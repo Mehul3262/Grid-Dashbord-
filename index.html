@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,11 +62,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: 0.3s;
-        }
-        .metric-card:hover {
-            border-color: var(--accent-glow);
-            box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
         }
         .label {
             color: var(--text-muted);
@@ -100,7 +96,7 @@
     </div>
     
     <div class="grid-container">
-        <div class="metric-card"><span class="label">1) Current Balance</span> <span class="value" id="val-balance">$0.00</span></div>
+        <div class="metric-card"><span class="label">1) Current Balance</span> <span class="value" id="val-balance">Connecting...</span></div>
         <div class="metric-card"><span class="label">2) Current Margin Use</span> <span class="value" id="val-margin">$0.00</span></div>
         <div class="metric-card"><span class="label">3) Max Margin (24h)</span> <span class="value" id="val-maxmargin">$0.00</span></div>
         <div class="metric-card"><span class="label">4) Open Trades</span> <span class="value" id="val-opentrades">Buy: 0 | Sell: 0</span></div>
@@ -112,33 +108,34 @@
         <div class="metric-card"><span class="label">10) ABC Scan Time</span> <span class="value" id="val-scantime">0 ms</span></div>
     </div>
 
-    <div class="status-badge" id="val-closingstatus">MONITORING</div>
+    <div class="status-badge" id="val-closingstatus">WAITING FOR MT5...</div>
 </div>
 
 <script>
-    // GitHub પર લાઈવ ડેટા ફેચ કરવા માટેનું સ્ક્રિપ્ટ (જો dashboard.json ફાઇલ અપલોડ કરેલી હશે તો ઓટોમેટિક ડેટા દેખાડશે)
     async function fetchDashboardData() {
         try {
-            let response = await fetch('dashboard.json?' + new Date().getTime());
+            let response = await fetch('https://mehul-grid-dashboard-default-rtdb.firebaseio.com/dashboard.json');
             if (response.ok) {
                 let data = await response.json();
-                document.getElementById('val-balance').innerText = data.balance;
-                document.getElementById('val-margin').innerText = data.margin;
-                document.getElementById('val-maxmargin').innerText = data.maxmargin;
-                document.getElementById('val-opentrades').innerText = `Buy: ${data.buys} | Sell: ${data.sells}`;
-                document.getElementById('val-maxtrades').innerText = data.maxtrades;
-                document.getElementById('val-pl').innerText = `${data.pl} (Target: ${data.target})`;
-                document.getElementById('val-todaypl').innerText = data.todaypl;
-                document.getElementById('val-status').innerText = `Bot A: [${data.statusA}] | Bot B: [${data.statusB}]`;
-                document.getElementById('val-dd').innerText = data.drawdown;
-                document.getElementById('val-scantime').innerText = data.scantime;
-                document.getElementById('val-closingstatus').innerText = data.closing;
+                if(data) {
+                    document.getElementById('val-balance').innerText = data.balance;
+                    document.getElementById('val-margin').innerText = data.margin;
+                    document.getElementById('val-maxmargin').innerText = data.maxmargin;
+                    document.getElementById('val-opentrades').innerText = `Buy: ${data.buys} | Sell: ${data.sells}`;
+                    document.getElementById('val-maxtrades').innerText = data.maxtrades;
+                    document.getElementById('val-pl').innerText = `${data.pl} (Target: ${data.target})`;
+                    document.getElementById('val-todaypl').innerText = data.todaypl;
+                    document.getElementById('val-status').innerText = `Bot A: [${data.statusA}] | Bot B: [${data.statusB}]`;
+                    document.getElementById('val-dd').innerText = data.drawdown;
+                    document.getElementById('val-scantime').innerText = data.scantime;
+                    document.getElementById('val-closingstatus').innerText = data.closing;
+                }
             }
         } catch (error) {
-            console.log("Waiting for data file...");
+            console.log("Error fetching data");
         }
     }
-    setInterval(fetchDashboardData, 2000); // દર 2 સેકન્ડે ડેટા રિફ્રેશ થશે
+    setInterval(fetchDashboardData, 1000); // દર 1 સેકન્ડે લાઈવ અપડેટ થશે
 </script>
 
 </body>
