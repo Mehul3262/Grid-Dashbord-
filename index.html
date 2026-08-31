@@ -1,201 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="gu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOT C MASTER DASHBOARD</title>
+    <title>Bot C Master Dashboard</title>
     <style>
         body {
             background-color: #0b0f19;
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         .container {
-            width: 100%;
-            max-width: 480px;
+            max-width: 600px;
+            margin: 0 auto;
         }
-        .top-bar {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #131b2e;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 8px;
             margin-bottom: 15px;
-            border: 1px solid #1f2a44;
+            border: 1px solid #1f293d;
         }
         .title {
-            font-weight: 800;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            color: #facc15;
+            color: #f3ba2f;
+            font-weight: bold;
+            font-size: 18px;
         }
         .live-badge {
-            background-color: #10b981;
-            color: #0b0f19;
-            font-weight: bold;
-            font-size: 12px;
+            background-color: #00c853;
+            color: white;
             padding: 4px 10px;
-            border-radius: 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
         }
-        .grid-grid {
+        .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
         .card {
-            background-color: #131b2e;
-            border: 1px solid #1f2a44;
-            border-radius: 10px;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .card.full-width {
-            grid-column: span 2;
-        }
-        .card-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #94a3b8;
-            font-weight: 700;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-        .card-value {
-            font-size: 16px;
-            font-weight: 700;
-            font-family: monospace;
-        }
-        .green { color: #10b981; }
-        .red { color: #ef4444; }
-        .yellow { color: #facc15; }
-        .white { color: #ffffff; }
-        .status-box {
             background: #131b2e;
-            border: 1px solid #1f2a44;
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            margin-top: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #1f293d;
         }
-        .footer-time {
+        .card-full {
+            background: #131b2e;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #1f293d;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .label {
+            font-size: 11px;
+            color: #8a99ad;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .green { color: #00c853; }
+        .red { color: #ff5252; }
+        .yellow { color: #ffeb3b; }
+        .white { color: #ffffff; }
+        .footer {
             text-align: center;
             font-size: 11px;
-            color: #64748b;
-            margin-top: 12px;
+            color: #6b7280;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="top-bar">
+    <div class="header">
         <div class="title">⚡ BOT C MASTER DASHBOARD</div>
         <div class="live-badge">LIVE</div>
     </div>
 
-    <div class="grid-grid">
-        <!-- 1) Current Balance -->
+    <div class="grid">
         <div class="card">
-            <div class="card-label">1) Current Balance</div>
-            <div class="card-value white" id="val-balance">$0.00</div>
+            <div class="label">1) Current Balance</div>
+            <div class="value white" id="val-balance">$60,313.03</div>
         </div>
-        <!-- 2) Current Margin Use -->
         <div class="card">
-            <div class="card-label">2) Current Margin Use</div>
-            <div class="card-value white" id="val-margin">$0.00</div>
-        </div>
-
-        <!-- 3) Max Margin (24h) -->
-        <div class="card">
-            <div class="card-label">3) Max Margin (24h)</div>
-            <div class="card-value white" id="val-maxmargin">$0.00</div>
-        </div>
-        <!-- 4) Open Trades -->
-        <div class="card">
-            <div class="card-label">4) Open Trades</div>
-            <div class="card-value white" id="val-opentrades" style="font-size: 13px;">Buy: 0 | Sell: 0</div>
-        </div>
-
-        <!-- 5) Max Open Trades (24h) -->
-        <div class="card">
-            <div class="card-label">5) Max Open Trades (24h)</div>
-            <div class="card-value yellow" id="val-maxtrades">0</div>
-        </div>
-        <!-- 6) Current P/L -->
-        <div class="card">
-            <div class="card-label">6) Current P/L</div>
-            <div class="card-value green" id="val-pl">$0.00</div>
-        </div>
-
-        <!-- 7) Today's P/L -->
-        <div class="card">
-            <div class="card-label">7) Today's P/L</div>
-            <div class="card-value green" id="val-todaypl">$0.00</div>
-        </div>
-        <!-- 8) Bot Status -->
-        <div class="card">
-            <div class="card-label">8) Bot Status</div>
-            <div class="card-value white" id="val-status" style="font-size: 11px;">A: [IDLE] | B: [IDLE]</div>
-        </div>
-
-        <!-- 9) Max Drawdown (24h) -->
-        <div class="card">
-            <div class="card-label">9) Max Drawdown (24h)</div>
-            <div class="card-value red" id="val-dd">$0.00</div>
-        </div>
-        <!-- 10) ABC Scan Time -->
-        <div class="card">
-            <div class="card-label">10) ABC Scan Time</div>
-            <div class="card-value yellow" id="val-scantime">0 ms</div>
+            <div class="label">2) Current Margin Use</div>
+            <div class="value white" id="val-margin">$356.55</div>
         </div>
     </div>
 
-    <!-- Closing Status Box -->
-    <div class="status-box">
-        <div class="card-label">Closing Status</div>
-        <div class="card-value yellow" id="val-closing" style="font-size: 14px;">MONITORING</div>
+    <div class="grid">
+        <div class="card">
+            <div class="label">3) Max Margin (24h)</div>
+            <div class="value white" id="val-max-margin">$7,036.42</div>
+        </div>
+        <div class="card">
+            <div class="label">4) Open Trades</div>
+            <div class="value white" id="val-open-trades">Buy: 3 | Sell: 2</div>
+        </div>
     </div>
 
-    <div class="footer-time" id="val-time">Last Updated: Connecting...</div>
+    <div class="grid">
+        <div class="card">
+            <div class="label">5) Max Open Trades (24h)</div>
+            <div class="value yellow" id="val-max-open">37</div>
+        </div>
+        <div class="card">
+            <div class="label">6) Current P/L</div>
+            <div class="value" id="val-current-pl">$-62.40</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="label">7) Today's P/L</div>
+            <div class="value green" id="val-today-pl">$11,599.77</div>
+        </div>
+        <div class="card">
+            <div class="label">8) Bot Status</div>
+            <div class="value white" style="font-size: 14px;" id="val-bot-status">A: [ACTIVE] | B: [IDLE]</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="label">9) Max Drawdown (24h)</div>
+            <div class="value red" id="val-max-dd">$75.60</div>
+        </div>
+        <div class="card">
+            <div class="label">10) ABC Scan Time</div>
+            <div class="value yellow" id="val-scan-time">34 ms</div>
+        </div>
+    </div>
+
+    <div class="card-full">
+        <div class="label">Closing Status</div>
+        <div class="value yellow" id="val-closing-status">MONITORING</div>
+    </div>
+
+    <div class="footer" id="last-updated">Last Updated: --</div>
 </div>
 
 <script>
-    async function fetchDashboardData() {
-        try {
-            let response = await fetch('https://mehul-grid-dashboard-default-rtdb.firebaseio.com/dashboard.json');
-            if (response.ok) {
-                let data = await response.json();
-                if(data) {
-                    document.getElementById('val-balance').innerText = data.balance;
-                    document.getElementById('val-margin').innerText = data.margin;
-                    document.getElementById('val-maxmargin').innerText = data.maxmargin;
-                    document.getElementById('val-opentrades').innerText = `Buy: ${data.buys} | Sell: ${data.sells}`;
-                    document.getElementById('val-maxtrades').innerText = data.maxtrades;
-                    document.getElementById('val-pl').innerText = data.pl;
-                    document.getElementById('val-todaypl').innerText = data.todaypl;
-                    document.getElementById('val-status').innerText = `A: [${data.statusA}] | B: [${data.statusB}]`;
-                    document.getElementById('val-dd').innerText = data.drawdown;
-                    document.getElementById('val-scantime').innerText = data.scantime;
-                    document.getElementById('val-closing').innerText = data.closing;
-                    
-                    let now = new Date();
-                    document.getElementById('val-time').innerText = "Last Updated: " + now.toISOString().slice(0, 19).replace('T', ' ');
-                }
-            }
-        } catch (error) {
-            console.log("Waiting for sync...");
+    function updateDashboard(data) {
+        // આ ફંક્શનની મદદથી તમે ડેટા ડાયનામિકલી બદલી શકો છો
+        // જો તમે JSON ફાઈલ વાપરતા હોવ તો અહીં ફેચ (fetch) કોડ મૂકી શકાય
+    }
+
+    // ઓટોમેટિક કલર ચેક કરવા માટેનું લોજિક (Current P/L માટે)
+    function checkColors() {
+        const plElement = document.getElementById('val-current-pl');
+        let plValue = parseFloat(plElement.innerText.replace('$', '').replace('(', '-').replace(')', ''));
+        
+        // જો વેલ્યુ 0 કે તેથી ઓછી હોય તો લાલ, નહિતર લીલો કલર કરશે
+        if (plValue < 0) {
+            plElement.className = "value red";
+        } else {
+            plElement.className = "value green";
         }
     }
-    setInterval(fetchDashboardData, 1000);
+
+    // પેજ લોડ થાય એટલે કલર ફોર્મેટ ચેક કરી લેશે
+    window.onload = function() {
+        checkColors();
+        let now = new Date();
+        document.getElementById('last-updated').innerText = "Last Updated: " + now.toISOString().slice(0, 10) + " " + now.toTimeString().slice(0, 8);
+    };
 </script>
 
 </body>
