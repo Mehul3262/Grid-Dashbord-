@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot C Master Dashboard</title>
+    <title>Bot C Master Dashboard - Live</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         body {
             background-color: #0b0f19;
@@ -77,9 +79,8 @@
         .footer {
             text-align: center;
             font-size: 11px;
-            color: #ff5252;
+            color: #6b7280;
             margin-top: 20px;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -151,55 +152,54 @@
         <div class="value yellow" id="val-closing-status">--</div>
     </div>
 
-    <div class="footer" id="error-status">Status: Connecting to data source...</div>
+    <div class="footer" id="last-updated">Last Updated: --</div>
 </div>
 
 <script>
-    // જો તમારી JSON ફાઈલનું નામ બીજું હોય (દા.ત. status.json કે botdata.json) તો અહીં બદલી નાખવું
-    const jsonFile = 'data.json';
+    // તમારા Firebase ની માહિતી અહીં નાખો
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "SENDER_ID",
+        appId: "APP_ID"
+    };
 
-    function fetchLiveData() {
-        fetch(jsonFile + '?t=' + new Date().getTime())
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("HTTP Error " + response.status + " (File not found)");
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
-                document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse || 0).toFixed(2);
-                document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h || 0).toFixed(2);
-                document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades || 0} | Sell: ${data.sellTrades || 0}`;
-                document.getElementById('val-max-open').innerText = data.maxOpenTrades24h || 0;
-                
-                let currentPL = parseFloat(data.currentPL || 0);
-                let plElement = document.getElementById('val-current-pl');
-                plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
-                plElement.className = currentPL < 0 ? "value red" : "value green";
+    firebase.initializeApp(firebaseConfig);
+    const dbRef = firebase.database().ref('botCData');
 
-                let todayPL = parseFloat(data.todayPL || 0);
-                let todayPlElement = document.getElementById('val-today-pl');
-                todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
-                todayPlElement.className = todayPL < 0 ? "value red" : "value green";
+    // રિયલ-ટાઇમ મિલીસેકન્ડ લિસનર
+    dbRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
 
-                document.getElementById('val-bot-status').innerText = data.botStatus || "--";
-                document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h || 0).toFixed(2);
-                document.getElementById('val-scan-time').innerText = (data.scanTime || 0) + " ms";
-                document.getElementById('val-closing-status').innerText = data.closingStatus || "--";
+        document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
+        document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse || 0).toFixed(2);
+        document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h || 0).toFixed(2);
+        document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades || 0} | Sell: ${data.sellTrades || 0}`;
+        document.getElementById('val-max-open').innerText = data.maxOpenTrades24h || 0;
+        
+        // Current P/L Color Logic (માઇનસ હોય તો લાલ, પ્લસ હોય તો લીલો)
+        let currentPL = parseFloat(data.currentPL || 0);
+        let plElement = document.getElementById('val-current-pl');
+        plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
+        plElement.className = currentPL < 0 ? "value red" : "value green";
 
-                let now = new Date();
-                document.getElementById('error-status.').style.color = "#00c853";
-                document.getElementById('error-status').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
-            })
-            .catch(error => {
-                document.getElementById('error-status').innerText = "Error: " + error.message + " (Check if " + jsonFile + " exists)";
-            });
-    }
+        let todayPL = parseFloat(data.todayPL || 0);
+        let todayPlElement = document.getElementById('val-today-pl');
+        todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
+        todayPlElement.className = todayPL < 0 ? "value red" : "value green";
 
-    // દર 1 સેકન્ડે ડેટા ફેચ કરશે
-    setInterval(fetchLiveData, 1000);
-    window.onload = fetchLiveData;
+        document.getElementById('val-bot-status').innerText = data.botStatus || "--";
+        document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h || 0).toFixed(2);
+        document.getElementById('val-scan-time').innerText = (data.scanTime || 0) + " ms";
+        document.getElementById('val-closing-status').innerText = data.closingStatus || "MONITORING";
+
+        let now = new Date();
+        document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
+    });
 </script>
 
 </body>
