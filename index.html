@@ -93,123 +93,86 @@
     <div class="grid">
         <div class="card">
             <div class="label">1) Current Balance</div>
-            <div class="value white" id="val-balance">--</div>
+            <div class="value white" id="val-balance">$60,313.03</div>
         </div>
         <div class="card">
             <div class="label">2) Current Margin Use</div>
-            <div class="value white" id="val-margin">--</div>
+            <div class="value white" id="val-margin">$356.55</div>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
             <div class="label">3) Max Margin (24h)</div>
-            <div class="value white" id="val-max-margin">--</div>
+            <div class="value white" id="val-max-margin">$7,036.42</div>
         </div>
         <div class="card">
             <div class="label">4) Open Trades</div>
-            <div class="value white" id="val-open-trades">--</div>
+            <div class="value white" id="val-open-trades">Buy: 3 | Sell: 2</div>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
             <div class="label">5) Max Open Trades (24h)</div>
-            <div class="value yellow" id="val-max-open">--</div>
+            <div class="value yellow" id="val-max-open">37</div>
         </div>
         <div class="card">
             <div class="label">6) Current P/L</div>
-            <div class="value" id="val-current-pl">--</div>
+            <div class="value" id="val-current-pl">$-62.40</div>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
             <div class="label">7) Today's P/L</div>
-            <div class="value" id="val-today-pl">--</div>
+            <div class="value green" id="val-today-pl">$11,599.77</div>
         </div>
         <div class="card">
             <div class="label">8) Bot Status</div>
-            <div class="value white" style="font-size: 13px;" id="val-bot-status">--</div>
+            <div class="value white" style="font-size: 13px;" id="val-bot-status">A: [ACTIVE] | B: [IDLE]</div>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
             <div class="label">9) Max Drawdown (24h)</div>
-            <div class="value red" id="val-max-dd">--</div>
+            <div class="value red" id="val-max-dd">$75.60</div>
         </div>
         <div class="card">
             <div class="label">10) ABC Scan Time</div>
-            <div class="value yellow" id="val-scan-time">--</div>
+            <div class="value yellow" id="val-scan-time">34 ms</div>
         </div>
     </div>
 
     <div class="card-full">
         <div class="label">Closing Status</div>
-        <div class="value yellow" id="val-closing-status">--</div>
+        <div class="value yellow" id="val-closing-status">MONITORING</div>
     </div>
 
     <div class="footer" id="last-updated">Last Updated: --</div>
 </div>
 
 <script>
-    // MT5 થી અપડેટ થતી JSON ફાઇલનું નામ અહીં લખો (દા.ત. data.json)
-    const jsonFileUrl = 'data.json'; 
-
-    function fetchData() {
-        fetch(jsonFileUrl + '?t=' + new Date().getTime()) // કેશ પ્રોબ્લેમ રોકવા માટે ટાઈમસ્ટેમ્પ ઉમેર્યું છે
-            .then(response => response.json())
-            .then(data => {
-                // ૧) Current Balance
-                document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance).toFixed(2);
-                
-                // ૨) Current Margin Use
-                document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse).toFixed(2);
-                
-                // ૩) Max Margin (24h)
-                document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h).toFixed(2);
-                
-                // ૪) Open Trades
-                document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades} | Sell: ${data.sellTrades}`;
-                
-                // ૫) Max Open Trades (24h)
-                document.getElementById('val-max-open').innerText = data.maxOpenTrades24h;
-                
-                // ૬) Current P/L (ઓટો કલર ચેન્જ સાથે)
-                let currentPL = parseFloat(data.currentPL);
-                let plElement = document.getElementById('val-current-pl');
-                plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
-                plElement.className = currentPL < 0 ? "value red" : "value green";
-
-                // ૭) Today's P/L
-                let todayPL = parseFloat(data.todayPL);
-                let todayPlElement = document.getElementById('val-today-pl');
-                todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
-                todayPlElement.className = todayPL < 0 ? "value red" : "value green";
-
-                // ૮) Bot Status
-                document.getElementById('val-bot-status').innerText = data.botStatus;
-
-                // ૯) Max Drawdown (24h) - સાચી ગણતરી (પિક વેલ્યુથી ડાઉનફોલ)
-                document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h).toFixed(2);
-
-                // ૧૦) ABC Scan Time
-                document.getElementById('val-scan-time').innerText = data.scanTime + " ms";
-
-                // Closing Status
-                document.getElementById('val-closing-status').innerText = data.closingStatus;
-
-                // Last Updated Time
-                let now = new Date();
-                document.getElementById('last-updated').innerText = "Last Updated: " + now.toISOString().slice(0, 10) + " " + now.toTimeString().slice(0, 8);
-            })
-            .catch(error => console.log('Error loading data:', error));
+    // ઓટોમેટિક કલર અને ફોર્મેટ ચેક કરવા માટેનું ફંક્શન
+    function updateColors() {
+        let plElement = document.getElementById('val-current-pl');
+        let textVal = plElement.innerText;
+        let numericVal = parseFloat(textVal.replace('$', '').replace('(', '-').replace(')', ''));
+        
+        // જો P/L માઇનસ હોય તો લાલ, નહિતર લીલો કલर કરશે
+        if (numericVal < 0) {
+            plElement.className = "value red";
+        } else {
+            plElement.className = "value green";
+        }
     }
 
-    // દર ૫ સેકન્ડે ડેટા ઓટોમેટિક રિફ્રેશ થશે
-    setInterval(fetchData, 5000);
-    window.onload = fetchData;
+    window.onload = function() {
+        updateColors();
+        let now = new Date();
+        document.getElementById('last-updated').innerText = "Last Updated: " + now.toISOString().slice(0, 10) + " " + now.toTimeString().slice(0, 8);
+    };
 </script>
 
 </body>
