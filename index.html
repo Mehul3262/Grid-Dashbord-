@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bot C Master Dashboard - Live</title>
+    <!-- Firebase SDK (Google CDN) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         body {
             background-color: #0b0f19;
@@ -38,12 +41,6 @@
             border-radius: 4px;
             font-size: 12px;
             font-weight: bold;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
         }
         .grid {
             display: grid;
@@ -99,104 +96,130 @@
     <div class="grid">
         <div class="card">
             <div class="label">1) Current Balance</div>
-            <div class="value white" id="val-balance">$60,313.03</div>
+            <div class="value white" id="val-balance">--</div>
         </div>
         <div class="card">
             <div class="label">2) Current Margin Use</div>
-            <div class="value white" id="val-margin">$356.55</div>
+            <div class="value white" id="val-margin">--</div>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
             <div class="label">3) Max Margin (24h)</div>
-            <div class="value white" id="val-max-margin">$7,036.42</div>
+            <div class="value white" id="val-max-margin">--</div>
         </div>
         <div class="card">
             <div class="label">4) Open Trades</div>
-            <div class="value white" id="val-open-trades">Buy: 3 | Sell: 2</div>
+            <div class="value white" id="val-open-trades">--</div>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
             <div class="label">5) Max Open Trades (24h)</div>
-            <div class="value yellow" id="val-max-open">37</div>
+            <div class="value yellow" id="val-max-open">--</div>
         </div>
         <div class="card">
             <div class="label">6) Current P/L</div>
-            <div class="value red" id="val-current-pl">$-62.40</div>
+            <div class="value" id="val-current-pl">--</div>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
             <div class="label">7) Today's P/L</div>
-            <div class="value green" id="val-today-pl">$11,599.77</div>
+            <div class="value" id="val-today-pl">--</div>
         </div>
         <div class="card">
             <div class="label">8) Bot Status</div>
-            <div class="value white" style="font-size: 13px;" id="val-bot-status">A: [ACTIVE] | B: [IDLE]</div>
+            <div class="value white" style="font-size: 13px;" id="val-bot-status">--</div>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
             <div class="label">9) Max Drawdown (24h)</div>
-            <div class="value red" id="val-max-dd">$75.60</div>
+            <div class="value red" id="val-max-dd">--</div>
         </div>
         <div class="card">
             <div class="label">10) ABC Scan Time</div>
-            <div class="value yellow" id="val-scan-time">34 ms</div>
+            <div class="value yellow" id="val-scan-time">--</div>
         </div>
     </div>
 
     <div class="card-full">
         <div class="label">Closing Status</div>
-        <div class="value yellow" id="val-closing-status">MONITORING</div>
+        <div class="value yellow" id="val-closing-status">--</div>
     </div>
 
     <div class="footer" id="last-updated">Last Updated: --</div>
 </div>
 
 <script>
-    // જો તમારી પાસે data.json ફાઇલ હોય તો તેની લિંક અહીં નાખો, 
-    // અથવા ડાયરેક્ટ વેલ્યુ માટે આ ફંક્શનમાં MT5 નો ડેટા સિંક કરી શકો.
-    function fetchLiveData() {
-        // અહીં કેશ ક્લિયર કરીને ડેટા ફેચ કરવાનો કોડ છે જેથી આંકડા ચોંટે નહીં
-        fetch('data.json?_=' + new Date().getTime())
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance).toFixed(2);
-                document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse).toFixed(2);
-                document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h).toFixed(2);
-                document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades} | Sell: ${data.sellTrades}`;
-                document.getElementById('val-max-open').innerText = data.maxOpenTrades24h;
-                
-                // Current P/L Color Logic (Minus = Red, Plus = Green)
-                let plElement = document.getElementById('val-current-pl');
-                let currentPL = parseFloat(data.currentPL);
-                plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
-                plElement.className = currentPL < 0 ? "value red" : "value green";
+    // 1. તમારા Firebase ની કોન્ફિગ ડિટેલ્સ અહીં નાખો (જે તમે MT5 માં વાપરી છે એ જ)
+    const firebaseConfig = {
+        apiKey: "YOUR_FIREBASE_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "SENDER_ID",
+        appId: "APP_ID"
+    };
 
-                let todayPL = parseFloat(data.todayPL);
-                let todayPlElement = document.getElementById('val-today-pl');
-                todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
-                todayPlElement.className = todayPL < 0 ? "value red" : "value green";
+    // Firebase ઇનિશિયલાઇઝ કરો
+    firebase.initializeApp(firebaseConfig);
+    const dbRef = firebase.database().ref('botCData'); // જે પાથ પર MT5 ડેટા મોકલે છે તે પાથ
 
-                document.getElementById('val-bot-status').innerText = data.botStatus;
-                document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h).toFixed(2);
-                document.getElementById('val-scan-time').innerText = data.scanTime + " ms";
-                document.getElementById('val-closing-status').innerText = data.closingStatus;
+    // રિયલ-ટાઇમ (Live) લિસનર - જેવું MT5 ડેટા બદલશે કે તરત જ GitHub માં રિફ્રેશ વગર દેખાશે
+    dbRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
 
-                let now = new Date();
-                document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
-            })
-            .catch(err => console.log("Waiting for fresh data..."));
-    }
+        // ૧) Current Balance
+        document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
+        
+        // ૨) Current Margin Use
+        document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse || 0).toFixed(2);
+        
+        // ૩) Max Margin (24h)
+        document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h || 0).toFixed(2);
+        
+        // ૪) Open Trades
+        document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades || 0} | Sell: ${data.sellTrades || 0}`;
+        
+        // ૫) Max Open Trades (24h)
+        document.getElementById('val-max-open').innerText = data.maxOpenTrades24h || 0;
+        
+        // ૬) Current P/L (ઓટો કલર: માઇનસ હોય તો લાલ, પ્લસ હોય તો લીલો)
+        let currentPL = parseFloat(data.currentPL || 0);
+        let plElement = document.getElementById('val-current-pl');
+        plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
+        plElement.className = currentPL < 0 ? "value red" : "value green";
 
-    // દર ૫૦૦ મિલીસેકન્ડે (0.5 સેકન્ડ) પેજ ઓટોમેટિક રિફ્રેશ વગર ડેટા અપડેટ કરશે
-    setInterval(fetchLiveData, 500);
+        // ૭) Today's P/L
+        let todayPL = parseFloat(data.todayPL || 0);
+        let todayPlElement = document.getElementById('val-today-pl');
+        todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
+        todayPlElement.className = todayPL < 0 ? "value red" : "value green";
+
+        // ૮) Bot Status
+        document.getElementById('val-bot-status').innerText = data.botStatus || "A: [IDLE] | B: [IDLE]";
+
+        // ૯) Max Drawdown (24h)
+        document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h || 0).toFixed(2);
+
+        // ૧૦) ABC Scan Time
+        document.getElementById('val-scan-time').innerText = (data.scanTime || 0) + " ms";
+
+        // Closing Status
+        document.getElementById('val-closing-status').innerText = data.closingStatus || "MONITORING";
+
+        // Last Updated Time
+        let now = new Date();
+        document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
+    });
 </script>
 
 </body>
