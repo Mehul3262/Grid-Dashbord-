@@ -5,77 +5,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Z-Anil Bot C Live Dashboard</title>
     <style>
+        :root {
+            --bg-color: #090d16;
+            --card-bg: #111827;
+            --border-color: #1f2937;
+            --accent-glow: #0284c7;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --green: #10b981;
+            --yellow: #f59e0b;
+        }
         body {
-            background-color: #0f172a;
-            color: #38bdf8;
-            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
         }
-        .dashboard-container {
-            background-color: #1e293b;
-            border: 2px solid #0284c7;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            width: 500px;
+        .dashboard-wrapper {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(2, 132, 199, 0.1);
+            width: 100%;
+            max-width: 520px;
+            padding: 24px;
+            box-sizing: border-box;
         }
-        h2 {
+        .header {
             text-align: center;
-            color: #facc15;
-            border-bottom: 2px dashed #38bdf8;
-            padding-bottom: 10px;
-            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
         }
-        .metric-row {
+        .header h2 {
+            margin: 0;
+            color: var(--yellow);
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+        .grid-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .metric-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
-            margin: 12px 0;
-            font-size: 16px;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .metric-card:hover {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
         }
         .label {
-            color: #94a3b8;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
         }
         .value {
-            font-weight: bold;
-            color: #ffffff;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-main);
+            font-family: monospace;
         }
-        .status-box {
+        .status-badge {
             margin-top: 20px;
             text-align: center;
-            padding: 10px;
-            background-color: #0284c7;
+            padding: 12px;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
             color: white;
             font-weight: bold;
-            border-radius: 6px;
+            font-size: 15px;
+            border-radius: 10px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
         }
     </style>
 </head>
 <body>
 
-<div class="dashboard-container">
-    <h2>BOT C MASTER DASHBOARD</h2>
+<div class="dashboard-wrapper">
+    <div class="header">
+        <h2>⚡ BOT C MASTER DASHBOARD ⚡</h2>
+    </div>
     
-    <div class="metric-row"><span class="label">1) Current Balance:</span> <span class="value" id="val-balance">$0.00</span></div>
-    <div class="metric-row"><span class="label">2) Current Margin Use:</span> <span class="value" id="val-margin">$0.00</span></div>
-    <div class="metric-row"><span class="label">3) Max Margin (24h):</span> <span class="value" id="val-maxmargin">$0.00</span></div>
-    <div class="metric-row"><span class="label">4) Open Trades:</span> <span class="value" id="val-opentrades">Buy: 0 | Sell: 0</span></div>
-    <div class="metric-row"><span class="label">5) Max Open Trades (24h):</span> <span class="value" id="val-maxtrades">0</span></div>
-    <div class="metric-row"><span class="label">6) Current P/L:</span> <span class="value" id="val-pl">$0.00</span></div>
-    <div class="metric-row"><span class="label">7) Today's P/L:</span> <span class="value" id="val-todaypl">$0.00</span></div>
-    <div class="metric-row"><span class="label">8) Bot Status:</span> <span class="value" id="val-status">Bot A: [IDLE] | Bot B: [IDLE]</span></div>
-    <div class="metric-row"><span class="label">9) Max Drawdown (24h):</span> <span class="value" id="val-dd">$0.00</span></div>
-    <div class="metric-row"><span class="label">10) ABC Scan Time:</span> <span class="value" id="val-scantime">0 ms</span></div>
+    <div class="grid-container">
+        <div class="metric-card"><span class="label">1) Current Balance</span> <span class="value" id="val-balance">$0.00</span></div>
+        <div class="metric-card"><span class="label">2) Current Margin Use</span> <span class="value" id="val-margin">$0.00</span></div>
+        <div class="metric-card"><span class="label">3) Max Margin (24h)</span> <span class="value" id="val-maxmargin">$0.00</span></div>
+        <div class="metric-card"><span class="label">4) Open Trades</span> <span class="value" id="val-opentrades">Buy: 0 | Sell: 0</span></div>
+        <div class="metric-card"><span class="label">5) Max Open Trades (24h)</span> <span class="value" id="val-maxtrades">0</span></div>
+        <div class="metric-card"><span class="label">6) Current P/L</span> <span class="value" id="val-pl">$0.00</span></div>
+        <div class="metric-card"><span class="label">7) Today's P/L</span> <span class="value" id="val-todaypl">$0.00</span></div>
+        <div class="metric-card"><span class="label">8) Bot Status</span> <span class="value" id="val-status">Bot A: [IDLE] | Bot B: [IDLE]</span></div>
+        <div class="metric-card"><span class="label">9) Max Drawdown (24h)</span> <span class="value" id="val-dd">$0.00</span></div>
+        <div class="metric-card"><span class="label">10) ABC Scan Time</span> <span class="value" id="val-scantime">0 ms</span></div>
+    </div>
 
-    <div class="status-box" id="val-closingstatus">MONITORING</div>
+    <div class="status-badge" id="val-closingstatus">MONITORING</div>
 </div>
 
 <script>
-    // અહીં તમે MT5 માંથી API કે JSON ફાઇલ સિંક કરીને ડેટા ઓટોમેટિક અપડેટ કરી શકો છો.
-    // હાલમાં ડેશબોર્ડ લાઈવ પેજ પર સેટઅપ થઈ ગયું છે.
+    // GitHub પર લાઈવ ડેટા ફેચ કરવા માટેનું સ્ક્રિપ્ટ (જો dashboard.json ફાઇલ અપલોડ કરેલી હશે તો ઓટોમેટિક ડેટા દેખાડશે)
+    async function fetchDashboardData() {
+        try {
+            let response = await fetch('dashboard.json?' + new Date().getTime());
+            if (response.ok) {
+                let data = await response.json();
+                document.getElementById('val-balance').innerText = data.balance;
+                document.getElementById('val-margin').innerText = data.margin;
+                document.getElementById('val-maxmargin').innerText = data.maxmargin;
+                document.getElementById('val-opentrades').innerText = `Buy: ${data.buys} | Sell: ${data.sells}`;
+                document.getElementById('val-maxtrades').innerText = data.maxtrades;
+                document.getElementById('val-pl').innerText = `${data.pl} (Target: ${data.target})`;
+                document.getElementById('val-todaypl').innerText = data.todaypl;
+                document.getElementById('val-status').innerText = `Bot A: [${data.statusA}] | Bot B: [${data.statusB}]`;
+                document.getElementById('val-dd').innerText = data.drawdown;
+                document.getElementById('val-scantime').innerText = data.scantime;
+                document.getElementById('val-closingstatus').innerText = data.closing;
+            }
+        } catch (error) {
+            console.log("Waiting for data file...");
+        }
+    }
+    setInterval(fetchDashboardData, 2000); // દર 2 સેકન્ડે ડેટા રિફ્રેશ થશે
 </script>
 
 </body>
