@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot C Master Dashboard - Live</title>
-    <!-- Firebase SDK (Google CDN) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <title>Bot C Master Dashboard</title>
     <style>
         body {
             background-color: #0b0f19;
@@ -157,69 +154,70 @@
 </div>
 
 <script>
-    // 1. તમારા Firebase ની કોન્ફિગ ડિટેલ્સ અહીં નાખો (જે તમે MT5 માં વાપરી છે એ જ)
-    const firebaseConfig = {
-        apiKey: "YOUR_FIREBASE_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "SENDER_ID",
-        appId: "APP_ID"
-    };
+    // જો તમે JSON ફાઈલ દ્વારા ડેટા મંગાવતા હોવ તો અહીં ફાઈલનું સાચું નામ આપવું (દા.ત. 'data.json')
+    const dataFile = 'data.json';
 
-    // Firebase ઇનિશિયલાઇઝ કરો
-    firebase.initializeApp(firebaseConfig);
-    const dbRef = firebase.database().ref('botCData'); // જે પાથ પર MT5 ડેટા મોકલે છે તે પાથ
+    function loadLiveData() {
+        // કેશ પ્રોબ્લેમ દૂર કરવા માટે પાછળ ટાઈમસ્ટેમ્પ જોડેલું છે જેથી દર વખતે નવો ડેટા જ લોડ થાય
+        fetch(dataFile + '?v=' + new Date().getTime())
+            .then(response => {
+                if (!response.ok) throw new Error("File not found");
+                return response.json();
+            })
+            .then(data => {
+                // 1) Current Balance
+                document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
+                
+                // 2) Current Margin Use
+                document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse || 0).toFixed(2);
+                
+                // 3) Max Margin (24h)
+                document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h || 0).toFixed(2);
+                
+                // 4) Open Trades
+                document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades || 0} | Sell: ${data.sellTrades || 0}`;
+                
+                // 5) Max Open Trades (24h)
+                document.getElementById('val-max-open').innerText = data.maxOpenTrades24h || 0;
+                
+                // 6) Current P/L (માઇનસ હોય તો લાલ, પ્લસ હોય તો લીલો કલર)
+                let currentPL = parseFloat(data.currentPL || 0);
+                let plElement = document.getElementById('val-current-pl');
+                plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
+                plElement.className = currentPL < 0 ? "value red" : "value green";
 
-    // રિયલ-ટાઇમ (Live) લિસનર - જેવું MT5 ડેટા બદલશે કે તરત જ GitHub માં રિફ્રેશ વગર દેખાશે
-    dbRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
+                // 7) Today's P/L
+                let todayPL = parseFloat(data.todayPL || 0);
+                let todayPlElement = document.getElementById('val-today-pl');
+                todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
+                todayPlElement.className = todayPL < 0 ? "value red" : "value green";
 
-        // ૧) Current Balance
-        document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
-        
-        // ૨) Current Margin Use
-        document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse || 0).toFixed(2);
-        
-        // ૩) Max Margin (24h)
-        document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h || 0).toFixed(2);
-        
-        // ૪) Open Trades
-        document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades || 0} | Sell: ${data.sellTrades || 0}`;
-        
-        // ૫) Max Open Trades (24h)
-        document.getElementById('val-max-open').innerText = data.maxOpenTrades24h || 0;
-        
-        // ૬) Current P/L (ઓટો કલર: માઇનસ હોય તો લાલ, પ્લસ હોય તો લીલો)
-        let currentPL = parseFloat(data.currentPL || 0);
-        let plElement = document.getElementById('val-current-pl');
-        plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
-        plElement.className = currentPL < 0 ? "value red" : "value green";
+                // 8) Bot Status
+                document.getElementById('val-bot-status').innerText = data.botStatus || "--";
 
-        // ૭) Today's P/L
-        let todayPL = parseFloat(data.todayPL || 0);
-        let todayPlElement = document.getElementById('val-today-pl');
-        todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
-        todayPlElement.className = todayPL < 0 ? "value red" : "value green";
+                // 9) Max Drawdown (24h)
+                document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h || 0).toFixed(2);
 
-        // ૮) Bot Status
-        document.getElementById('val-bot-status').innerText = data.botStatus || "A: [IDLE] | B: [IDLE]";
+                // 10) ABC Scan Time
+                document.getElementById('val-scan-time').innerText = (data.scanTime || 0) + " ms";
 
-        // ૯) Max Drawdown (24h)
-        document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h || 0).toFixed(2);
+                // Closing Status
+                document.getElementById('val-closing-status').innerText = data.closingStatus || "--";
 
-        // ૧૦) ABC Scan Time
-        document.getElementById('val-scan-time').innerText = (data.scanTime || 0) + " ms";
+                // Last Updated Time Stamp
+                let now = new Date();
+                document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
+            })
+            .catch(error => {
+                console.log("Waiting for data sync...");
+            });
+    }
 
-        // Closing Status
-        document.getElementById('val-closing-status').innerText = data.closingStatus || "MONITORING";
-
-        // Last Updated Time
-        let now = new Date();
-        document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
-    });
+    // દર 1 સેકન્ડે (1000 ms) ડેટા ઓટોમેટિક રિફ્રેશ થશે અને ચોંટેલો નહીં રહે
+    setInterval(loadLiveData, 1000);
+    
+    // પેજ લોડ થતા જ તરત ડેટા ફેચ કરશે
+    window.onload = loadLiveData;
 </script>
 
 </body>
