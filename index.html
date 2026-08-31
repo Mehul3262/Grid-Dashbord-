@@ -1,182 +1,82 @@
-
 <!DOCTYPE html>
-<html lang="gu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid EA - Live Dashboard</title>
+    <title>Z-Anil Bot C Live Dashboard</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0b0e14; color: #e1e6ed; padding: 15px; }
-        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #1e2638; }
-        .header h1 { font-size: 18px; color: #f0b90b; }
-        .live-tag { background: #0ecb81; color: #000; padding: 4px 8px; font-weight: bold; border-radius: 4px; font-size: 11px; }
-        
-        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-        .card { background: #161b26; border: 1px solid #1e2638; padding: 12px; border-radius: 8px; }
-        .card h3 { font-size: 10px; color: #848e9c; margin-bottom: 4px; text-transform: uppercase; }
-        .card .value { font-size: 16px; font-weight: bold; }
-        
-        .positive { color: #0ecb81; }
-        .negative { color: #f6465d; }
-        .neutral { color: #f0b90b; }
-
-        .progress-box { margin-top: 15px; background: #161b26; border: 1px solid #1e2638; padding: 14px; border-radius: 8px; }
-        .progress-bar-bg { background: #2b313a; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 8px; }
-        .progress-bar-fill { background: linear-gradient(90deg, #f0b90b, #0ecb81); height: 100%; width: 0%; transition: width 0.5s ease; }
-
-        .footer { margin-top: 20px; text-align: center; color: #5e6673; font-size: 11px; }
+        body {
+            background-color: #0f172a;
+            color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .dashboard-container {
+            background-color: #1e293b;
+            border: 2px solid #0284c7;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            width: 500px;
+        }
+        h2 {
+            text-align: center;
+            color: #facc15;
+            border-bottom: 2px dashed #38bdf8;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+        .label {
+            color: #94a3b8;
+        }
+        .value {
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .status-box {
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            background-color: #0284c7;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>🤖 MEHUL GRID EA</h1>
-        <span class="live-tag" id="status-tag">CONNECTING...</span>
-    </div>
+<div class="dashboard-container">
+    <h2>BOT C MASTER DASHBOARD</h2>
+    
+    <div class="metric-row"><span class="label">1) Current Balance:</span> <span class="value" id="val-balance">$0.00</span></div>
+    <div class="metric-row"><span class="label">2) Current Margin Use:</span> <span class="value" id="val-margin">$0.00</span></div>
+    <div class="metric-row"><span class="label">3) Max Margin (24h):</span> <span class="value" id="val-maxmargin">$0.00</span></div>
+    <div class="metric-row"><span class="label">4) Open Trades:</span> <span class="value" id="val-opentrades">Buy: 0 | Sell: 0</span></div>
+    <div class="metric-row"><span class="label">5) Max Open Trades (24h):</span> <span class="value" id="val-maxtrades">0</span></div>
+    <div class="metric-row"><span class="label">6) Current P/L:</span> <span class="value" id="val-pl">$0.00</span></div>
+    <div class="metric-row"><span class="label">7) Today's P/L:</span> <span class="value" id="val-todaypl">$0.00</span></div>
+    <div class="metric-row"><span class="label">8) Bot Status:</span> <span class="value" id="val-status">Bot A: [IDLE] | Bot B: [IDLE]</span></div>
+    <div class="metric-row"><span class="label">9) Max Drawdown (24h):</span> <span class="value" id="val-dd">$0.00</span></div>
+    <div class="metric-row"><span class="label">10) ABC Scan Time:</span> <span class="value" id="val-scantime">0 ms</span></div>
 
-    <div class="grid-container">
-        <!-- 1. Balance & Equity -->
-        <div class="card">
-            <h3>Balance / Equity</h3>
-            <div class="value" id="balance_equity">$0.00 / $0.00</div>
-        </div>
-        <!-- 2. Today PnL -->
-        <div class="card">
-            <h3>Today PnL</h3>
-            <div class="value positive" id="today_pnl">$0.00</div>
-        </div>
-        <!-- 3. Floating PnL -->
-        <div class="card">
-            <h3>Floating PnL</h3>
-            <div class="value" id="floating_pnl">$0.00</div>
-        </div>
-        <!-- 4. Open Trades (Buy/Sell) -->
-        <div class="card">
-            <h3>Open Trades (Buy/Sell)</h3>
-            <div class="value" id="open_trades">0 (B:0 / S:0)</div>
-        </div>
-        <!-- 5. Signals TF1 & TF2 -->
-        <div class="card">
-            <h3>TF1 Signal</h3>
-            <div class="value" id="tf1_dir">--</div>
-        </div>
-        <div class="card">
-            <h3>TF2 Signal</h3>
-            <div class="value" id="tf2_dir">--</div>
-        </div>
-        <!-- 6. Max Drawdown -->
-        <div class="card">
-            <h3>Max Drawdown</h3>
-            <div class="value negative" id="max_dd">$0.00</div>
-        </div>
-        <!-- 7. Max Margin -->
-        <div class="card">
-            <h3>Max Margin Use</h3>
-            <div class="value" id="max_margin">$0.00</div>
-        </div>
-        <!-- 8. Scan Time -->
-        <div class="card">
-            <h3>Scan Time</h3>
-            <div class="value neutral" id="scan_time">00:00:00</div>
-        </div>
-        <!-- 9. Current ATR -->
-        <div class="card">
-            <h3>Current ATR (TF1/TF2)</h3>
-            <div class="value" id="atr_val">0.00000 | 0.00000</div>
-        </div>
-        <!-- 10. Current ADX -->
-        <div class="card">
-            <h3>Current ADX (TF1/TF2)</h3>
-            <div class="value" id="adx_val">0.00 | 0.00</div>
-        </div>
-        <!-- 11. Current Margin -->
-        <div class="card">
-            <h3>Current Margin</h3>
-            <div class="value" id="current_margin">$0.00</div>
-        </div>
-    </div>
+    <div class="status-box" id="val-closingstatus">MONITORING</div>
+</div>
 
-    <!-- 12. Basket Target Progress -->
-    <div class="progress-box">
-        <h3>Basket Target Progress ($<span id="target_val">30</span>)</h3>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progress-fill"></div>
-        </div>
-    </div>
+<script>
+    // અહીં તમે MT5 માંથી API કે JSON ફાઇલ સિંક કરીને ડેટા ઓટોમેટિક અપડેટ કરી શકો છો.
+    // હાલમાં ડેશબોર્ડ લાઈવ પેજ પર સેટઅપ થઈ ગયું છે.
+</script>
 
-    <div class="footer">
-        Last Updated: <span id="last_update">Never</span>
-    </div>
-
-    <script>
-        const DB_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/live_data.json";
-
-        async function fetchLiveData() {
-            try {
-                const response = await fetch(DB_URL);
-                if (!response.ok) return;
-                const data = await response.json();
-
-                if (data) {
-                    // 1. Balance & Equity
-                    document.getElementById('balance_equity').innerText = '$' + data.balance.toFixed(2) + ' / $' + data.equity.toFixed(2);
-                    
-                    // 2. Today PnL
-                    const todayElem = document.getElementById('today_pnl');
-                    todayElem.innerText = '$' + data.today_pnl.toFixed(2);
-                    todayElem.className = 'value ' + (data.today_pnl >= 0 ? 'positive' : 'negative');
-
-                    // 3. Floating PnL
-                    const floatElem = document.getElementById('floating_pnl');
-                    floatElem.innerText = '$' + data.floating_pnl.toFixed(2);
-                    floatElem.className = 'value ' + (data.floating_pnl >= 0 ? 'positive' : 'negative');
-
-                    // 4. Open Trades with Buy/Sell count
-                    document.getElementById('open_trades').innerText = data.open_trades + ' (B:' + data.buy_trades + ' / S:' + data.sell_trades + ')';
-
-                    // 5. Signals
-                    document.getElementById('tf1_dir').innerText = data.tf1_dir;
-                    document.getElementById('tf1_dir').className = 'value ' + (data.tf1_dir === 'BUY' ? 'positive' : 'negative');
-                    document.getElementById('tf2_dir').innerText = data.tf2_dir;
-                    document.getElementById('tf2_dir').className = 'value ' + (data.tf2_dir === 'BUY' ? 'positive' : 'negative');
-
-                    // 6 & 7. Drawdown & Margin
-                    document.getElementById('max_dd').innerText = '$' + data.max_dd.toFixed(2);
-                    document.getElementById('max_margin').innerText = '$' + data.max_margin.toFixed(2);
-
-                    // 8. Scan Time
-                    document.getElementById('scan_time').innerText = data.scan_time;
-
-                    // 9. ATR Values
-                    document.getElementById('atr_val').innerText = data.atr_tf1.toFixed(5) + ' | ' + data.atr_tf2.toFixed(5);
-
-                    // 10. ADX Values
-                    document.getElementById('adx_val').innerText = data.adx_tf1.toFixed(2) + ' | ' + data.adx_tf2.toFixed(2);
-
-                    // 11. Current Margin
-                    document.getElementById('current_margin').innerText = '$' + data.current_margin.toFixed(2);
-
-                    // 12. Target & Progress Bar
-                    document.getElementById('target_val').innerText = data.target_usd;
-                    document.getElementById('last_update').innerText = data.last_update;
-
-                    let progress = (data.floating_pnl / data.target_usd) * 100;
-                    if(progress < 0) progress = 0;
-                    if(progress > 100) progress = 100;
-                    document.getElementById('progress-fill').style.width = progress + '%';
-
-                    document.getElementById('status-tag').innerText = 'LIVE';
-                    document.getElementById('status-tag').style.background = '#0ecb81';
-                }
-            } catch (err) {
-                document.getElementById('status-tag').innerText = 'OFFLINE';
-                document.getElementById('status-tag').style.background = '#f6465d';
-            }
-        }
-
-        setInterval(fetchLiveData, 2000);
-        fetchLiveData();
-    </script>
 </body>
 </html>
