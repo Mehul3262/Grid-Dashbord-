@@ -1,12 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="gu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot C Master Dashboard - Live</title>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <title>Bot C Master Dashboard</title>
     <style>
         body {
             background-color: #0b0f19;
@@ -154,55 +152,51 @@
         <div class="value yellow" id="val-closing-status">--</div>
     </div>
 
-    <div class="footer" id="last-updated">Status: Connecting to Live Stream...</div>
+    <div class="footer" id="last-updated">Status: Connecting...</div>
 </div>
 
 <script>
-    // ⚠️ તમારા Firebase પ્રોજેક્ટની માહિતી અહીં મૂકવી (મફતમાં 2 મિનિટમાં Firebase બેઝ બની જાય છે)
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "SENDER_ID",
-        appId: "APP_ID"
-    };
+    const jsonFile = 'dashboard.json';
 
-    firebase.initializeApp(firebaseConfig);
-    const dbRef = firebase.database().ref('botCData');
+    function loadData() {
+        fetch(jsonFile + '?t=' + new Date().getTime())
+            .then(response => {
+                if (!response.ok) throw new Error("File not found");
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
+                document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse || 0).toFixed(2);
+                document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h || 0).toFixed(2);
+                document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades || 0} | Sell: ${data.sellTrades || 0}`;
+                document.getElementById('val-max-open').innerText = data.maxOpenTrades24h || 0;
+                
+                let currentPL = parseFloat(data.currentPL || 0);
+                let plElement = document.getElementById('val-current-pl');
+                plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
+                plElement.className = currentPL < 0 ? "value red" : "value green";
 
-    dbRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (!data) {
-            document.getElementById('last-updated').innerText = "Status: Waiting for data from MT5...";
-            return;
-        }
+                let todayPL = parseFloat(data.todayPL || 0);
+                let todayPlElement = document.getElementById('val-today-pl');
+                todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
+                todayPlElement.className = todayPL < 0 ? "value red" : "value green";
 
-        document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
-        document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse || 0).toFixed(2);
-        document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h || 0).toFixed(2);
-        document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades || 0} | Sell: ${data.sellTrades || 0}`;
-        document.getElementById('val-max-open').innerText = data.maxOpenTrades24h || 0;
-        
-        let currentPL = parseFloat(data.currentPL || 0);
-        let plElement = document.getElementById('val-current-pl');
-        plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
-        plElement.className = currentPL < 0 ? "value red" : "value green";
+                document.getElementById('val-bot-status').innerText = data.botStatus || "--";
+                document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h || 0).toFixed(2);
+                document.getElementById('val-scan-time').innerText = (data.scanTime || 0) + " ms";
+                document.getElementById('val-closing-status').innerText = data.closingStatus || "--";
 
-        let todayPL = parseFloat(data.todayPL || 0);
-        let todayPlElement = document.getElementById('val-today-pl');
-        todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
-        todayPlElement.className = todayPL < 0 ? "value red" : "value green";
+                let now = new Date();
+                document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
+            })
+            .catch(error => {
+                document.getElementById('last-updated').innerText = "Waiting for dashboard.json on GitHub...";
+            });
+    }
 
-        document.getElementById('val-bot-status').innerText = data.botStatus || "--";
-        document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h || 0).toFixed(2);
-        document.getElementById('val-scan-time').innerText = (data.scanTime || 0) + " ms";
-        document.getElementById('val-closing-status').innerText = data.closingStatus || "--";
-
-        let now = new Date();
-        document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
-    });
+    // દર 1 સેકન્ડે ઓટો રિફ્રેશ થશે
+    setInterval(loadData, 1000);
+    window.onload = loadData;
 </script>
 
 </body>
