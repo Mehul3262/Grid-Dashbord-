@@ -53,7 +53,7 @@
 
 <script>
     const binId = "6a9576b9f5f4af5e2957c0e7";
-    const masterKey = "$2a$10$QbGp4ZDovwmuPlqeWEVBsuye/IkSE875eUr.jzqnldg.7JG7ElTNq"; // તમારી માસ્ટર કી
+    const masterKey = "$2a$10$QbGp4ZDovwmuPlqeWEVBsuye/IkSE875eUr.jzqnldg.7JG7ElTNq";
 
     function loadData() {
         fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
@@ -86,14 +86,14 @@
             document.getElementById('val-closing-status').innerText = data.closingStatus || "--";
 
             let now = new Date();
-            document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString() + "." + now.getMilliseconds();
+            document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString();
         })
         .catch(err => {
             document.getElementById('last-updated').innerText = "Error loading from cloud...";
         });
     }
 
-    setInterval(loadData, 1000);
+    setInterval(loadData, 2000);
     window.onload = loadData;
 </script>
 
