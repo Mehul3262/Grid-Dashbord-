@@ -1,101 +1,182 @@
 <!DOCTYPE html>
-<html lang="gu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bot C Master Dashboard</title>
     <style>
-        body { background-color: #0b0f19; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 15px; }
-        .container { max-width: 600px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: #131b2e; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #1f293d; }
-        .title { color: #f3ba2f; font-weight: bold; font-size: 18px; }
-        .live-badge { background-color: #00c853; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-        .card { background: #131b2e; padding: 15px; border-radius: 8px; border: 1px solid #1f293d; }
-        .card-full { background: #131b2e; padding: 15px; border-radius: 8px; border: 1px solid #1f293d; margin-bottom: 12px; text-align: center; }
-        .label { font-size: 11px; color: #8a99ad; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; }
-        .value { font-size: 18px; font-weight: bold; }
-        .green { color: #00c853; } .red { color: #ff5252; } .yellow { color: #ffeb3b; } .white { color: #ffffff; }
-        .footer { text-align: center; font-size: 11px; color: #00c853; margin-top: 20px; font-weight: bold; }
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            background: #131a2c;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 15px 20px;
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .header h2 {
+            margin: 0;
+            color: #f59e0b;
+            font-size: 18px;
+        }
+        .live-badge {
+            background: #10b981;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            max-width: 450px;
+        }
+        .card {
+            background: #131a2c;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+        .card-title {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .card-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .full-card {
+            grid-column: span 2;
+            background: #131a2c;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 12px;
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+        .status-footer {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #10b981;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
     <div class="header">
-        <div class="title">⚡ BOT C MASTER DASHBOARD</div>
+        <h2>⚡ BOT C MASTER<br>DASHBOARD</h2>
         <div class="live-badge">LIVE</div>
     </div>
 
-    <div class="grid">
-        <div class="card"><div class="label">1) Current Balance</div><div class="value white" id="val-balance">--</div></div>
-        <div class="card"><div class="label">2) Current Margin Use</div><div class="value white" id="val-margin">--</div></div>
+    <div class="grid-container">
+        <div class="card">
+            <div class="card-title">1) Current Balance</div>
+            <div id="balance" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">2) Current Margin Use</div>
+            <div id="margin_use" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">3) Max Margin (24h)</div>
+            <div id="max_margin" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">4) Open Trades</div>
+            <div id="open_trades" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">5) Max Open Trades (24h)</div>
+            <div id="max_open_trades" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">6) Current P/L</div>
+            <div id="current_pl" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">7) Today's P/L</div>
+            <div id="todays_pl" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">8) Bot Status</div>
+            <div id="bot_status" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">9) Max Drawdown (24h)</div>
+            <div id="max_drawdown" class="card-value">--</div>
+        </div>
+        <div class="card">
+            <div class="card-title">10) ABC Scan Time</div>
+            <div id="abc_scan_time" class="card-value">--</div>
+        </div>
     </div>
-    <div class="grid">
-        <div class="card"><div class="label">3) Max Margin (24h)</div><div class="value white" id="val-max-margin">--</div></div>
-        <div class="card"><div class="label">4) Open Trades</div><div class="value white" id="val-open-trades">--</div></div>
+
+    <div class="full-card">
+        <div class="card-title">Closing Status</div>
+        <div id="closing_status" class="card-value" style="margin-top: 5px;">--</div>
     </div>
-    <div class="grid">
-        <div class="card"><div class="label">5) Max Open Trades (24h)</div><div class="value yellow" id="val-max-open">--</div></div>
-        <div class="card"><div class="label">6) Current P/L</div><div class="value" id="val-current-pl">--</div></div>
-    </div>
-    <div class="grid">
-        <div class="card"><div class="label">7) Today's P/L</div><div class="value" id="val-today-pl">--</div></div>
-        <div class="card"><div class="label">8) Bot Status</div><div class="value white" style="font-size: 13px;" id="val-bot-status">--</div></div>
-    </div>
-    <div class="grid">
-        <div class="card"><div class="label">9) Max Drawdown (24h)</div><div class="value red" id="val-max-dd">--</div></div>
-        <div class="card"><div class="label">10) ABC Scan Time</div><div class="value yellow" id="val-scan-time">--</div></div>
-    </div>
-    <div class="card-full"><div class="label">Closing Status</div><div class="value yellow" id="val-closing-status">--</div></div>
-    <div class="footer" id="last-updated">Status: Connecting to Cloud...</div>
-</div>
 
-<script>
-    const binId = "6a9576b9f5f4af5e2957c0e7";
-    const masterKey = "$2a$10$QbGp4ZDovwmuPlqeWEVBsuye/IkSE875eUr.jzqnldg.7JG7ElTNq";
+    <div id="connection-status" class="status-footer">Status: Connecting to Cloud...</div>
 
-    function loadData() {
-        fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-            headers: { 'X-Master-Key': masterKey }
-        })
-        .then(res => res.json())
-        .then(result => {
-            const data = result.record;
-            if(!data) return;
+    <script>
+        const firebaseURL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/bot_status.json";
 
-            document.getElementById('val-balance').innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
-            document.getElementById('val-margin').innerText = "$" + parseFloat(data.marginUse || 0).toFixed(2);
-            document.getElementById('val-max-margin').innerText = "$" + parseFloat(data.maxMargin24h || 0).toFixed(2);
-            document.getElementById('val-open-trades').innerText = `Buy: ${data.buyTrades || 0} | Sell: ${data.sellTrades || 0}`;
-            document.getElementById('val-max-open').innerText = data.maxOpenTrades24h || 0;
-            
-            let currentPL = parseFloat(data.currentPL || 0);
-            let plElement = document.getElementById('val-current-pl');
-            plElement.innerText = (currentPL < 0 ? "-$" : "$") + Math.abs(currentPL).toFixed(2);
-            plElement.className = currentPL < 0 ? "value red" : "value green";
+        function fetchBotData() {
+            fetch(firebaseURL)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.getElementById('balance').innerText = data.balance || "--";
+                        document.getElementById('margin_use').innerText = data.margin_use || "--";
+                        document.getElementById('max_margin').innerText = data.max_margin || "--";
+                        document.getElementById('open_trades').innerText = data.open_trades || "--";
+                        document.getElementById('max_open_trades').innerText = data.max_open_trades || "--";
+                        document.getElementById('current_pl').innerText = data.current_pl || "--";
+                        document.getElementById('todays_pl').innerText = data.todays_pl || "--";
+                        document.getElementById('bot_status').innerText = data.bot_status || "--";
+                        document.getElementById('max_drawdown').innerText = data.max_drawdown || "--";
+                        document.getElementById('abc_scan_time').innerText = data.abc_scan_time || "--";
+                        document.getElementById('closing_status').innerText = data.closing_status || "--";
 
-            let todayPL = parseFloat(data.todayPL || 0);
-            let todayPlElement = document.getElementById('val-today-pl');
-            todayPlElement.innerText = (todayPL < 0 ? "-$" : "$") + Math.abs(todayPL).toFixed(2);
-            todayPlElement.className = todayPL < 0 ? "value red" : "value green";
+                        document.getElementById('connection-status').innerText = "Status: Live Connected (Cloud Sync)";
+                        document.getElementById('connection-status').style.color = "#10b981";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                    document.getElementById('connection-status').innerText = "Status: Reconnecting...";
+                    document.getElementById('connection-status').style.color = "#f59e0b";
+                });
+        }
 
-            document.getElementById('val-bot-status').innerText = data.botStatus || "--";
-            document.getElementById('val-max-dd').innerText = "$" + parseFloat(data.maxDrawdown24h || 0).toFixed(2);
-            document.getElementById('val-scan-time').innerText = (data.scanTime || 0) + " ms";
-            document.getElementById('val-closing-status').innerText = data.closingStatus || "--";
-
-            let now = new Date();
-            document.getElementById('last-updated').innerText = "Last Updated: " + now.toLocaleTimeString();
-        })
-        .catch(err => {
-            document.getElementById('last-updated').innerText = "Error loading from cloud...";
-        });
-    }
-
-    setInterval(loadData, 2000);
-    window.onload = loadData;
-</script>
-
+        // Fetch data every 1 second
+        setInterval(fetchBotData, 1000);
+        fetchBotData(); // Initial call
+    </script>
 </body>
 </html>
