@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot C Master Dashboard</title>
+    <title>Mehul Grid EA Dashboard</title>
     <style>
         body {
             background-color: #0b0f19;
             color: #ffffff;
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 15px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -19,50 +19,52 @@
             background: #131a2c;
             border: 1px solid #1e293b;
             border-radius: 12px;
-            padding: 15px 20px;
+            padding: 12px 18px;
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             box-sizing: border-box;
         }
         .header h2 {
             margin: 0;
             color: #f59e0b;
-            font-size: 18px;
+            font-size: 16px;
+            font-weight: bold;
         }
         .live-badge {
             background: #10b981;
             color: #fff;
             padding: 4px 10px;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
         }
         .grid-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
         }
         .card {
             background: #131a2c;
             border: 1px solid #1e293b;
             border-radius: 10px;
-            padding: 12px;
+            padding: 10px 12px;
             box-sizing: border-box;
         }
         .card-title {
-            font-size: 11px;
+            font-size: 10px;
             color: #94a3b8;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             text-transform: uppercase;
+            font-weight: bold;
         }
         .card-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: #ffffff;
         }
@@ -73,75 +75,86 @@
             border-radius: 10px;
             padding: 12px;
             text-align: center;
-            margin-top: 12px;
+            margin-top: 10px;
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             box-sizing: border-box;
         }
-        .status-footer {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #10b981;
-            font-weight: bold;
+        .progress-bar-bg {
+            background: #1e293b;
+            border-radius: 6px;
+            height: 10px;
+            width: 100%;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            background: #10b981;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .green { color: #10b981 !important; }
+        .red { color: #ef4444 !important; }
+        .yellow { color: #f59e0b !important; }
+        .footer-time {
+            margin-top: 12px;
+            font-size: 11px;
+            color: #64748b;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>⚡ BOT C MASTER<br>DASHBOARD</h2>
+        <h2>🤖 MEHUL GRID EA</h2>
         <div class="live-badge">LIVE</div>
     </div>
 
     <div class="grid-container">
         <div class="card">
-            <div class="card-title">1) Current Balance</div>
-            <div id="balance" class="card-value">--</div>
+            <div class="card-title">Balance / Equity</div>
+            <div id="balance_equity" class="card-value">-- / --</div>
         </div>
         <div class="card">
-            <div class="card-title">2) Current Margin Use</div>
-            <div id="margin_use" class="card-value">--</div>
+            <div class="card-title">Today PNL</div>
+            <div id="today_pnl" class="card-value">--</div>
         </div>
         <div class="card">
-            <div class="card-title">3) Max Margin (24h)</div>
-            <div id="max_margin" class="card-value">--</div>
+            <div class="card-title">Floating PNL</div>
+            <div id="floating_pnl" class="card-value">--</div>
         </div>
         <div class="card">
-            <div class="card-title">4) Open Trades</div>
+            <div class="card-title">Open Trades (B / S)</div>
             <div id="open_trades" class="card-value">--</div>
         </div>
         <div class="card">
-            <div class="card-title">5) Max Open Trades (24h)</div>
-            <div id="max_open_trades" class="card-value">--</div>
+            <div class="card-title">Max Drawdown</div>
+            <div id="max_drawdown" class="card-value red">--</div>
         </div>
         <div class="card">
-            <div class="card-title">6) Current P/L</div>
-            <div id="current_pl" class="card-value">--</div>
+            <div class="card-title">Max Margin Use</div>
+            <div id="max_margin" class="card-value">--</div>
         </div>
         <div class="card">
-            <div class="card-title">7) Today's P/L</div>
-            <div id="todays_pl" class="card-value">--</div>
+            <div class="card-title">Scan Speed (ms)</div>
+            <div id="scan_ms" class="card-value yellow">--</div>
         </div>
         <div class="card">
-            <div class="card-title">8) Bot Status</div>
-            <div id="bot_status" class="card-value">--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">9) Max Drawdown (24h)</div>
-            <div id="max_drawdown" class="card-value">--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">10) ABC Scan Time</div>
-            <div id="abc_scan_time" class="card-value">--</div>
+            <div class="card-title">Current Margin</div>
+            <div id="current_margin" class="card-value">--</div>
         </div>
     </div>
 
     <div class="full-card">
-        <div class="card-title">Closing Status</div>
-        <div id="closing_status" class="card-value" style="margin-top: 5px;">--</div>
+        <div id="basket_title" class="card-title" style="font-size: 12px; color: #cbd5e1;">Basket Target Progress</div>
+        <div class="progress-bar-bg">
+            <div id="progress_fill" class="progress-bar-fill"></div>
+        </div>
     </div>
 
-    <div id="connection-status" class="status-footer">Status: Connecting to Cloud...</div>
+    <div id="last_updated" class="footer-time">Last Updated: Connecting...</div>
 
     <script>
         const firebaseURL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/bot_status.json";
@@ -151,32 +164,48 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data) {
-                        document.getElementById('balance').innerText = data.balance || "--";
-                        document.getElementById('margin_use').innerText = data.margin_use || "--";
-                        document.getElementById('max_margin').innerText = data.max_margin || "--";
-                        document.getElementById('open_trades').innerText = data.open_trades || "--";
-                        document.getElementById('max_open_trades').innerText = data.max_open_trades || "--";
-                        document.getElementById('current_pl').innerText = data.current_pl || "--";
-                        document.getElementById('todays_pl').innerText = data.todays_pl || "--";
-                        document.getElementById('bot_status').innerText = data.bot_status || "--";
-                        document.getElementById('max_drawdown').innerText = data.max_drawdown || "--";
-                        document.getElementById('abc_scan_time').innerText = data.abc_scan_time || "--";
-                        document.getElementById('closing_status').innerText = data.closing_status || "--";
+                        document.getElementById('balance_equity').innerText = `${data.balance} / ${data.equity}`;
+                        
+                        let todayEl = document.getElementById('today_pnl');
+                        todayEl.innerText = data.today_pnl;
+                        todayEl.className = data.today_pnl.includes("-") ? "card-value red" : "card-value green";
 
-                        document.getElementById('connection-status').innerText = "Status: Live Connected (Cloud Sync)";
-                        document.getElementById('connection-status').style.color = "#10b981";
+                        let floatEl = document.getElementById('floating_pnl');
+                        floatEl.innerText = data.floating_pnl;
+                        floatEl.className = data.floating_pnl.includes("-") ? "card-value red" : "card-value green";
+
+                        document.getElementById('open_trades').innerText = data.open_trades;
+                        document.getElementById('max_drawdown').innerText = data.max_drawdown;
+                        document.getElementById('max_margin').innerText = data.max_margin;
+                        document.getElementById('scan_ms').innerText = data.scan_ms;
+                        document.getElementById('current_margin').innerText = data.current_margin;
+                        
+                        document.getElementById('basket_title').innerText = data.basket_target;
+
+                        // Progress Bar Logic
+                        let current = parseFloat(data.basket_current) || 0;
+                        let target = parseFloat(data.basket_max) || 100;
+                        let percent = (current / target) * 100;
+                        if(percent < 0) percent = 0;
+                        if(percent > 100) percent = 100;
+                        document.getElementById('progress_fill').style.width = percent + '%';
+
+                        let now = new Date();
+                        let timeString = now.getFullYear() + '.' + 
+                                         String(now.getMonth() + 1).padStart(2, '0') + '.' + 
+                                         String(now.getDate()).padStart(2, '0') + ' ' + 
+                                         String(now.getHours()).padStart(2, '0') + ':' + 
+                                         String(now.getMinutes()).padStart(2, '0') + ':' + 
+                                         String(now.getSeconds()).padStart(2, '0');
+                        
+                        document.getElementById('last_updated').innerText = "Last Updated: " + timeString;
                     }
                 })
-                .catch(error => {
-                    console.error("Error fetching data:", error);
-                    document.getElementById('connection-status').innerText = "Status: Reconnecting...";
-                    document.getElementById('connection-status').style.color = "#f59e0b";
-                });
+                .catch(error => console.log('Error fetching data:', error));
         }
 
-        // Fetch data every 1 second
         setInterval(fetchBotData, 1000);
-        fetchBotData(); // Initial call
+        fetchBotData();
     </script>
 </body>
 </html>
