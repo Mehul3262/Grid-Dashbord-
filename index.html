@@ -3,209 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid EA Dashboard</title>
+    <title>Mehul Grid EA - Live Dashboard</title>
     <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-gold: #d4af37;
+            --profit-green: #3fb950;
+            --loss-red: #f85149;
+            --border-color: #30363d;
+        }
+
         body {
-            background-color: #0b0f19;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
-            padding: 12px;
+            padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
         }
+
+        .dashboard-container {
+            max-width: 900px;
+            width: 100%;
+        }
+
         .header {
-            background: #131a2c;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
-            padding: 12px 18px;
-            width: 100%;
-            max-width: 420px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            box-sizing: border-box;
-        }
-        .header h2 {
-            margin: 0;
-            color: #f59e0b;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .live-badge {
-            background: #10b981;
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            width: 100%;
-            max-width: 420px;
-        }
-        .card {
-            background: #131a2c;
-            border: 1px solid #1e293b;
-            border-radius: 10px;
-            padding: 10px 12px;
-            box-sizing: border-box;
-        }
-        .card-title {
-            font-size: 10px;
-            color: #94a3b8;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        .card-value {
-            font-size: 15px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-        .full-card {
-            grid-column: span 2;
-            background: #131a2c;
-            border: 1px solid #1e293b;
-            border-radius: 10px;
-            padding: 12px;
             text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            color: var(--accent-gold);
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--profit-green);
+            background: rgba(63, 185, 80, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(63, 185, 80, 0.2);
+        }
+
+        .dot {
+            height: 8px;
+            width: 8px;
+            background-color: var(--profit-green);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: blink 1.5s infinite ease-in-out;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card .value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .status-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-panel h3 {
+            margin: 0 0 15px 0;
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .status-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--accent-gold);
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: var(--bg-color);
+            border-radius: 4px;
+            height: 20px;
             margin-top: 10px;
-            width: 100%;
-            max-width: 420px;
-            box-sizing: border-box;
-        }
-        .progress-bar-bg {
-            background: #1e293b;
-            border-radius: 6px;
-            height: 10px;
-            width: 100%;
-            margin-top: 8px;
             overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
         }
-        .progress-bar-fill {
-            background: #10b981;
+
+        .progress-bar {
             height: 100%;
+            background-color: var(--profit-green);
             width: 0%;
             transition: width 0.5s ease;
         }
-        .green { color: #10b981 !important; }
-        .red { color: #ef4444 !important; }
-        .yellow { color: #f59e0b !important; }
-        .footer-time {
-            margin-top: 12px;
-            font-size: 11px;
-            color: #64748b;
+
+        .footer {
             text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: var(--text-muted);
         }
+
+        /* Utility classes for colors */
+        .text-green { color: var(--profit-green) !important; }
+        .text-red { color: var(--loss-red) !important; }
+        .text-white { color: var(--text-main) !important; }
     </style>
 </head>
 <body>
 
+<div class="dashboard-container">
     <div class="header">
-        <h2>🤖 MEHUL GRID EA</h2>
-        <div class="live-badge">LIVE</div>
+        <h1>MEHUL GRID MASTER</h1>
+        <div class="live-indicator"><span class="dot"></span>Live Connection to VPS</div>
     </div>
 
-    <div class="grid-container">
+    <!-- Main Financials -->
+    <div class="grid">
         <div class="card">
-            <div class="card-title">Balance / Equity</div>
-            <div id="balance_equity" class="card-value">-- / --</div>
+            <h3>Balance</h3>
+            <div class="value" id="balance">Loading...</div>
         </div>
         <div class="card">
-            <div class="card-title">Today PNL</div>
-            <div id="today_pnl" class="card-value">--</div>
+            <h3>Equity</h3>
+            <div class="value" id="equity">Loading...</div>
         </div>
         <div class="card">
-            <div class="card-title">Floating PNL</div>
-            <div id="floating_pnl" class="card-value">--</div>
+            <h3>Today P/L</h3>
+            <div class="value" id="today_pnl">Loading...</div>
         </div>
         <div class="card">
-            <div class="card-title">Open Trades (B / S)</div>
-            <div id="open_trades" class="card-value">--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Max Drawdown</div>
-            <div id="max_drawdown" class="card-value red">--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Max Margin Use</div>
-            <div id="max_margin" class="card-value">--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Scan Speed (ms)</div>
-            <div id="scan_ms" class="card-value yellow">--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Current Margin</div>
-            <div id="current_margin" class="card-value">--</div>
+            <h3>Floating P/L</h3>
+            <div class="value" id="floating_pnl">Loading...</div>
         </div>
     </div>
 
-    <div class="full-card">
-        <div id="basket_title" class="card-title" style="font-size: 12px; color: #cbd5e1;">Basket Target Progress</div>
-        <div class="progress-bar-bg">
-            <div id="progress_fill" class="progress-bar-fill"></div>
+    <!-- Trading Stats -->
+    <div class="grid">
+        <div class="card">
+            <h3>Open Trades</h3>
+            <div class="value text-white" id="open_trades" style="font-size: 18px;">Loading...</div>
+        </div>
+        <div class="card">
+            <h3>Max Drawdown</h3>
+            <div class="value text-red" id="max_drawdown">Loading...</div>
+        </div>
+        <div class="card">
+            <h3>Max Margin</h3>
+            <div class="value text-white" id="max_margin">Loading...</div>
+        </div>
+        <div class="card">
+            <h3>Current Margin</h3>
+            <div class="value text-white" id="current_margin">Loading...</div>
         </div>
     </div>
 
-    <div id="last_updated" class="footer-time">Last Updated: Connecting...</div>
+    <!-- Target & Status -->
+    <div class="status-panel">
+        <h3 id="basket_target_text">Basket Target Progress</h3>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress_bar"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 12px; color: var(--text-muted);">
+            <span id="current_prog_text">$0.00</span>
+            <span id="max_prog_text">Target</span>
+        </div>
+    </div>
 
-    <script>
-        const firebaseURL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/bot_status.json";
+    <div class="status-panel" style="text-align: center;">
+        <h3>Bot Status</h3>
+        <div class="status-text" id="closing_status">Fetching Live Status...</div>
+        <div style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
+            Scan Speed: <span id="scan_ms">0 ms</span>
+        </div>
+    </div>
 
-        function fetchBotData() {
-            fetch(firebaseURL)
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        document.getElementById('balance_equity').innerText = `${data.balance} / ${data.equity}`;
-                        
-                        let todayEl = document.getElementById('today_pnl');
-                        todayEl.innerText = data.today_pnl;
-                        todayEl.className = data.today_pnl.includes("-") ? "card-value red" : "card-value green";
+    <div class="footer">
+        Secured Dashboard • Updates automatically every 2 seconds
+    </div>
+</div>
 
-                        let floatEl = document.getElementById('floating_pnl');
-                        floatEl.innerText = data.floating_pnl;
-                        floatEl.className = data.floating_pnl.includes("-") ? "card-value red" : "card-value green";
+<script>
+    const FIREBASE_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/bot_status.json";
 
-                        document.getElementById('open_trades').innerText = data.open_trades;
-                        document.getElementById('max_drawdown').innerText = data.max_drawdown;
-                        document.getElementById('max_margin').innerText = data.max_margin;
-                        document.getElementById('scan_ms').innerText = data.scan_ms;
-                        document.getElementById('current_margin').innerText = data.current_margin;
-                        
-                        document.getElementById('basket_title').innerText = data.basket_target;
-
-                        // Progress Bar Logic
-                        let current = parseFloat(data.basket_current) || 0;
-                        let target = parseFloat(data.basket_max) || 100;
-                        let percent = (current / target) * 100;
-                        if(percent < 0) percent = 0;
-                        if(percent > 100) percent = 100;
-                        document.getElementById('progress_fill').style.width = percent + '%';
-
-                        let now = new Date();
-                        let timeString = now.getFullYear() + '.' + 
-                                         String(now.getMonth() + 1).padStart(2, '0') + '.' + 
-                                         String(now.getDate()).padStart(2, '0') + ' ' + 
-                                         String(now.getHours()).padStart(2, '0') + ':' + 
-                                         String(now.getMinutes()).padStart(2, '0') + ':' + 
-                                         String(now.getSeconds()).padStart(2, '0');
-                        
-                        document.getElementById('last_updated').innerText = "Last Updated: " + timeString;
-                    }
-                })
-                .catch(error => console.log('Error fetching data:', error));
+    function updateColor(elementId, valueString) {
+        const el = document.getElementById(elementId);
+        if(!el) return;
+        el.innerText = valueString;
+        
+        // Remove existing color classes
+        el.classList.remove('text-green', 'text-red', 'text-white');
+        
+        if (valueString.includes("$-") || valueString.startsWith("-")) {
+            el.classList.add('text-red');
+        } else if (valueString !== "$0.00" && valueString !== "0" && !valueString.includes("Waiting")) {
+            el.classList.add('text-green');
+        } else {
+            el.classList.add('text-white');
         }
+    }
 
-        setInterval(fetchBotData, 1000);
-        fetchBotData();
-    </script>
+    async function fetchData() {
+        try {
+            const response = await fetch(FIREBASE_URL);
+            const data = await response.json();
+            
+            if(data) {
+                updateColor('balance', data.balance);
+                updateColor('equity', data.equity);
+                updateColor('today_pnl', data.today_pnl);
+                updateColor('floating_pnl', data.floating_pnl);
+                
+                document.getElementById('open_trades').innerText = data.open_trades;
+                document.getElementById('max_drawdown').innerText = data.max_drawdown;
+                document.getElementById('max_margin').innerText = data.max_margin;
+                document.getElementById('current_margin').innerText = data.current_margin;
+                
+                document.getElementById('closing_status').innerText = data.closing_status;
+                document.getElementById('scan_ms').innerText = data.scan_ms;
+                
+                document.getElementById('basket_target_text').innerText = data.basket_target || "Basket Target Progress";
+                
+                // Progress Bar Logic
+                let current = parseFloat(data.basket_current) || 0;
+                let max = parseFloat(data.basket_max) || 100;
+                
+                document.getElementById('current_prog_text').innerText = "$" + current.toFixed(2);
+                document.getElementById('max_prog_text').innerText = "$" + max.toFixed(2);
+                
+                let percent = 0;
+                if(current > 0) {
+                    percent = (current / max) * 100;
+                    if(percent > 100) percent = 100;
+                }
+                
+                document.getElementById('progress_bar').style.width = percent + "%";
+                
+                // Change progress bar color based on profit/loss
+                if(current < 0) {
+                    document.getElementById('progress_bar').style.backgroundColor = "var(--loss-red)";
+                    // Small visual trick to show negative impact
+                    let negPercent = (Math.abs(current) / max) * 100;
+                    if(negPercent > 100) negPercent = 100;
+                    document.getElementById('progress_bar').style.width = negPercent + "%";
+                    document.getElementById('progress_bar').style.float = "right";
+                } else {
+                    document.getElementById('progress_bar').style.backgroundColor = "var(--profit-green)";
+                    document.getElementById('progress_bar').style.float = "left";
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+        }
+    }
+
+    // Fetch immediately on load, then every 2 seconds
+    fetchData();
+    setInterval(fetchData, 2000);
+</script>
+
 </body>
 </html>
