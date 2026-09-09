@@ -23,7 +23,8 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            overflow: hidden; /* સ્ક્રોલ સંપૂર્ણ બંધ */
+            width: 100vw;
+            overflow: hidden; 
             box-sizing: border-box;
             display: flex;
             justify-content: center;
@@ -32,46 +33,45 @@
 
         .dashboard-container {
             width: 100%;
-            max-width: 600px;
-            height: 98vh;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 8px;
+            padding: 12px; /* સ્ક્રીનની બોર્ડરથી થોડું જ અંતર */
             box-sizing: border-box;
         }
 
         .header {
             text-align: center;
-            padding-bottom: 4px;
+            padding-bottom: 8px;
             border-bottom: 1px solid var(--border-color);
         }
 
         .header h1 {
             color: var(--accent-gold);
-            margin: 0 0 3px 0;
-            font-size: 18px;
+            margin: 0 0 5px 0;
+            font-size: 22px; /* હેડિંગ મોટું કર્યું */
             letter-spacing: 1px;
         }
 
         .live-indicator {
             display: inline-flex;
             align-items: center;
-            font-size: 10px;
+            font-size: 12px;
             color: var(--profit-green);
             background: rgba(63, 185, 80, 0.1);
-            padding: 2px 8px;
+            padding: 3px 10px;
             border-radius: 20px;
             border: 1px solid rgba(63, 185, 80, 0.2);
         }
 
         .dot {
-            height: 6px;
-            width: 6px;
+            height: 8px;
+            width: 8px;
             background-color: var(--profit-green);
             border-radius: 50%;
             display: inline-block;
-            margin-right: 5px;
+            margin-right: 6px;
             animation: blink 1.5s infinite ease-in-out;
         }
 
@@ -81,20 +81,20 @@
             100% { opacity: 0.3; }
         }
 
-        /* 10 Items Grid (2x5) */
+        /* મોટા બોક્સ માટે ગ્રીડ સેટિંગ */
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 6px; 
+            gap: 12px; /* બોક્સ વચ્ચેની જગ્યા વધારી */
             flex-grow: 1;
-            margin: 8px 0;
+            margin: 12px 0;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 6px 4px;
+            border-radius: 8px;
+            padding: 10px 5px; /* બોક્સની લંબાઈ વધારી */
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -102,14 +102,14 @@
         }
 
         .card h3 {
-            margin: 0 0 3px 0;
-            font-size: 10px;
+            margin: 0 0 5px 0;
+            font-size: 12px; /* ટાઇટલના ફોન્ટ મોટા કર્યા */
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .card .value {
-            font-size: 15px; 
+            font-size: 20px; /* આંકડા સૌથી મોટા કર્યા (પહેલા 15px હતા) */
             font-weight: bold;
             margin: 0;
             white-space: nowrap;
@@ -118,21 +118,21 @@
         .status-panel {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px;
+            border-radius: 8px;
+            padding: 12px;
             text-align: center;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .status-panel h3 {
-            margin: 0 0 5px 0;
-            font-size: 11px;
+            margin: 0 0 6px 0;
+            font-size: 13px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .status-text {
-            font-size: 13px;
+            font-size: 16px; /* સ્ટેટસના ફોન્ટ મોટા કર્યા */
             font-weight: bold;
             color: var(--accent-gold);
             white-space: nowrap;
@@ -144,8 +144,8 @@
             width: 100%;
             background-color: var(--bg-color);
             border-radius: 4px;
-            height: 10px;
-            margin-top: 4px;
+            height: 12px;
+            margin-top: 6px;
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
@@ -159,7 +159,7 @@
 
         .footer {
             text-align: center;
-            font-size: 9px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
@@ -173,13 +173,11 @@
 
 <div class="dashboard-container">
     
-    <!-- Header -->
     <div class="header">
         <h1>MEHUL GRID LIVE</h1>
         <div class="live-indicator"><span class="dot"></span>Live Connection Active</div>
     </div>
 
-    <!-- 10 Grid Items (સંપૂર્ણ 10 આઈટમ્સ) -->
     <div class="grid">
         <div class="card">
             <h3>Balance</h3>
@@ -195,7 +193,8 @@
         </div>
         <div class="card">
             <h3>Open Trades</h3>
-            <div class="value text-white" id="open_trades" style="font-size: 13px;">--</div>
+            <!-- ઓપન ટ્રેડના આંકડા લાંબા હોવાથી તેને 16px સેટ કર્યા છે જેથી બોક્સની બહાર ન જાય -->
+            <div class="value text-white" id="open_trades" style="font-size: 16px;">--</div>
         </div>
         <div class="card">
             <h3>Max Drawdown</h3>
@@ -223,10 +222,9 @@
         </div>
     </div>
 
-    <!-- 11th Item: Basket Target Progress -->
     <div class="status-panel">
-        <h3 id="basket_target_text" style="margin: 0 0 2px 0;">Basket Target Progress</h3>
-        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);">
+        <h3 id="basket_target_text" style="margin: 0 0 4px 0;">Basket Target Progress</h3>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
             <span id="current_prog_text">$0.00</span>
             <span id="max_prog_text">Target</span>
         </div>
@@ -235,16 +233,14 @@
         </div>
     </div>
 
-    <!-- Bot Status -->
     <div class="status-panel">
         <h3>Bot Status</h3>
         <div class="status-text" id="closing_status">Fetching Data...</div>
-        <div style="margin-top: 3px; font-size: 9px; color: var(--text-muted);">
+        <div style="margin-top: 4px; font-size: 11px; color: var(--text-muted);">
             Scan Speed: <span id="scan_ms">0</span> ms
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
         Auto-refreshing every 2s
     </div>
@@ -275,27 +271,22 @@
             const data = await response.json();
             
             if(data) {
-                // Main Financials
                 updateColor('balance', data.balance);
                 updateColor('today_pnl', data.today_pnl);
                 updateColor('floating_pnl', data.floating_pnl);
                 
-                // Stats
                 document.getElementById('open_trades').innerText = data.open_trades || '--';
                 document.getElementById('max_drawdown').innerText = data.max_drawdown || '--';
                 document.getElementById('max_margin').innerText = data.max_margin || '--';
                 document.getElementById('current_margin').innerText = data.current_margin || '--';
                 
-                // NEW: Uptime, ADX, ATR
                 document.getElementById('uptime').innerText = data.uptime || '--';
                 document.getElementById('adx').innerText = data.adx || '--';
                 document.getElementById('atr').innerText = data.atr || '--';
                 
-                // Status
                 document.getElementById('closing_status').innerText = data.closing_status || 'Running';
                 document.getElementById('scan_ms').innerText = data.scan_ms || '0';
                 
-                // Target Progress
                 document.getElementById('basket_target_text').innerText = data.basket_target || "Basket Target Progress";
                 
                 let current = parseFloat(data.basket_current) || 0;
