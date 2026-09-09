@@ -22,8 +22,8 @@
             color: var(--text-main);
             margin: 0;
             padding: 0;
-            height: 100vh; /* 100% Screen Height */
-            overflow: hidden; /* સ્ક્રોલ બંધ કરવા માટે */
+            height: 100vh;
+            overflow: hidden; /* સ્ક્રોલ સંપૂર્ણ બંધ */
             box-sizing: border-box;
             display: flex;
             justify-content: center;
@@ -33,34 +33,34 @@
         .dashboard-container {
             width: 100%;
             max-width: 600px;
-            height: 98vh; /* ફુલ સ્ક્રીન કવર કરશે */
+            height: 98vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* બધી વસ્તુઓને સ્ક્રીન મુજબ ઓટોમેટિક સેટ કરશે */
-            padding: 10px;
+            justify-content: space-between;
+            padding: 8px;
             box-sizing: border-box;
         }
 
         .header {
             text-align: center;
-            padding-bottom: 5px;
+            padding-bottom: 4px;
             border-bottom: 1px solid var(--border-color);
         }
 
         .header h1 {
             color: var(--accent-gold);
-            margin: 0 0 5px 0;
-            font-size: 20px;
+            margin: 0 0 3px 0;
+            font-size: 18px;
             letter-spacing: 1px;
         }
 
         .live-indicator {
             display: inline-flex;
             align-items: center;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--profit-green);
             background: rgba(63, 185, 80, 0.1);
-            padding: 3px 10px;
+            padding: 2px 8px;
             border-radius: 20px;
             border: 1px solid rgba(63, 185, 80, 0.2);
         }
@@ -71,7 +71,7 @@
             background-color: var(--profit-green);
             border-radius: 50%;
             display: inline-block;
-            margin-right: 6px;
+            margin-right: 5px;
             animation: blink 1.5s infinite ease-in-out;
         }
 
@@ -81,17 +81,20 @@
             100% { opacity: 0.3; }
         }
 
+        /* 10 Items Grid (2x5) */
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 કોલમ ફિક્સ */
-            gap: 8px; /* ખાના વચ્ચે જગ્યા ઓછી કરી */
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px; 
+            flex-grow: 1;
+            margin: 8px 0;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 10px 5px;
+            padding: 6px 4px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -99,14 +102,14 @@
         }
 
         .card h3 {
-            margin: 0 0 4px 0;
-            font-size: 11px;
+            margin: 0 0 3px 0;
+            font-size: 10px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .card .value {
-            font-size: 16px; /* મોબાઈલ માટે પરફેક્ટ સાઈઝ */
+            font-size: 15px; 
             font-weight: bold;
             margin: 0;
             white-space: nowrap;
@@ -116,19 +119,20 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
+            margin-bottom: 5px;
         }
 
         .status-panel h3 {
-            margin: 0 0 8px 0;
-            font-size: 12px;
+            margin: 0 0 5px 0;
+            font-size: 11px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .status-text {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             color: var(--accent-gold);
             white-space: nowrap;
@@ -140,8 +144,8 @@
             width: 100%;
             background-color: var(--bg-color);
             border-radius: 4px;
-            height: 12px;
-            margin-top: 5px;
+            height: 10px;
+            margin-top: 4px;
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
@@ -155,34 +159,31 @@
 
         .footer {
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-muted);
         }
 
         .text-green { color: var(--profit-green) !important; }
         .text-red { color: var(--loss-red) !important; }
         .text-white { color: var(--text-main) !important; }
+        .text-gold { color: var(--accent-gold) !important; }
     </style>
 </head>
 <body>
 
 <div class="dashboard-container">
     
-    <!-- હેડર (Header) -->
+    <!-- Header -->
     <div class="header">
         <h1>MEHUL GRID LIVE</h1>
         <div class="live-indicator"><span class="dot"></span>Live Connection Active</div>
     </div>
 
-    <!-- મેઈન 8 બોક્સ (Main 8 Cards) -->
+    <!-- 10 Grid Items (સંપૂર્ણ 10 આઈટમ્સ) -->
     <div class="grid">
         <div class="card">
             <h3>Balance</h3>
             <div class="value" id="balance">--</div>
-        </div>
-        <div class="card">
-            <h3>Equity</h3>
-            <div class="value" id="equity">--</div>
         </div>
         <div class="card">
             <h3>Today P/L</h3>
@@ -194,7 +195,7 @@
         </div>
         <div class="card">
             <h3>Open Trades</h3>
-            <div class="value text-white" id="open_trades" style="font-size: 14px;">--</div>
+            <div class="value text-white" id="open_trades" style="font-size: 13px;">--</div>
         </div>
         <div class="card">
             <h3>Max Drawdown</h3>
@@ -208,12 +209,24 @@
             <h3>Current Margin</h3>
             <div class="value text-white" id="current_margin">--</div>
         </div>
+        <div class="card">
+            <h3>Bot Uptime</h3>
+            <div class="value text-gold" id="uptime">--</div>
+        </div>
+        <div class="card">
+            <h3>ADX (14)</h3>
+            <div class="value text-white" id="adx">--</div>
+        </div>
+        <div class="card">
+            <h3>ATR (14)</h3>
+            <div class="value text-white" id="atr">--</div>
+        </div>
     </div>
 
-    <!-- બાસ્કેટ ટાર્ગેટ પ્રોગ્રેસ બાર -->
+    <!-- 11th Item: Basket Target Progress -->
     <div class="status-panel">
-        <h3 id="basket_target_text" style="margin: 0 0 5px 0;">Basket Target</h3>
-        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+        <h3 id="basket_target_text" style="margin: 0 0 2px 0;">Basket Target Progress</h3>
+        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);">
             <span id="current_prog_text">$0.00</span>
             <span id="max_prog_text">Target</span>
         </div>
@@ -222,16 +235,16 @@
         </div>
     </div>
 
-    <!-- બોટ સ્ટેટસ -->
+    <!-- Bot Status -->
     <div class="status-panel">
         <h3>Bot Status</h3>
         <div class="status-text" id="closing_status">Fetching Data...</div>
-        <div style="margin-top: 5px; font-size: 10px; color: var(--text-muted);">
-            Speed: <span id="scan_ms">0</span>
+        <div style="margin-top: 3px; font-size: 9px; color: var(--text-muted);">
+            Scan Speed: <span id="scan_ms">0</span> ms
         </div>
     </div>
 
-    <!-- ફૂટર -->
+    <!-- Footer -->
     <div class="footer">
         Auto-refreshing every 2s
     </div>
@@ -245,7 +258,7 @@
         if(!el) return;
         el.innerText = valueString;
         
-        el.classList.remove('text-green', 'text-red', 'text-white');
+        el.classList.remove('text-green', 'text-red', 'text-white', 'text-gold');
         
         if (valueString.includes("$-") || valueString.startsWith("-")) {
             el.classList.add('text-red');
@@ -262,19 +275,27 @@
             const data = await response.json();
             
             if(data) {
+                // Main Financials
                 updateColor('balance', data.balance);
-                updateColor('equity', data.equity);
                 updateColor('today_pnl', data.today_pnl);
                 updateColor('floating_pnl', data.floating_pnl);
                 
-                document.getElementById('open_trades').innerText = data.open_trades;
-                document.getElementById('max_drawdown').innerText = data.max_drawdown;
-                document.getElementById('max_margin').innerText = data.max_margin;
-                document.getElementById('current_margin').innerText = data.current_margin;
+                // Stats
+                document.getElementById('open_trades').innerText = data.open_trades || '--';
+                document.getElementById('max_drawdown').innerText = data.max_drawdown || '--';
+                document.getElementById('max_margin').innerText = data.max_margin || '--';
+                document.getElementById('current_margin').innerText = data.current_margin || '--';
                 
-                document.getElementById('closing_status').innerText = data.closing_status;
-                document.getElementById('scan_ms').innerText = data.scan_ms;
+                // NEW: Uptime, ADX, ATR
+                document.getElementById('uptime').innerText = data.uptime || '--';
+                document.getElementById('adx').innerText = data.adx || '--';
+                document.getElementById('atr').innerText = data.atr || '--';
                 
+                // Status
+                document.getElementById('closing_status').innerText = data.closing_status || 'Running';
+                document.getElementById('scan_ms').innerText = data.scan_ms || '0';
+                
+                // Target Progress
                 document.getElementById('basket_target_text').innerText = data.basket_target || "Basket Target Progress";
                 
                 let current = parseFloat(data.basket_current) || 0;
