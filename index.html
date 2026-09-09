@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid EA - Live Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mehul Grid EA - Live</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -16,53 +16,62 @@
             --border-color: #30363d;
         }
 
-        body {
+        body, html {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            height: 100vh; /* 100% Screen Height */
+            overflow: hidden; /* સ્ક્રોલ બંધ કરવા માટે */
+            box-sizing: border-box;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
         .dashboard-container {
-            max-width: 900px;
             width: 100%;
+            max-width: 600px;
+            height: 98vh; /* ફુલ સ્ક્રીન કવર કરશે */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* બધી વસ્તુઓને સ્ક્રીન મુજબ ઓટોમેટિક સેટ કરશે */
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            padding-bottom: 5px;
             border-bottom: 1px solid var(--border-color);
         }
 
         .header h1 {
             color: var(--accent-gold);
-            margin: 0 0 10px 0;
-            font-size: 28px;
+            margin: 0 0 5px 0;
+            font-size: 20px;
             letter-spacing: 1px;
         }
 
         .live-indicator {
             display: inline-flex;
             align-items: center;
-            font-size: 14px;
+            font-size: 11px;
             color: var(--profit-green);
             background: rgba(63, 185, 80, 0.1);
-            padding: 5px 12px;
+            padding: 3px 10px;
             border-radius: 20px;
             border: 1px solid rgba(63, 185, 80, 0.2);
         }
 
         .dot {
-            height: 8px;
-            width: 8px;
+            height: 6px;
+            width: 6px;
             background-color: var(--profit-green);
             border-radius: 50%;
             display: inline-block;
-            margin-right: 8px;
+            margin-right: 6px;
             animation: blink 1.5s infinite ease-in-out;
         }
 
@@ -74,68 +83,66 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(2, 1fr); /* 2 કોલમ ફિક્સ */
+            gap: 8px; /* ખાના વચ્ચે જગ્યા ઓછી કરી */
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 6px;
+            padding: 10px 5px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .card h3 {
-            margin: 0 0 10px 0;
-            font-size: 13px;
+            margin: 0 0 4px 0;
+            font-size: 11px;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .card .value {
-            font-size: 24px;
+            font-size: 16px; /* મોબાઈલ માટે પરફેક્ટ સાઈઝ */
             font-weight: bold;
             margin: 0;
+            white-space: nowrap;
         }
 
         .status-panel {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
         }
 
         .status-panel h3 {
-            margin: 0 0 15px 0;
-            font-size: 14px;
+            margin: 0 0 8px 0;
+            font-size: 12px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .status-text {
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: bold;
             color: var(--accent-gold);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .progress-container {
             width: 100%;
             background-color: var(--bg-color);
             border-radius: 4px;
-            height: 20px;
-            margin-top: 10px;
+            height: 12px;
+            margin-top: 5px;
             overflow: hidden;
-            position: relative;
             border: 1px solid var(--border-color);
         }
 
@@ -148,12 +155,10 @@
 
         .footer {
             text-align: center;
-            margin-top: 30px;
-            font-size: 12px;
+            font-size: 10px;
             color: var(--text-muted);
         }
 
-        /* Utility classes for colors */
         .text-green { color: var(--profit-green) !important; }
         .text-red { color: var(--loss-red) !important; }
         .text-white { color: var(--text-main) !important; }
@@ -162,73 +167,73 @@
 <body>
 
 <div class="dashboard-container">
+    
+    <!-- હેડર (Header) -->
     <div class="header">
-        <h1>MEHUL GRID MASTER</h1>
-        <div class="live-indicator"><span class="dot"></span>Live Connection to VPS</div>
+        <h1>MEHUL GRID LIVE</h1>
+        <div class="live-indicator"><span class="dot"></span>Live Connection Active</div>
     </div>
 
-    <!-- Main Financials -->
+    <!-- મેઈન 8 બોક્સ (Main 8 Cards) -->
     <div class="grid">
         <div class="card">
             <h3>Balance</h3>
-            <div class="value" id="balance">Loading...</div>
+            <div class="value" id="balance">--</div>
         </div>
         <div class="card">
             <h3>Equity</h3>
-            <div class="value" id="equity">Loading...</div>
+            <div class="value" id="equity">--</div>
         </div>
         <div class="card">
             <h3>Today P/L</h3>
-            <div class="value" id="today_pnl">Loading...</div>
+            <div class="value" id="today_pnl">--</div>
         </div>
         <div class="card">
             <h3>Floating P/L</h3>
-            <div class="value" id="floating_pnl">Loading...</div>
+            <div class="value" id="floating_pnl">--</div>
         </div>
-    </div>
-
-    <!-- Trading Stats -->
-    <div class="grid">
         <div class="card">
             <h3>Open Trades</h3>
-            <div class="value text-white" id="open_trades" style="font-size: 18px;">Loading...</div>
+            <div class="value text-white" id="open_trades" style="font-size: 14px;">--</div>
         </div>
         <div class="card">
             <h3>Max Drawdown</h3>
-            <div class="value text-red" id="max_drawdown">Loading...</div>
+            <div class="value text-red" id="max_drawdown">--</div>
         </div>
         <div class="card">
             <h3>Max Margin</h3>
-            <div class="value text-white" id="max_margin">Loading...</div>
+            <div class="value text-white" id="max_margin">--</div>
         </div>
         <div class="card">
             <h3>Current Margin</h3>
-            <div class="value text-white" id="current_margin">Loading...</div>
+            <div class="value text-white" id="current_margin">--</div>
         </div>
     </div>
 
-    <!-- Target & Status -->
+    <!-- બાસ્કેટ ટાર્ગેટ પ્રોગ્રેસ બાર -->
     <div class="status-panel">
-        <h3 id="basket_target_text">Basket Target Progress</h3>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress_bar"></div>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 12px; color: var(--text-muted);">
+        <h3 id="basket_target_text" style="margin: 0 0 5px 0;">Basket Target</h3>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
             <span id="current_prog_text">$0.00</span>
             <span id="max_prog_text">Target</span>
         </div>
-    </div>
-
-    <div class="status-panel" style="text-align: center;">
-        <h3>Bot Status</h3>
-        <div class="status-text" id="closing_status">Fetching Live Status...</div>
-        <div style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
-            Scan Speed: <span id="scan_ms">0 ms</span>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress_bar"></div>
         </div>
     </div>
 
+    <!-- બોટ સ્ટેટસ -->
+    <div class="status-panel">
+        <h3>Bot Status</h3>
+        <div class="status-text" id="closing_status">Fetching Data...</div>
+        <div style="margin-top: 5px; font-size: 10px; color: var(--text-muted);">
+            Speed: <span id="scan_ms">0</span>
+        </div>
+    </div>
+
+    <!-- ફૂટર -->
     <div class="footer">
-        Secured Dashboard • Updates automatically every 2 seconds
+        Auto-refreshing every 2s
     </div>
 </div>
 
@@ -240,7 +245,6 @@
         if(!el) return;
         el.innerText = valueString;
         
-        // Remove existing color classes
         el.classList.remove('text-green', 'text-red', 'text-white');
         
         if (valueString.includes("$-") || valueString.startsWith("-")) {
@@ -273,7 +277,6 @@
                 
                 document.getElementById('basket_target_text').innerText = data.basket_target || "Basket Target Progress";
                 
-                // Progress Bar Logic
                 let current = parseFloat(data.basket_current) || 0;
                 let max = parseFloat(data.basket_max) || 100;
                 
@@ -288,10 +291,8 @@
                 
                 document.getElementById('progress_bar').style.width = percent + "%";
                 
-                // Change progress bar color based on profit/loss
                 if(current < 0) {
                     document.getElementById('progress_bar').style.backgroundColor = "var(--loss-red)";
-                    // Small visual trick to show negative impact
                     let negPercent = (Math.abs(current) / max) * 100;
                     if(negPercent > 100) negPercent = 100;
                     document.getElementById('progress_bar').style.width = negPercent + "%";
@@ -302,11 +303,10 @@
                 }
             }
         } catch (error) {
-            console.error("Error fetching data: ", error);
+            console.error("Error fetching data:", error);
         }
     }
 
-    // Fetch immediately on load, then every 2 seconds
     fetchData();
     setInterval(fetchData, 2000);
 </script>
