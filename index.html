@@ -37,7 +37,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 12px; /* સ્ક્રીનની બોર્ડરથી થોડું જ અંતર */
+            padding: 12px;
             box-sizing: border-box;
         }
 
@@ -50,7 +50,7 @@
         .header h1 {
             color: var(--accent-gold);
             margin: 0 0 5px 0;
-            font-size: 22px; /* હેડિંગ મોટું કર્યું */
+            font-size: 22px;
             letter-spacing: 1px;
         }
 
@@ -81,20 +81,19 @@
             100% { opacity: 0.3; }
         }
 
-        /* મોટા બોક્સ માટે ગ્રીડ સેટિંગ */
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px; /* બોક્સ વચ્ચેની જગ્યા વધારી */
+            gap: 10px;
             flex-grow: 1;
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 10px 5px; /* બોક્સની લંબાઈ વધારી */
+            padding: 8px 5px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -102,14 +101,14 @@
         }
 
         .card h3 {
-            margin: 0 0 5px 0;
-            font-size: 12px; /* ટાઇટલના ફોન્ટ મોટા કર્યા */
+            margin: 0 0 4px 0;
+            font-size: 11px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .card .value {
-            font-size: 20px; /* આંકડા સૌથી મોટા કર્યા (પહેલા 15px હતા) */
+            font-size: 18px;
             font-weight: bold;
             margin: 0;
             white-space: nowrap;
@@ -119,20 +118,20 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .status-panel h3 {
-            margin: 0 0 6px 0;
-            font-size: 13px;
+            margin: 0 0 4px 0;
+            font-size: 12px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .status-text {
-            font-size: 16px; /* સ્ટેટસના ફોન્ટ મોટા કર્યા */
+            font-size: 15px;
             font-weight: bold;
             color: var(--accent-gold);
             white-space: nowrap;
@@ -144,8 +143,8 @@
             width: 100%;
             background-color: var(--bg-color);
             border-radius: 4px;
-            height: 12px;
-            margin-top: 6px;
+            height: 10px;
+            margin-top: 4px;
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
@@ -193,8 +192,7 @@
         </div>
         <div class="card">
             <h3>Open Trades</h3>
-            <!-- ઓપન ટ્રેડના આંકડા લાંબા હોવાથી તેને 16px સેટ કર્યા છે જેથી બોક્સની બહાર ન જાય -->
-            <div class="value text-white" id="open_trades" style="font-size: 16px;">--</div>
+            <div class="value text-white" id="open_trades" style="font-size: 15px;">--</div>
         </div>
         <div class="card">
             <h3>Max Drawdown</h3>
@@ -213,18 +211,23 @@
             <div class="value text-gold" id="uptime">--</div>
         </div>
         <div class="card">
-            <h3>ADX (14)</h3>
+            <h3>ADX (20)</h3>
             <div class="value text-white" id="adx">--</div>
         </div>
         <div class="card">
             <h3>ATR (14)</h3>
             <div class="value text-white" id="atr">--</div>
         </div>
+        <!-- નવું ઉમેરેલું માર્કેટ કન્ડિશન બોક્સ -->
+        <div class="card" style="grid-column: span 2;">
+            <h3>Market Condition</h3>
+            <div class="value text-gold" id="market_condition" style="font-size: 16px;">--</div>
+        </div>
     </div>
 
     <div class="status-panel">
         <h3 id="basket_target_text" style="margin: 0 0 4px 0;">Basket Target Progress</h3>
-        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
             <span id="current_prog_text">$0.00</span>
             <span id="max_prog_text">Target</span>
         </div>
@@ -236,7 +239,7 @@
     <div class="status-panel">
         <h3>Bot Status</h3>
         <div class="status-text" id="closing_status">Fetching Data...</div>
-        <div style="margin-top: 4px; font-size: 11px; color: var(--text-muted);">
+        <div style="margin-top: 2px; font-size: 11px; color: var(--text-muted);">
             Scan Speed: <span id="scan_ms">0</span> ms
         </div>
     </div>
@@ -283,6 +286,9 @@
                 document.getElementById('uptime').innerText = data.uptime || '--';
                 document.getElementById('adx').innerText = data.adx || '--';
                 document.getElementById('atr').innerText = data.atr || '--';
+                
+                // Firebase માંથી માર્કેટ કન્ડિશન અહીં ફેચ થશે
+                document.getElementById('market_condition').innerText = data.market_condition || '--';
                 
                 document.getElementById('closing_status').innerText = data.closing_status || 'Running';
                 document.getElementById('scan_ms').innerText = data.scan_ms || '0';
