@@ -3,37 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid Live</title>
+    <title>Mehul Grid Live - Glassmorphism</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #0b0f19; color: #ffffff; font-family: 'Inter', sans-serif; padding: 15px; }
+        
+        /* ડાર્ક પર્પલ અને બ્લુ ગ્રેડિયન્ટ બેકગ્રાઉન્ડ */
+        body { 
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            background-attachment: fixed;
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+            padding: 15px; 
+            min-height: 100vh;
+        }
         
         .container { max-width: 600px; margin: 0 auto; }
         
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { color: #facc15; font-size: 24px; letter-spacing: 1px; }
-        .status-badge { display: inline-block; background: rgba(34, 197, 94, 0.1); color: #4ade80; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-top: 10px; border: 1px solid rgba(34, 197, 94, 0.2); }
-        .status-badge.offline { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2); }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { 
+            background: -webkit-linear-gradient(#facc15, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 26px; 
+            letter-spacing: 1.5px; 
+            margin-bottom: 8px;
+        }
         
-        .card { background-color: #161f33; padding: 15px 10px; border-radius: 10px; text-align: center; border: 1px solid #283552; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .status-badge { 
+            display: inline-block; 
+            background: rgba(34, 197, 94, 0.15); 
+            color: #4ade80; 
+            padding: 6px 18px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        .status-badge.offline { 
+            background: rgba(239, 68, 68, 0.15); 
+            color: #ef4444; 
+            border-color: rgba(239, 68, 68, 0.3); 
+        }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        
+        /* ગ્લાસમોર્ફિઝમ કાર્ડ ઇફેક્ટ */
+        .card { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            padding: 18px 12px; 
+            border-radius: 16px; 
+            text-align: center; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); 
+            transition: transform 0.2s ease;
+        }
+        .card:active { transform: scale(0.98); }
         .card.full { grid-column: span 2; }
         
-        .title { color: #94a3b8; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
-        .value { font-size: 16px; font-weight: 700; color: #f8fafc; }
-        .value.large { font-size: 18px; }
+        .title { color: #a5b4fc; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .value { font-size: 17px; font-weight: 700; color: #f8fafc; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .value.large { font-size: 20px; }
         
         .green { color: #4ade80 !important; }
         .red { color: #f87171 !important; }
         .yellow { color: #fbbf24 !important; }
         .blue { color: #60a5fa !important; }
 
-        .progress-container { background: #0f172a; border-radius: 5px; height: 12px; width: 100%; margin-top: 10px; overflow: hidden; position: relative; border: 1px solid #334155; }
-        .progress-bar { background: linear-gradient(90deg, #3b82f6, #2dd4bf); height: 100%; width: 0%; transition: width 0.3s ease; }
-        .progress-labels { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; margin-top: 5px; }
+        .progress-container { 
+            background: rgba(0, 0, 0, 0.3); 
+            border-radius: 8px; 
+            height: 14px; 
+            width: 100%; 
+            margin-top: 12px; 
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.05); 
+        }
+        .progress-bar { 
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6); 
+            height: 100%; 
+            width: 0%; 
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 11px; color: #cbd5e1; margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -62,14 +119,14 @@
         <div class="card"><div class="title">ATR (14)</div><div class="value" id="atr">--</div></div>
         
         <div class="card"><div class="title">MARKET CONDITION</div><div class="value yellow" id="market_condition">--</div></div>
-        <div class="card"><div class="title">ACTIVE CYCLE</div><div class="value blue" style="font-size: 14px;" id="active_cycle">--</div></div>
+        <div class="card"><div class="title">ACTIVE CYCLE</div><div class="value blue" style="font-size: 15px;" id="active_cycle">--</div></div>
 
         <div class="card"><div class="title">MAX OPEN TRADES</div><div class="value" id="max_open_trades">--</div></div>
-        <div class="card"><div class="title">SCAN SPEED</div><div class="value" style="font-size: 12px; color: #cbd5e1;" id="scan_ms">--</div></div>
+        <div class="card"><div class="title">SCAN SPEED</div><div class="value" style="font-size: 13px; color: #94a3b8;" id="scan_ms">--</div></div>
         
-        <div class="card full">
+        <div class="card full" style="border: 1px solid rgba(96, 165, 250, 0.3);">
             <div class="title">TARGET RULE</div>
-            <div class="value" style="font-size: 14px;" id="target_rule">--</div>
+            <div class="value" style="font-size: 15px;" id="target_rule">--</div>
         </div>
         
         <div class="card full">
@@ -83,9 +140,9 @@
             </div>
         </div>
 
-        <div class="card full" style="border-color: #3b82f6;">
+        <div class="card full" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(250, 204, 21, 0.3);">
             <div class="title">BOT STATUS</div>
-            <div class="value" style="font-size: 14px; font-weight: 600;" id="closing_status">--</div>
+            <div class="value yellow" style="font-size: 15px;" id="closing_status">--</div>
         </div>
     </div>
 </div>
@@ -100,7 +157,6 @@
             const data = await response.json();
             
             if (data) {
-                // Update basic text fields
                 document.getElementById('balance').innerText = data.balance || '--';
                 document.getElementById('today_pnl').innerText = data.today_pnl || '--';
                 document.getElementById('open_trades').innerText = data.open_trades || '--';
@@ -117,7 +173,6 @@
                 document.getElementById('scan_ms').innerText = data.scan_ms || '--';
                 document.getElementById('closing_status').innerText = data.closing_status || '--';
 
-                // Handle Floating P/L Color
                 const floatEl = document.getElementById('floating_pnl');
                 floatEl.innerText = data.floating_pnl || '--';
                 if(data.floating_pnl && data.floating_pnl.includes('-')) {
@@ -126,7 +181,6 @@
                     floatEl.className = "value large green";
                 }
 
-                // Progress Bar Logic
                 const current = parseFloat(data.basket_current) || 0;
                 const max = parseFloat(data.basket_max) || 100;
                 let percent = (current / max) * 100;
@@ -137,7 +191,6 @@
                 document.getElementById('basket_max_lbl').innerText = "$" + max.toFixed(2);
                 document.getElementById('basket_title').innerText = data.basket_target || "TARGET PROGRESS";
 
-                // Connection Status
                 document.getElementById('conn-status').innerText = "● Live Connection Active";
                 document.getElementById('conn-status').className = "status-badge";
                 lastFetchTime = Date.now();
@@ -147,7 +200,6 @@
         }
     }
 
-    // Check if offline
     setInterval(() => {
         if (Date.now() - lastFetchTime > 5000) {
             document.getElementById('conn-status').innerText = "● Connection Lost";
@@ -155,7 +207,6 @@
         }
     }, 1000);
 
-    // Fetch every 500ms
     fetchLiveData();
     setInterval(fetchLiveData, 500);
 </script>
