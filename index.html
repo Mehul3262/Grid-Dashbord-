@@ -3,99 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid Live - Cyberpunk</title>
+    <title>Mehul Grid - Compact Pro</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap');
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* પિચ બ્લેક બેકગ્રાઉન્ડ */
+        /* કોમ્પેક્ટ ડાર્ક બેકગ્રાઉન્ડ */
         body { 
-            background-color: #050505; 
-            color: #e0e0e0; 
-            font-family: 'Share Tech Mono', monospace; 
-            padding: 15px; 
-            min-height: 100vh;
+            background-color: #0d1117; 
+            color: #c9d1d9; 
+            font-family: 'Roboto Mono', monospace; 
+            padding: 8px; /* પેડિંગ ઘટાડ્યું */
+            font-size: 12px;
         }
         
         .container { max-width: 600px; margin: 0 auto; }
         
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { 
-            color: #0ff;
-            font-size: 28px; 
-            letter-spacing: 2px; 
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.4);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 5px; }
+        .header h1 { color: #e3b341; font-size: 16px; letter-spacing: 0.5px; margin: 0; }
         
         .status-badge { 
-            display: inline-block; 
-            background: #000; 
-            color: #0f0; 
-            padding: 4px 15px; 
-            border-radius: 0px; 
-            font-size: 14px; 
-            border: 1px solid #0f0;
-            box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
-            text-transform: uppercase;
+            background: rgba(46, 160, 67, 0.15); 
+            color: #3fb950; 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            font-size: 10px; 
+            border: 1px solid rgba(46, 160, 67, 0.4);
+            font-weight: 600;
         }
         .status-badge.offline { 
-            color: #f00; 
-            border-color: #f00; 
-            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+            background: rgba(248, 81, 73, 0.15); 
+            color: #f85149; 
+            border-color: rgba(248, 81, 73, 0.4); 
         }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        /* ગ્રીડમાં ખાના વચ્ચેનું અંતર ઘટાડ્યું (gap: 6px) */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
         
-        /* નિયોન સાયબરપંક કાર્ડ */
         .card { 
-            background: #0a0a0a; 
-            padding: 15px 10px; 
+            background-color: #161b22; 
+            padding: 8px 6px; /* કાર્ડની અંદરની જગ્યા ઘટાડી */
             border-radius: 4px; 
             text-align: center; 
-            border: 1px solid #0ff; 
-            box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.1), 0 0 5px rgba(0, 255, 255, 0.2);
-            transition: all 0.2s;
-            position: relative;
+            border: 1px solid #30363d; 
         }
+        .card.full { grid-column: span 2; padding: 10px 8px; }
         
-        /* કાર્ડના ખૂણા પર નાની ડિઝાઇન (Tech UI Effect) */
-        .card::before {
-            content: ''; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid #fff; border-left: 2px solid #fff;
-        }
-        .card::after {
-            content: ''; position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-bottom: 2px solid #fff; border-right: 2px solid #fff;
-        }
-
-        .card.full { grid-column: span 2; }
+        .title { color: #8b949e; font-size: 9px; font-weight: 600; text-transform: uppercase; margin-bottom: 3px; }
+        .value { font-size: 15px; font-weight: 700; color: #f0f6fc; }
+        .value.large { font-size: 17px; }
         
-        .title { color: #0ff; font-size: 12px; letter-spacing: 1px; margin-bottom: 8px; text-shadow: 0 0 3px rgba(0, 255, 255, 0.5); }
-        .value { font-size: 18px; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
-        .value.large { font-size: 22px; }
-        
-        .green { color: #0f0 !important; text-shadow: 0 0 8px rgba(0, 255, 0, 0.6) !important; }
-        .red { color: #f03 !important; text-shadow: 0 0 8px rgba(255, 0, 51, 0.6) !important; }
-        .yellow { color: #ff0 !important; text-shadow: 0 0 8px rgba(255, 255, 0, 0.6) !important; }
-        .blue { color: #0ff !important; text-shadow: 0 0 8px rgba(0, 255, 255, 0.6) !important; }
+        .green { color: #3fb950 !important; }
+        .red { color: #f85149 !important; }
+        .yellow { color: #d29922 !important; }
+        .blue { color: #58a6ff !important; }
 
         .progress-container { 
-            background: #000; 
-            height: 12px; 
+            background: #010409; 
+            border-radius: 3px; 
+            height: 8px; /* પ્રોગ્રેસ બાર પાતળો કર્યો */
             width: 100%; 
-            margin-top: 12px; 
-            border: 1px solid #0ff; 
-            position: relative;
+            margin-top: 6px; 
+            border: 1px solid #30363d; 
         }
         .progress-bar { 
-            background: #0ff; 
+            background: #58a6ff; 
             height: 100%; 
             width: 0%; 
-            transition: width 0.3s linear; 
-            box-shadow: 0 0 10px #0ff;
+            transition: width 0.2s ease; 
         }
-        .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: #aaa; margin-top: 8px; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 9px; color: #8b949e; margin-top: 4px; }
+        
+        /* ડીસ્પ્લે પર લાંબા ટેક્સ્ટ માટે નાનો ફોન્ટ */
+        .text-small { font-size: 12px !important; }
     </style>
 </head>
 <body>
@@ -103,10 +84,10 @@
 <div class="container">
     <div class="header">
         <h1>MEHUL GRID LIVE</h1>
-        <div class="status-badge" id="conn-status">SYS.ONLINE</div>
+        <div class="status-badge" id="conn-status">● ONLINE</div>
     </div>
 
-    <!-- 14 Items Grid -->
+    <!-- 14 Items Compact Grid -->
     <div class="grid">
         <div class="card"><div class="title">BALANCE</div><div class="value large green" id="balance">--</div></div>
         <div class="card"><div class="title">TODAY P/L</div><div class="value large green" id="today_pnl">--</div></div>
@@ -123,19 +104,19 @@
         <div class="card"><div class="title">ADX (20)</div><div class="value" id="adx">--</div></div>
         <div class="card"><div class="title">ATR (14)</div><div class="value" id="atr">--</div></div>
         
-        <div class="card"><div class="title">MARKET COND.</div><div class="value yellow" id="market_condition">--</div></div>
-        <div class="card"><div class="title">ACTIVE CYCLE</div><div class="value blue" style="font-size: 15px;" id="active_cycle">--</div></div>
+        <div class="card"><div class="title">MARKET COND.</div><div class="value yellow text-small" id="market_condition">--</div></div>
+        <div class="card"><div class="title">ACTIVE CYCLE</div><div class="value blue text-small" id="active_cycle">--</div></div>
 
-        <div class="card"><div class="title">MAX OPEN TRADES</div><div class="value" id="max_open_trades">--</div></div>
-        <div class="card"><div class="title">SCAN SPEED</div><div class="value" style="font-size: 13px; color: #888;" id="scan_ms">--</div></div>
+        <div class="card"><div class="title">MAX OPEN (CYC)</div><div class="value" id="max_open_trades">--</div></div>
+        <div class="card"><div class="title">SCAN SPEED</div><div class="value text-small" style="color: #8b949e;" id="scan_ms">--</div></div>
         
-        <div class="card full" style="border-color: #ff0;">
-            <div class="title" style="color: #ff0;">TARGET RULE</div>
-            <div class="value yellow" style="font-size: 16px;" id="target_rule">--</div>
+        <div class="card full" style="border-color: #d29922;">
+            <div class="title" style="color: #d29922;">TARGET RULE</div>
+            <div class="value text-small" id="target_rule">--</div>
         </div>
         
         <div class="card full">
-            <div class="title" id="basket_title">BASKET TARGET PROGRESS</div>
+            <div class="title" id="basket_title">BASKET PROGRESS</div>
             <div class="progress-container">
                 <div class="progress-bar" id="progress-fill"></div>
             </div>
@@ -145,9 +126,9 @@
             </div>
         </div>
 
-        <div class="card full" style="border-color: #0f0;">
-            <div class="title" style="color: #0f0;">BOT STATUS</div>
-            <div class="value green" style="font-size: 16px;" id="closing_status">--</div>
+        <div class="card full" style="border-color: #3fb950; background-color: rgba(63, 185, 80, 0.05);">
+            <div class="title" style="color: #3fb950;">BOT STATUS</div>
+            <div class="value green text-small" id="closing_status">--</div>
         </div>
     </div>
 </div>
@@ -174,7 +155,7 @@
                 document.getElementById('market_condition').innerText = data.market_condition || '--';
                 document.getElementById('active_cycle').innerText = data.active_cycle || '--';
                 document.getElementById('target_rule').innerText = data.target_rule || '--';
-                document.getElementById('max_open_trades').innerText = (data.max_open_trades || '0') + " (PEAK)";
+                document.getElementById('max_open_trades').innerText = data.max_open_trades || '0';
                 document.getElementById('scan_ms').innerText = data.scan_ms || '--';
                 document.getElementById('closing_status').innerText = data.closing_status || '--';
 
@@ -196,7 +177,7 @@
                 document.getElementById('basket_max_lbl').innerText = "$" + max.toFixed(2);
                 document.getElementById('basket_title').innerText = data.basket_target || "TARGET PROGRESS";
 
-                document.getElementById('conn-status').innerText = "SYS.ONLINE";
+                document.getElementById('conn-status').innerText = "● ONLINE";
                 document.getElementById('conn-status').className = "status-badge";
                 lastFetchTime = Date.now();
             }
@@ -207,7 +188,7 @@
 
     setInterval(() => {
         if (Date.now() - lastFetchTime > 5000) {
-            document.getElementById('conn-status').innerText = "SYS.OFFLINE";
+            document.getElementById('conn-status').innerText = "● OFFLINE";
             document.getElementById('conn-status').className = "status-badge offline";
         }
     }, 1000);
