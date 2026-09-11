@@ -2,331 +2,162 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mehul Grid EA - Live</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mehul Grid Live</title>
     <style>
-        :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --text-main: #c9d1d9;
-            --text-muted: #8b949e;
-            --accent-gold: #d4af37;
-            --profit-green: #3fb950;
-            --loss-red: #f85149;
-            --border-color: #30363d;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #0b0f19; color: #ffffff; font-family: 'Inter', sans-serif; padding: 15px; }
+        
+        .container { max-width: 600px; margin: 0 auto; }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: #facc15; font-size: 24px; letter-spacing: 1px; }
+        .status-badge { display: inline-block; background: rgba(34, 197, 94, 0.1); color: #4ade80; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-top: 10px; border: 1px solid rgba(34, 197, 94, 0.2); }
+        .status-badge.offline { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2); }
 
-        body, html {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden; 
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        
+        .card { background-color: #161f33; padding: 15px 10px; border-radius: 10px; text-align: center; border: 1px solid #283552; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .card.full { grid-column: span 2; }
+        
+        .title { color: #94a3b8; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .value { font-size: 16px; font-weight: 700; color: #f8fafc; }
+        .value.large { font-size: 18px; }
+        
+        .green { color: #4ade80 !important; }
+        .red { color: #f87171 !important; }
+        .yellow { color: #fbbf24 !important; }
+        .blue { color: #60a5fa !important; }
 
-        .dashboard-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 12px;
-            box-sizing: border-box;
-        }
-
-        .header {
-            text-align: center;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .header h1 {
-            color: var(--accent-gold);
-            margin: 0 0 5px 0;
-            font-size: 22px;
-            letter-spacing: 1px;
-        }
-
-        .live-indicator {
-            display: inline-flex;
-            align-items: center;
-            font-size: 12px;
-            color: var(--profit-green);
-            background: rgba(63, 185, 80, 0.1);
-            padding: 3px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(63, 185, 80, 0.2);
-        }
-
-        .dot {
-            height: 8px;
-            width: 8px;
-            background-color: var(--profit-green);
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 6px;
-            animation: blink 1.5s infinite ease-in-out;
-        }
-
-        @keyframes blink {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            flex-grow: 1;
-            margin: 10px 0;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 8px 5px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .card h3 {
-            margin: 0 0 4px 0;
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .card .value {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0;
-            white-space: nowrap;
-        }
-
-        .status-panel {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            margin-bottom: 6px;
-        }
-
-        .status-panel h3 {
-            margin: 0 0 4px 0;
-            font-size: 12px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .status-text {
-            font-size: 15px;
-            font-weight: bold;
-            color: var(--accent-gold);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .progress-container {
-            width: 100%;
-            background-color: var(--bg-color);
-            border-radius: 4px;
-            height: 10px;
-            margin-top: 4px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .progress-bar {
-            height: 100%;
-            background-color: var(--profit-green);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .text-green { color: var(--profit-green) !important; }
-        .text-red { color: var(--loss-red) !important; }
-        .text-white { color: var(--text-main) !important; }
-        .text-gold { color: var(--accent-gold) !important; }
+        .progress-container { background: #0f172a; border-radius: 5px; height: 12px; width: 100%; margin-top: 10px; overflow: hidden; position: relative; border: 1px solid #334155; }
+        .progress-bar { background: linear-gradient(90deg, #3b82f6, #2dd4bf); height: 100%; width: 0%; transition: width 0.3s ease; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-<div class="dashboard-container">
-    
+<div class="container">
     <div class="header">
         <h1>MEHUL GRID LIVE</h1>
-        <div class="live-indicator"><span class="dot"></span>Live Connection Active</div>
+        <div class="status-badge" id="conn-status">● Live Connection Active</div>
     </div>
 
+    <!-- 14 Items Grid -->
     <div class="grid">
-        <div class="card">
-            <h3>Balance</h3>
-            <div class="value" id="balance">--</div>
-        </div>
-        <div class="card">
-            <h3>Today P/L</h3>
-            <div class="value" id="today_pnl">--</div>
-        </div>
-        <div class="card">
-            <h3>Floating P/L</h3>
-            <div class="value" id="floating_pnl">--</div>
-        </div>
-        <div class="card">
-            <h3>Open Trades</h3>
-            <div class="value text-white" id="open_trades" style="font-size: 15px;">--</div>
-        </div>
-        <div class="card">
-            <h3>Max Drawdown</h3>
-            <div class="value text-red" id="max_drawdown">--</div>
-        </div>
-        <div class="card">
-            <h3>Max Margin</h3>
-            <div class="value text-white" id="max_margin">--</div>
-        </div>
-        <div class="card">
-            <h3>Current Margin</h3>
-            <div class="value text-white" id="current_margin">--</div>
-        </div>
-        <div class="card">
-            <h3>Bot Uptime</h3>
-            <div class="value text-gold" id="uptime">--</div>
-        </div>
-        <div class="card">
-            <h3>ADX (20)</h3>
-            <div class="value text-white" id="adx">--</div>
-        </div>
-        <div class="card">
-            <h3>ATR (14)</h3>
-            <div class="value text-white" id="atr">--</div>
-        </div>
-        <!-- નવું ઉમેરેલું માર્કેટ કન્ડિશન બોક્સ -->
-        <div class="card" style="grid-column: span 2;">
-            <h3>Market Condition</h3>
-            <div class="value text-gold" id="market_condition" style="font-size: 16px;">--</div>
-        </div>
-    </div>
+        <div class="card"><div class="title">BALANCE</div><div class="value large green" id="balance">--</div></div>
+        <div class="card"><div class="title">TODAY P/L</div><div class="value large green" id="today_pnl">--</div></div>
+        
+        <div class="card"><div class="title">FLOATING P/L</div><div class="value large" id="floating_pnl">--</div></div>
+        <div class="card"><div class="title">OPEN TRADES</div><div class="value" id="open_trades">--</div></div>
+        
+        <div class="card"><div class="title">MAX DRAWDOWN</div><div class="value red" id="max_drawdown">--</div></div>
+        <div class="card"><div class="title">MAX MARGIN USE</div><div class="value" id="max_margin">--</div></div>
+        
+        <div class="card"><div class="title">CURRENT MARGIN</div><div class="value" id="current_margin">--</div></div>
+        <div class="card"><div class="title">BOT UPTIME</div><div class="value yellow" id="uptime">--</div></div>
+        
+        <div class="card"><div class="title">ADX (20)</div><div class="value" id="adx">--</div></div>
+        <div class="card"><div class="title">ATR (14)</div><div class="value" id="atr">--</div></div>
+        
+        <div class="card"><div class="title">MARKET CONDITION</div><div class="value yellow" id="market_condition">--</div></div>
+        <div class="card"><div class="title">ACTIVE CYCLE</div><div class="value blue" style="font-size: 14px;" id="active_cycle">--</div></div>
 
-    <div class="status-panel">
-        <h3 id="basket_target_text" style="margin: 0 0 4px 0;">Basket Target Progress</h3>
-        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
-            <span id="current_prog_text">$0.00</span>
-            <span id="max_prog_text">Target</span>
+        <div class="card"><div class="title">MAX OPEN TRADES</div><div class="value" id="max_open_trades">--</div></div>
+        <div class="card"><div class="title">SCAN SPEED</div><div class="value" style="font-size: 12px; color: #cbd5e1;" id="scan_ms">--</div></div>
+        
+        <div class="card full">
+            <div class="title">TARGET RULE</div>
+            <div class="value" style="font-size: 14px;" id="target_rule">--</div>
         </div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress_bar"></div>
+        
+        <div class="card full">
+            <div class="title" id="basket_title">BASKET TARGET PROGRESS</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-fill"></div>
+            </div>
+            <div class="progress-labels">
+                <span>$0.00</span>
+                <span id="basket_max_lbl">$0.00</span>
+            </div>
         </div>
-    </div>
 
-    <div class="status-panel">
-        <h3>Bot Status</h3>
-        <div class="status-text" id="closing_status">Fetching Data...</div>
-        <div style="margin-top: 2px; font-size: 11px; color: var(--text-muted);">
-            Scan Speed: <span id="scan_ms">0</span> ms
+        <div class="card full" style="border-color: #3b82f6;">
+            <div class="title">BOT STATUS</div>
+            <div class="value" style="font-size: 14px; font-weight: 600;" id="closing_status">--</div>
         </div>
-    </div>
-
-    <div class="footer">
-        Auto-refreshing every 2s
     </div>
 </div>
 
 <script>
     const FIREBASE_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/bot_status.json";
+    let lastFetchTime = Date.now();
 
-    function updateColor(elementId, valueString) {
-        const el = document.getElementById(elementId);
-        if(!el) return;
-        el.innerText = valueString;
-        
-        el.classList.remove('text-green', 'text-red', 'text-white', 'text-gold');
-        
-        if (valueString.includes("$-") || valueString.startsWith("-")) {
-            el.classList.add('text-red');
-        } else if (valueString !== "$0.00" && valueString !== "0" && !valueString.includes("Waiting")) {
-            el.classList.add('text-green');
-        } else {
-            el.classList.add('text-white');
-        }
-    }
-
-    async function fetchData() {
+    async function fetchLiveData() {
         try {
-            const response = await fetch(FIREBASE_URL);
+            const response = await fetch(FIREBASE_URL + "?r=" + Math.random());
             const data = await response.json();
             
-            if(data) {
-                updateColor('balance', data.balance);
-                updateColor('today_pnl', data.today_pnl);
-                updateColor('floating_pnl', data.floating_pnl);
-                
+            if (data) {
+                // Update basic text fields
+                document.getElementById('balance').innerText = data.balance || '--';
+                document.getElementById('today_pnl').innerText = data.today_pnl || '--';
                 document.getElementById('open_trades').innerText = data.open_trades || '--';
                 document.getElementById('max_drawdown').innerText = data.max_drawdown || '--';
                 document.getElementById('max_margin').innerText = data.max_margin || '--';
                 document.getElementById('current_margin').innerText = data.current_margin || '--';
-                
                 document.getElementById('uptime').innerText = data.uptime || '--';
                 document.getElementById('adx').innerText = data.adx || '--';
                 document.getElementById('atr').innerText = data.atr || '--';
-                
-                // Firebase માંથી માર્કેટ કન્ડિશન અહીં ફેચ થશે
                 document.getElementById('market_condition').innerText = data.market_condition || '--';
-                
-                document.getElementById('closing_status').innerText = data.closing_status || 'Running';
-                document.getElementById('scan_ms').innerText = data.scan_ms || '0';
-                
-                document.getElementById('basket_target_text').innerText = data.basket_target || "Basket Target Progress";
-                
-                let current = parseFloat(data.basket_current) || 0;
-                let max = parseFloat(data.basket_max) || 100;
-                
-                document.getElementById('current_prog_text').innerText = "$" + current.toFixed(2);
-                document.getElementById('max_prog_text').innerText = "$" + max.toFixed(2);
-                
-                let percent = 0;
-                if(current > 0) {
-                    percent = (current / max) * 100;
-                    if(percent > 100) percent = 100;
-                }
-                
-                document.getElementById('progress_bar').style.width = percent + "%";
-                
-                if(current < 0) {
-                    document.getElementById('progress_bar').style.backgroundColor = "var(--loss-red)";
-                    let negPercent = (Math.abs(current) / max) * 100;
-                    if(negPercent > 100) negPercent = 100;
-                    document.getElementById('progress_bar').style.width = negPercent + "%";
-                    document.getElementById('progress_bar').style.float = "right";
+                document.getElementById('active_cycle').innerText = data.active_cycle || '--';
+                document.getElementById('target_rule').innerText = data.target_rule || '--';
+                document.getElementById('max_open_trades').innerText = (data.max_open_trades || '0') + " (Current Cycle)";
+                document.getElementById('scan_ms').innerText = data.scan_ms || '--';
+                document.getElementById('closing_status').innerText = data.closing_status || '--';
+
+                // Handle Floating P/L Color
+                const floatEl = document.getElementById('floating_pnl');
+                floatEl.innerText = data.floating_pnl || '--';
+                if(data.floating_pnl && data.floating_pnl.includes('-')) {
+                    floatEl.className = "value large red";
                 } else {
-                    document.getElementById('progress_bar').style.backgroundColor = "var(--profit-green)";
-                    document.getElementById('progress_bar').style.float = "left";
+                    floatEl.className = "value large green";
                 }
+
+                // Progress Bar Logic
+                const current = parseFloat(data.basket_current) || 0;
+                const max = parseFloat(data.basket_max) || 100;
+                let percent = (current / max) * 100;
+                if(percent < 0) percent = 0;
+                if(percent > 100) percent = 100;
+                
+                document.getElementById('progress-fill').style.width = percent + '%';
+                document.getElementById('basket_max_lbl').innerText = "$" + max.toFixed(2);
+                document.getElementById('basket_title').innerText = data.basket_target || "TARGET PROGRESS";
+
+                // Connection Status
+                document.getElementById('conn-status').innerText = "● Live Connection Active";
+                document.getElementById('conn-status').className = "status-badge";
+                lastFetchTime = Date.now();
             }
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Firebase Error:", error);
         }
     }
 
-    fetchData();
-    setInterval(fetchData, 2000);
+    // Check if offline
+    setInterval(() => {
+        if (Date.now() - lastFetchTime > 5000) {
+            document.getElementById('conn-status').innerText = "● Connection Lost";
+            document.getElementById('conn-status').className = "status-badge offline";
+        }
+    }, 1000);
+
+    // Fetch every 500ms
+    fetchLiveData();
+    setInterval(fetchLiveData, 500);
 </script>
 
 </body>
