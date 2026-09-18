@@ -14,40 +14,46 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* No Scroll & White Background */
         body {
-            background-color: #0b0c10;
-            color: #ffffff;
-            padding: 15px;
+            background-color: #ffffff;
+            color: #000000;
+            height: 100vh; /* 100% Screen Height */
+            overflow: hidden; /* સ્ક્રોલિંગ બંધ */
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            flex-shrink: 0; /* હેડરની સાઇઝ ફિક્સ રાખવા */
         }
 
         .header h1 {
-            color: #ffc107;
-            font-size: 26px;
+            color: #000000;
+            font-size: 24px;
             font-weight: 900;
             letter-spacing: 1px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .status-pill {
             display: inline-block;
-            background-color: rgba(76, 175, 80, 0.1);
-            color: #4caf50;
-            padding: 5px 15px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 4px 12px;
             border-radius: 20px;
             border: 1px solid #4caf50;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
         }
 
         .status-indicator {
             display: inline-block;
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background-color: #4caf50;
             border-radius: 50%;
             margin-right: 5px;
@@ -60,23 +66,26 @@
             100% { opacity: 1; }
         }
 
+        /* Auto-fit Grid to screen */
         .grid-container {
+            flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
+            grid-template-rows: repeat(6, 1fr); /* 6 લાઈનો સરખા ભાગે વહેંચાશે */
+            gap: 8px;
+            margin-bottom: 5px;
         }
 
         .card {
-            background-color: #1a1a24;
-            border: 1px solid #2d2d3d;
-            border-radius: 10px;
-            padding: 15px 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 5px 10px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .card-full {
@@ -84,39 +93,40 @@
         }
 
         .title {
-            color: #8c8c9e;
-            font-size: 12px;
+            color: #555555;
+            font-size: 11px;
             font-weight: 800;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 2px;
         }
 
         .value {
-            font-size: 26px; /* પહેલા 20px હતું, હવે મેક્સિમમ મોટું કર્યું છે */
-            font-weight: 800; /* એકદમ ઘાટા ફોન્ટ */
+            font-size: 22px; 
+            font-weight: 900;
             word-wrap: break-word;
         }
 
-        /* Text Colors */
-        .text-green { color: #4caf50; }
-        .text-red { color: #f44336; }
-        .text-white { color: #ffffff; }
-        .text-yellow { color: #ffc107; }
+        /* Light Theme Text Colors */
+        .text-green { color: #28a745 !important; }
+        .text-red { color: #dc3545 !important; }
+        .text-black { color: #000000 !important; }
+        .text-blue { color: #0056b3 !important; } /* White theme માટે yellow ની જગ્યાએ Blue બેસ્ટ લાગશે */
 
         /* Progress Bar */
         .progress-container {
             width: 100%;
-            background-color: #2d2d3d;
+            background-color: #e9ecef;
             border-radius: 10px;
             height: 10px;
-            margin-top: 10px;
+            margin-top: 5px;
             overflow: hidden;
+            border: 1px solid #ced4da;
         }
 
         .progress-fill {
             height: 100%;
-            background-color: #4caf50;
+            background-color: #28a745;
             width: 0%;
             transition: width 0.5s ease-in-out;
         }
@@ -126,16 +136,16 @@
             justify-content: space-between;
             font-size: 11px;
             font-weight: 800;
-            color: #8c8c9e;
-            margin-top: 5px;
+            color: #555555;
+            margin-top: 4px;
         }
         
         #error-msg {
-            color: #f44336;
+            color: #dc3545;
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             display: none;
         }
     </style>
@@ -167,14 +177,13 @@
         <!-- Floating P/L -->
         <div class="card">
             <div class="title">Floating P/L</div>
-            <div class="value text-white" id="val-floating-pl">$0.00</div>
+            <div class="value text-black" id="val-floating-pl">$0.00</div>
         </div>
 
         <!-- Open Trades -->
         <div class="card">
             <div class="title">Open Trades</div>
-            <!-- આમાં લખાણ લાંબુ હોવાથી સાઇઝ 18px રાખી છે જેથી બે લાઈનમાં ના તૂટે -->
-            <div class="value text-white" id="val-open-trades" style="font-size: 18px;">0 (B:0 / S:0)</div>
+            <div class="value text-black" id="val-open-trades" style="font-size: 16px;">0 (B:0 / S:0)</div>
         </div>
 
         <!-- Max Drawdown -->
@@ -186,49 +195,49 @@
         <!-- Max Margin -->
         <div class="card">
             <div class="title">Max Margin</div>
-            <div class="value text-white" id="val-max-margin">$0.00</div>
+            <div class="value text-black" id="val-max-margin">$0.00</div>
         </div>
 
         <!-- Current Margin -->
         <div class="card">
             <div class="title">Current Margin</div>
-            <div class="value text-white" id="val-current-margin">$0.00</div>
+            <div class="value text-black" id="val-current-margin">$0.00</div>
         </div>
 
         <!-- Bot Uptime -->
         <div class="card">
             <div class="title">Bot Uptime</div>
-            <div class="value text-yellow" id="val-uptime">0h 0m</div>
+            <div class="value text-blue" id="val-uptime">0h 0m</div>
         </div>
 
         <!-- Max Open Trades -->
         <div class="card">
             <div class="title">Max Open Trades</div>
-            <div class="value text-white" id="val-max-open-trades">0</div>
+            <div class="value text-black" id="val-max-open-trades">0</div>
         </div>
 
         <!-- Scan Speed -->
         <div class="card">
             <div class="title">Scan Speed</div>
-            <div class="value text-white" id="val-scan-speed" style="font-size: 20px;">0.00 ms</div>
+            <div class="value text-black" id="val-scan-speed" style="font-size: 18px;">0.00 ms</div>
         </div>
 
         <!-- ADX -->
         <div class="card">
             <div class="title">ADX (14)</div>
-            <div class="value text-white" id="val-adx">0.00</div>
+            <div class="value text-black" id="val-adx">0.00</div>
         </div>
 
         <!-- ATR -->
         <div class="card">
             <div class="title">ATR (14)</div>
-            <div class="value text-white" id="val-atr" style="font-size: 22px;">0.00000</div>
+            <div class="value text-black" id="val-atr" style="font-size: 20px;">0.00000</div>
         </div>
 
         <!-- Market Condition -->
         <div class="card card-full">
             <div class="title">Market Condition</div>
-            <div class="value text-yellow" id="val-market-condition" style="font-size: 28px;">Checking...</div>
+            <div class="value text-blue" id="val-market-condition" style="font-size: 24px;">Checking...</div>
         </div>
 
         <!-- Basket Target Progress -->
@@ -253,11 +262,10 @@
 
         function updateColor(elementId, value) {
             const el = document.getElementById(elementId);
-            // કલર અપડેટ કરતી વખતે જૂની સાઇઝ ના જતી રહે તે માટે માત્ર કલર ક્લાસ બદલ્યા છે
-            el.classList.remove("text-green", "text-red", "text-white", "text-yellow");
+            el.classList.remove("text-green", "text-red", "text-black", "text-blue");
             if (value > 0) el.classList.add("text-green");
             else if (value < 0) el.classList.add("text-red");
-            else el.classList.add("text-white");
+            else el.classList.add("text-black");
         }
 
         async function fetchDashboardData() {
@@ -291,13 +299,13 @@
                     document.getElementById('val-atr').innerText = parseFloat(data.atr).toFixed(5);
 
                     let condition = "Normal (Range)";
-                    let condColor = "text-white";
+                    let condColor = "text-black";
                     if(data.adx > 40) { condition = "Fast (Trending)"; condColor = "text-red"; }
-                    else if (data.adx >= 25) { condition = "Medium Trend"; condColor = "text-yellow"; }
+                    else if (data.adx >= 25) { condition = "Medium Trend"; condColor = "text-blue"; }
                     
                     let mcEl = document.getElementById('val-market-condition');
                     mcEl.innerText = condition;
-                    mcEl.classList.remove("text-green", "text-red", "text-white", "text-yellow");
+                    mcEl.classList.remove("text-green", "text-red", "text-black", "text-blue");
                     mcEl.classList.add(condColor);
 
                     let target = data.basket_target || 10.00;
@@ -314,7 +322,7 @@
             } catch (error) {
                 console.error("Firebase Fetch Error:", error);
                 document.getElementById('error-msg').style.display = 'block';
-                document.querySelector('.status-indicator').style.backgroundColor = '#f44336';
+                document.querySelector('.status-indicator').style.backgroundColor = '#dc3545';
             }
         }
 
