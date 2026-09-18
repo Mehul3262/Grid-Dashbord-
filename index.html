@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mehul Grid Live Dashboard</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap');
 
         * {
             box-sizing: border-box;
@@ -27,8 +27,8 @@
 
         .header h1 {
             color: #ffc107;
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 26px;
+            font-weight: 900;
             letter-spacing: 1px;
             margin-bottom: 10px;
         }
@@ -40,14 +40,14 @@
             padding: 5px 15px;
             border-radius: 20px;
             border: 1px solid #4caf50;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 800;
         }
 
         .status-indicator {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background-color: #4caf50;
             border-radius: 50%;
             margin-right: 5px;
@@ -71,9 +71,12 @@
             background-color: #1a1a24;
             border: 1px solid #2d2d3d;
             border-radius: 10px;
-            padding: 15px;
+            padding: 15px 10px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .card-full {
@@ -82,16 +85,17 @@
 
         .title {
             color: #8c8c9e;
-            font-size: 11px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 800;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .value {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 26px; /* પહેલા 20px હતું, હવે મેક્સિમમ મોટું કર્યું છે */
+            font-weight: 800; /* એકદમ ઘાટા ફોન્ટ */
+            word-wrap: break-word;
         }
 
         /* Text Colors */
@@ -105,7 +109,7 @@
             width: 100%;
             background-color: #2d2d3d;
             border-radius: 10px;
-            height: 8px;
+            height: 10px;
             margin-top: 10px;
             overflow: hidden;
         }
@@ -120,7 +124,8 @@
         .progress-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
+            font-size: 11px;
+            font-weight: 800;
             color: #8c8c9e;
             margin-top: 5px;
         }
@@ -128,7 +133,8 @@
         #error-msg {
             color: #f44336;
             text-align: center;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: 800;
             margin-bottom: 10px;
             display: none;
         }
@@ -167,7 +173,8 @@
         <!-- Open Trades -->
         <div class="card">
             <div class="title">Open Trades</div>
-            <div class="value text-white" id="val-open-trades" style="font-size: 16px;">0 (B:0 / S:0)</div>
+            <!-- આમાં લખાણ લાંબુ હોવાથી સાઇઝ 18px રાખી છે જેથી બે લાઈનમાં ના તૂટે -->
+            <div class="value text-white" id="val-open-trades" style="font-size: 18px;">0 (B:0 / S:0)</div>
         </div>
 
         <!-- Max Drawdown -->
@@ -194,6 +201,18 @@
             <div class="value text-yellow" id="val-uptime">0h 0m</div>
         </div>
 
+        <!-- Max Open Trades -->
+        <div class="card">
+            <div class="title">Max Open Trades</div>
+            <div class="value text-white" id="val-max-open-trades">0</div>
+        </div>
+
+        <!-- Scan Speed -->
+        <div class="card">
+            <div class="title">Scan Speed</div>
+            <div class="value text-white" id="val-scan-speed" style="font-size: 20px;">0.00 ms</div>
+        </div>
+
         <!-- ADX -->
         <div class="card">
             <div class="title">ADX (14)</div>
@@ -203,13 +222,13 @@
         <!-- ATR -->
         <div class="card">
             <div class="title">ATR (14)</div>
-            <div class="value text-white" id="val-atr">0.00000</div>
+            <div class="value text-white" id="val-atr" style="font-size: 22px;">0.00000</div>
         </div>
 
         <!-- Market Condition -->
         <div class="card card-full">
             <div class="title">Market Condition</div>
-            <div class="value text-yellow" id="val-market-condition">Checking...</div>
+            <div class="value text-yellow" id="val-market-condition" style="font-size: 28px;">Checking...</div>
         </div>
 
         <!-- Basket Target Progress -->
@@ -226,7 +245,6 @@
     </div>
 
     <script>
-        // તમારું ફાયરબેઝ ડેટાબેઝ URL
         const FIREBASE_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json";
 
         function formatMoney(amount) {
@@ -235,7 +253,8 @@
 
         function updateColor(elementId, value) {
             const el = document.getElementById(elementId);
-            el.className = "value"; // Reset classes
+            // કલર અપડેટ કરતી વખતે જૂની સાઇઝ ના જતી રહે તે માટે માત્ર કલર ક્લાસ બદલ્યા છે
+            el.classList.remove("text-green", "text-red", "text-white", "text-yellow");
             if (value > 0) el.classList.add("text-green");
             else if (value < 0) el.classList.add("text-red");
             else el.classList.add("text-white");
@@ -251,7 +270,6 @@
                     document.getElementById('error-msg').style.display = 'none';
                     document.querySelector('.status-indicator').style.backgroundColor = '#4caf50';
 
-                    // Update Cards
                     document.getElementById('val-balance').innerText = formatMoney(data.balance);
                     document.getElementById('val-today-pl').innerText = formatMoney(data.today_pl);
                     updateColor('val-today-pl', data.today_pl);
@@ -266,10 +284,12 @@
                     document.getElementById('val-current-margin').innerText = formatMoney(data.current_margin);
                     document.getElementById('val-uptime').innerText = data.uptime;
                     
+                    document.getElementById('val-max-open-trades').innerText = data.max_open_trades || 0;
+                    document.getElementById('val-scan-speed').innerText = (data.scan_speed ? parseFloat(data.scan_speed).toFixed(2) : "0.00") + " ms";
+
                     document.getElementById('val-adx').innerText = parseFloat(data.adx).toFixed(2);
                     document.getElementById('val-atr').innerText = parseFloat(data.atr).toFixed(5);
 
-                    // Market Condition Logic based on ADX
                     let condition = "Normal (Range)";
                     let condColor = "text-white";
                     if(data.adx > 40) { condition = "Fast (Trending)"; condColor = "text-red"; }
@@ -277,9 +297,9 @@
                     
                     let mcEl = document.getElementById('val-market-condition');
                     mcEl.innerText = condition;
-                    mcEl.className = "value " + condColor;
+                    mcEl.classList.remove("text-green", "text-red", "text-white", "text-yellow");
+                    mcEl.classList.add(condColor);
 
-                    // Target Progress Logic
                     let target = data.basket_target || 10.00;
                     document.getElementById('val-target-title').innerText = `Basket Target Progress ($${target.toFixed(2)})`;
                     document.getElementById('val-target-max').innerText = formatMoney(target);
@@ -298,10 +318,7 @@
             }
         }
 
-        // દર 2 સેકન્ડે ડેટા લાઈવ ખેંચશે
         setInterval(fetchDashboardData, 2000);
-        
-        // પેજ ખુલે ત્યારે તરત જ એકવાર અપડેટ કરશે
         fetchDashboardData();
     </script>
 </body>
