@@ -1,108 +1,308 @@
 <!DOCTYPE html>
-<html lang="gu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEHUL GRID LIVE</title>
+    <title>Mehul Grid Live Dashboard</title>
     <style>
-        body { background-color: #121212; color: #ffffff; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 10px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
-        .header h1 { color: #FFA500; font-size: 20px; margin: 0; }
-        .status-badge { background-color: #004d00; color: #00FF00; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px; border: 1px solid #00FF00; }
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { background-color: #1e1e1e; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #333; }
-        .card-title { font-size: 12px; color: #888; margin-bottom: 8px; text-transform: uppercase; }
-        .card-value { font-size: 18px; font-weight: bold; }
-        .text-green { color: #00FF00; }
-        .text-red { color: #FF4500; }
-        .text-yellow { color: #FFA500; }
-        .text-white { color: #FFFFFF; }
-        .sub-text { font-size: 12px; color: #ccc; margin-top: 5px; }
-        .full-width { grid-column: span 2; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #0b0c10;
+            color: #ffffff;
+            padding: 15px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #ffc107;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .status-pill {
+            display: inline-block;
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #4caf50;
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid #4caf50;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card {
+            background-color: #1a1a24;
+            border: 1px solid #2d2d3d;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .card-full {
+            grid-column: span 2;
+        }
+
+        .title {
+            color: #8c8c9e;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* Text Colors */
+        .text-green { color: #4caf50; }
+        .text-red { color: #f44336; }
+        .text-white { color: #ffffff; }
+        .text-yellow { color: #ffc107; }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: #2d2d3d;
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #8c8c9e;
+            margin-top: 5px;
+        }
+        
+        #error-msg {
+            color: #f44336;
+            text-align: center;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>MEHUL GRID LIVE</h1>
-        <div class="status-badge">● ONLINE</div>
+        <div class="status-pill" id="conn-status">
+            <span class="status-indicator"></span> Live Connection Active
+        </div>
     </div>
+    
+    <div id="error-msg">Connection Error! Retrying...</div>
 
     <div class="grid-container">
-        <div class="card"><div class="card-title">Balance</div><div class="card-value text-green" id="balance">$0.00</div></div>
-        <div class="card"><div class="card-title">Today P/L</div><div class="card-value text-green" id="today_pl">$0.00</div></div>
-        
-        <div class="card"><div class="card-title">Floating P/L</div><div class="card-value text-red" id="floating_pl">$0.00</div></div>
+        <!-- Balance -->
         <div class="card">
-            <div class="card-title">Open Trades</div>
-            <div class="card-value text-white" id="total_trades">0</div>
-            <div class="sub-text" id="trade_details">A(B:0 S:0) | B(B:0 S:0)</div>
+            <div class="title">Balance</div>
+            <div class="value text-green" id="val-balance">$0.00</div>
         </div>
 
-        <div class="card"><div class="card-title">Max Drawdown</div><div class="card-value text-red" id="max_dd">$0.00</div></div>
-        <div class="card"><div class="card-title">Max Margin Use</div><div class="card-value text-white" id="max_margin">$0.00</div></div>
-
-        <div class="card"><div class="card-title">Current Margin</div><div class="card-value text-white" id="current_margin">$0.00</div></div>
-        <div class="card"><div class="card-title">Bot Uptime</div><div class="card-value text-yellow" id="uptime">0h 0m</div></div>
-
-        <div class="card"><div class="card-title">ADX (20)</div><div class="card-value text-white" id="adx">0.00</div></div>
-        <div class="card"><div class="card-title">ATR (14)</div><div class="card-value text-white" id="atr">0.0000</div></div>
-
-        <div class="card"><div class="card-title">Max Open (A+B)</div><div class="card-value text-white" id="max_open_trades">0</div></div>
+        <!-- Today P/L -->
         <div class="card">
-            <div class="card-title">Scan Speed (ms)</div>
-            <div class="card-value text-white" id="scan_speed">0.00</div>
+            <div class="title">Today P/L</div>
+            <div class="value text-green" id="val-today-pl">$0.00</div>
         </div>
 
-        <div class="card full-width" style="border-color: #FFA500;">
-            <div class="card-title" style="color: #FFA500;">BASKET TARGET</div>
-            <div class="card-value text-white" id="basket_target">$0.00</div>
+        <!-- Floating P/L -->
+        <div class="card">
+            <div class="title">Floating P/L</div>
+            <div class="value text-white" id="val-floating-pl">$0.00</div>
+        </div>
+
+        <!-- Open Trades -->
+        <div class="card">
+            <div class="title">Open Trades</div>
+            <div class="value text-white" id="val-open-trades" style="font-size: 16px;">0 (B:0 / S:0)</div>
+        </div>
+
+        <!-- Max Drawdown -->
+        <div class="card">
+            <div class="title">Max Drawdown</div>
+            <div class="value text-red" id="val-max-dd">$0.00</div>
+        </div>
+
+        <!-- Max Margin -->
+        <div class="card">
+            <div class="title">Max Margin</div>
+            <div class="value text-white" id="val-max-margin">$0.00</div>
+        </div>
+
+        <!-- Current Margin -->
+        <div class="card">
+            <div class="title">Current Margin</div>
+            <div class="value text-white" id="val-current-margin">$0.00</div>
+        </div>
+
+        <!-- Bot Uptime -->
+        <div class="card">
+            <div class="title">Bot Uptime</div>
+            <div class="value text-yellow" id="val-uptime">0h 0m</div>
+        </div>
+
+        <!-- ADX -->
+        <div class="card">
+            <div class="title">ADX (14)</div>
+            <div class="value text-white" id="val-adx">0.00</div>
+        </div>
+
+        <!-- ATR -->
+        <div class="card">
+            <div class="title">ATR (14)</div>
+            <div class="value text-white" id="val-atr">0.00000</div>
+        </div>
+
+        <!-- Market Condition -->
+        <div class="card card-full">
+            <div class="title">Market Condition</div>
+            <div class="value text-yellow" id="val-market-condition">Checking...</div>
+        </div>
+
+        <!-- Basket Target Progress -->
+        <div class="card card-full">
+            <div class="title" id="val-target-title">Basket Target Progress ($10.00)</div>
+            <div class="progress-container">
+                <div class="progress-fill" id="val-progress-bar"></div>
+            </div>
+            <div class="progress-labels">
+                <span>$0.00</span>
+                <span id="val-target-max">$10.00</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // અપડેટ કરેલી ફાયરબેઝ લિંક (અહીં .json લગાવેલું જ છે)
+        // તમારું ફાયરબેઝ ડેટાબેઝ URL
         const FIREBASE_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json";
 
-        async function fetchData() {
+        function formatMoney(amount) {
+            return "$" + parseFloat(amount).toFixed(2);
+        }
+
+        function updateColor(elementId, value) {
+            const el = document.getElementById(elementId);
+            el.className = "value"; // Reset classes
+            if (value > 0) el.classList.add("text-green");
+            else if (value < 0) el.classList.add("text-red");
+            else el.classList.add("text-white");
+        }
+
+        async function fetchDashboardData() {
             try {
-                const response = await fetch(FIREBASE_URL);
+                const response = await fetch(FIREBASE_URL + "?nocache=" + new Date().getTime());
+                if (!response.ok) throw new Error("Network response was not ok");
                 const data = await response.json();
                 
-                if(data) {
-                    document.getElementById('balance').innerText = "$" + data.balance.toFixed(2);
-                    
-                    let todayPl = document.getElementById('today_pl');
-                    todayPl.innerText = "$" + data.today_pl.toFixed(2);
-                    todayPl.className = data.today_pl >= 0 ? "card-value text-green" : "card-value text-red";
+                if (data) {
+                    document.getElementById('error-msg').style.display = 'none';
+                    document.querySelector('.status-indicator').style.backgroundColor = '#4caf50';
 
-                    let floatingPl = document.getElementById('floating_pl');
-                    floatingPl.innerText = "$" + data.floating_pl.toFixed(2);
-                    floatingPl.className = data.floating_pl >= 0 ? "card-value text-green" : "card-value text-red";
+                    // Update Cards
+                    document.getElementById('val-balance').innerText = formatMoney(data.balance);
+                    document.getElementById('val-today-pl').innerText = formatMoney(data.today_pl);
+                    updateColor('val-today-pl', data.today_pl);
 
-                    document.getElementById('total_trades').innerText = data.open_trades_total;
-                    document.getElementById('trade_details').innerText = `A(B:${data.bot_a_buy} S:${data.bot_a_sell}) | B(B:${data.bot_b_buy} S:${data.bot_b_sell})`;
+                    document.getElementById('val-floating-pl').innerText = formatMoney(data.floating_pl);
+                    updateColor('val-floating-pl', data.floating_pl);
+
+                    document.getElementById('val-open-trades').innerText = `${data.open_trades_total} (B:${data.buy_trades} / S:${data.sell_trades})`;
                     
-                    document.getElementById('max_dd').innerText = "$" + data.max_dd.toFixed(2);
-                    document.getElementById('max_margin').innerText = "$" + data.max_margin.toFixed(2);
-                    document.getElementById('current_margin').innerText = "$" + data.current_margin.toFixed(2);
-                    document.getElementById('uptime').innerText = data.uptime;
+                    document.getElementById('val-max-dd').innerText = formatMoney(data.max_dd);
+                    document.getElementById('val-max-margin').innerText = formatMoney(data.max_margin);
+                    document.getElementById('val-current-margin').innerText = formatMoney(data.current_margin);
+                    document.getElementById('val-uptime').innerText = data.uptime;
                     
-                    document.getElementById('adx').innerText = data.adx.toFixed(2);
-                    document.getElementById('atr').innerText = data.atr.toFixed(5);
+                    document.getElementById('val-adx').innerText = parseFloat(data.adx).toFixed(2);
+                    document.getElementById('val-atr').innerText = parseFloat(data.atr).toFixed(5);
+
+                    // Market Condition Logic based on ADX
+                    let condition = "Normal (Range)";
+                    let condColor = "text-white";
+                    if(data.adx > 40) { condition = "Fast (Trending)"; condColor = "text-red"; }
+                    else if (data.adx >= 25) { condition = "Medium Trend"; condColor = "text-yellow"; }
                     
-                    document.getElementById('max_open_trades').innerText = data.max_open_trades;
-                    document.getElementById('scan_speed').innerText = data.scan_speed + " ms";
-                    document.getElementById('basket_target').innerText = "$" + data.basket_target.toFixed(2);
+                    let mcEl = document.getElementById('val-market-condition');
+                    mcEl.innerText = condition;
+                    mcEl.className = "value " + condColor;
+
+                    // Target Progress Logic
+                    let target = data.basket_target || 10.00;
+                    document.getElementById('val-target-title').innerText = `Basket Target Progress ($${target.toFixed(2)})`;
+                    document.getElementById('val-target-max').innerText = formatMoney(target);
+                    
+                    let progressPercent = 0;
+                    if(data.floating_pl > 0) {
+                        progressPercent = (data.floating_pl / target) * 100;
+                        if(progressPercent > 100) progressPercent = 100;
+                    }
+                    document.getElementById('val-progress-bar').style.width = progressPercent + "%";
                 }
             } catch (error) {
-                console.error("Error fetching data: ", error);
+                console.error("Firebase Fetch Error:", error);
+                document.getElementById('error-msg').style.display = 'block';
+                document.querySelector('.status-indicator').style.backgroundColor = '#f44336';
             }
         }
 
-        // દર 1 સેકન્ડે (1000ms) ડેટા રીફ્રેશ થશે
-        setInterval(fetchData, 1000);
-        fetchData();
+        // દર 2 સેકન્ડે ડેટા લાઈવ ખેંચશે
+        setInterval(fetchDashboardData, 2000);
+        
+        // પેજ ખુલે ત્યારે તરત જ એકવાર અપડેટ કરશે
+        fetchDashboardData();
     </script>
 </body>
 </html>
