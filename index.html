@@ -18,7 +18,7 @@
         body {
             background-color: #ffffff;
             color: #000000;
-            height: 100vh; /* 100% Screen Height */
+            height: 100vh;
             overflow: hidden; /* સ્ક્રોલિંગ બંધ */
             display: flex;
             flex-direction: column;
@@ -28,7 +28,7 @@
         .header {
             text-align: center;
             margin-bottom: 10px;
-            flex-shrink: 0; /* હેડરની સાઇઝ ફિક્સ રાખવા */
+            flex-shrink: 0;
         }
 
         .header h1 {
@@ -71,7 +71,7 @@
             flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-template-rows: repeat(6, 1fr); /* 6 લાઈનો સરખા ભાગે વહેંચાશે */
+            grid-template-rows: repeat(7, 1fr); /* 12 નાના ખાના (6 લાઈન) + 1 મોટું ખાનું (1 લાઈન) = 7 લાઈન */
             gap: 8px;
             margin-bottom: 5px;
         }
@@ -111,14 +111,14 @@
         .text-green { color: #28a745 !important; }
         .text-red { color: #dc3545 !important; }
         .text-black { color: #000000 !important; }
-        .text-blue { color: #0056b3 !important; } /* White theme માટે yellow ની જગ્યાએ Blue બેસ્ટ લાગશે */
+        .text-blue { color: #0056b3 !important; } 
 
         /* Progress Bar */
         .progress-container {
             width: 100%;
             background-color: #e9ecef;
             border-radius: 10px;
-            height: 10px;
+            height: 12px;
             margin-top: 5px;
             overflow: hidden;
             border: 1px solid #ced4da;
@@ -234,13 +234,7 @@
             <div class="value text-black" id="val-atr" style="font-size: 20px;">0.00000</div>
         </div>
 
-        <!-- Market Condition -->
-        <div class="card card-full">
-            <div class="title">Market Condition</div>
-            <div class="value text-blue" id="val-market-condition" style="font-size: 24px;">Checking...</div>
-        </div>
-
-        <!-- Basket Target Progress -->
+        <!-- Basket Target Progress (અહીં Market Condition કાઢી નાખ્યું છે) -->
         <div class="card card-full">
             <div class="title" id="val-target-title">Basket Target Progress ($10.00)</div>
             <div class="progress-container">
@@ -298,16 +292,7 @@
                     document.getElementById('val-adx').innerText = parseFloat(data.adx).toFixed(2);
                     document.getElementById('val-atr').innerText = parseFloat(data.atr).toFixed(5);
 
-                    let condition = "Normal (Range)";
-                    let condColor = "text-black";
-                    if(data.adx > 40) { condition = "Fast (Trending)"; condColor = "text-red"; }
-                    else if (data.adx >= 25) { condition = "Medium Trend"; condColor = "text-blue"; }
-                    
-                    let mcEl = document.getElementById('val-market-condition');
-                    mcEl.innerText = condition;
-                    mcEl.classList.remove("text-green", "text-red", "text-black", "text-blue");
-                    mcEl.classList.add(condColor);
-
+                    // Target Progress Logic
                     let target = data.basket_target || 10.00;
                     document.getElementById('val-target-title').innerText = `Basket Target Progress ($${target.toFixed(2)})`;
                     document.getElementById('val-target-max').innerText = formatMoney(target);
