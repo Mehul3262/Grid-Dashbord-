@@ -22,31 +22,31 @@
             overflow: hidden; /* સ્ક્રોલિંગ બંધ */
             display: flex;
             flex-direction: column;
-            padding: 10px;
+            padding: 8px; /* જગ્યા બચાવવા પેડિંગ ઓછું કર્યું */
         }
 
         .header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             flex-shrink: 0;
         }
 
         .header h1 {
             color: #000000;
-            font-size: 24px;
+            font-size: 22px; /* હેડિંગ થોડું નાનું કર્યું */
             font-weight: 900;
             letter-spacing: 1px;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .status-pill {
             display: inline-block;
             background-color: #e8f5e9;
             color: #2e7d32;
-            padding: 4px 12px;
+            padding: 2px 10px;
             border-radius: 20px;
             border: 1px solid #4caf50;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
         }
 
@@ -71,16 +71,16 @@
             flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-template-rows: repeat(7, 1fr); /* 12 નાના ખાના (6 લાઈન) + 1 મોટું ખાનું (1 લાઈન) = 7 લાઈન */
-            gap: 8px;
-            margin-bottom: 5px;
+            grid-template-rows: repeat(8, 1fr); /* 12 નાના (6) + 2 મોટા (2) = 8 લાઈનો */
+            gap: 6px; /* ખાના વચ્ચેની જગ્યા ઓછી કરી જેથી બધું ફીટ આવી જાય */
+            margin-bottom: 2px;
         }
 
         .card {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 5px 10px;
+            padding: 4px 8px; /* અંદરની જગ્યા ઘટાડી */
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -94,15 +94,15 @@
 
         .title {
             color: #555555;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            margin-bottom: 2px;
+            margin-bottom: 0px;
         }
 
         .value {
-            font-size: 22px; 
+            font-size: 18px; /* આંકડા ફીટ થાય એ માટે સાઇઝ બેલેન્સ કરી */
             font-weight: 900;
             word-wrap: break-word;
         }
@@ -118,8 +118,8 @@
             width: 100%;
             background-color: #e9ecef;
             border-radius: 10px;
-            height: 12px;
-            margin-top: 5px;
+            height: 8px;
+            margin-top: 3px;
             overflow: hidden;
             border: 1px solid #ced4da;
         }
@@ -134,18 +134,18 @@
         .progress-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             color: #555555;
-            margin-top: 4px;
+            margin-top: 2px;
         }
         
         #error-msg {
             color: #dc3545;
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
             display: none;
         }
     </style>
@@ -183,7 +183,7 @@
         <!-- Open Trades -->
         <div class="card">
             <div class="title">Open Trades</div>
-            <div class="value text-black" id="val-open-trades" style="font-size: 16px;">0 (B:0 / S:0)</div>
+            <div class="value text-black" id="val-open-trades" style="font-size: 15px;">0 (B:0 / S:0)</div>
         </div>
 
         <!-- Max Drawdown -->
@@ -219,7 +219,7 @@
         <!-- Scan Speed -->
         <div class="card">
             <div class="title">Scan Speed</div>
-            <div class="value text-black" id="val-scan-speed" style="font-size: 18px;">0.00 ms</div>
+            <div class="value text-black" id="val-scan-speed" style="font-size: 16px;">0.00 ms</div>
         </div>
 
         <!-- ADX -->
@@ -231,10 +231,22 @@
         <!-- ATR -->
         <div class="card">
             <div class="title">ATR (14)</div>
-            <div class="value text-black" id="val-atr" style="font-size: 20px;">0.00000</div>
+            <div class="value text-black" id="val-atr" style="font-size: 16px;">0.00000</div>
         </div>
 
-        <!-- Basket Target Progress (અહીં Market Condition કાઢી નાખ્યું છે) -->
+        <!-- Small Target Progress (1-2 Trades) -->
+        <div class="card card-full">
+            <div class="title" id="val-small-target-title">Small Target Progress ($2.00)</div>
+            <div class="progress-container">
+                <div class="progress-fill" id="val-small-progress-bar"></div>
+            </div>
+            <div class="progress-labels">
+                <span>$0.00</span>
+                <span id="val-small-target-max">$2.00</span>
+            </div>
+        </div>
+
+        <!-- Basket Target Progress (3+ Trades) -->
         <div class="card card-full">
             <div class="title" id="val-target-title">Basket Target Progress ($10.00)</div>
             <div class="progress-container">
@@ -292,17 +304,29 @@
                     document.getElementById('val-adx').innerText = parseFloat(data.adx).toFixed(2);
                     document.getElementById('val-atr').innerText = parseFloat(data.atr).toFixed(5);
 
-                    // Target Progress Logic
-                    let target = data.basket_target || 10.00;
-                    document.getElementById('val-target-title').innerText = `Basket Target Progress ($${target.toFixed(2)})`;
-                    document.getElementById('val-target-max').innerText = formatMoney(target);
+                    // Small Target Progress Logic
+                    let smallTarget = 2.00; // MT5 ની ડીફોલ્ટ વેલ્યુ 
+                    document.getElementById('val-small-target-title').innerText = `Small Target Progress ($${smallTarget.toFixed(2)})`;
+                    document.getElementById('val-small-target-max').innerText = formatMoney(smallTarget);
                     
-                    let progressPercent = 0;
+                    let smallProgressPercent = 0;
                     if(data.floating_pl > 0) {
-                        progressPercent = (data.floating_pl / target) * 100;
-                        if(progressPercent > 100) progressPercent = 100;
+                        smallProgressPercent = (data.floating_pl / smallTarget) * 100;
+                        if(smallProgressPercent > 100) smallProgressPercent = 100;
                     }
-                    document.getElementById('val-progress-bar').style.width = progressPercent + "%";
+                    document.getElementById('val-small-progress-bar').style.width = smallProgressPercent + "%";
+
+                    // Basket Target Progress Logic
+                    let basketTarget = data.basket_target || 10.00;
+                    document.getElementById('val-target-title').innerText = `Basket Target Progress ($${basketTarget.toFixed(2)})`;
+                    document.getElementById('val-target-max').innerText = formatMoney(basketTarget);
+                    
+                    let basketProgressPercent = 0;
+                    if(data.floating_pl > 0) {
+                        basketProgressPercent = (data.floating_pl / basketTarget) * 100;
+                        if(basketProgressPercent > 100) basketProgressPercent = 100;
+                    }
+                    document.getElementById('val-progress-bar').style.width = basketProgressPercent + "%";
                 }
             } catch (error) {
                 console.error("Firebase Fetch Error:", error);
