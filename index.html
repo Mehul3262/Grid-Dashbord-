@@ -3,340 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid Live Dashboard</title>
+    <title>Mehul Grid Live - Pro Edition</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap');
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* 100dvh જેથી મોબાઈલના બ્રાઉઝરનું એડ્રેસ બાર નડે નહીં */
-        body {
-            background-color: #ffffff;
-            color: #000000;
-            height: 100dvh; 
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            padding: 4px; /* વધારાની જગ્યા કાઢી નાખી */
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2px;
-            flex-shrink: 0;
-        }
-
-        .header h1 {
-            color: #000000;
-            font-size: 20px;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-            margin-bottom: 0px;
-        }
-
-        .status-pill {
-            display: inline-block;
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 2px 10px;
-            border-radius: 12px;
-            border: 1px solid #4caf50;
-            font-size: 10px;
-            font-weight: 800;
-            margin-bottom: 2px;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: #4caf50;
-            border-radius: 50%;
-            margin-right: 4px;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
-
-        /* દબાણ પૂર્વક 8 લાઈનોને ફિટ કરવા માટેનું જાદુ */
-        .grid-container {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: repeat(8, minmax(0, 1fr)); 
-            gap: 4px; 
-            margin-bottom: 0px;
-        }
-
-        .card {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            padding: 2px 4px; 
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        .card-full {
-            grid-column: span 2;
-        }
-
-        .title {
-            color: #555555;
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-bottom: 0px; /* ટાઇટલ અને આંકડા વચ્ચેની જગ્યા કાઢી નાખી */
-        }
-
-        /* આંકડા સૌથી મોટા અને ઘાટા (Bold) કર્યા */
-        .value {
-            font-size: 24px; 
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.5px;
-            word-wrap: break-word;
-        }
-
+        body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 10px; }
+        h1 { text-align: center; color: #111; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; font-size: 24px;}
+        .status-badge { text-align: center; padding: 8px; font-weight: bold; font-size: 14px; border-radius: 5px; margin-bottom: 15px; color: white; }
+        .bg-normal { background-color: #28a745; }
+        .bg-recovery { background-color: #dc3545; animation: blink 2s infinite; }
+        @keyframes blink { 50% { opacity: 0.7; } }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .card { background-color: #fff; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
+        .card h3 { margin: 0 0 5px 0; font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card p { margin: 0; font-size: 20px; font-weight: 900; color: #111; }
         .text-green { color: #28a745 !important; }
         .text-red { color: #dc3545 !important; }
-        .text-black { color: #000000 !important; }
-        .text-blue { color: #0056b3 !important; } 
-
-        .progress-container {
-            width: 100%;
-            background-color: #e9ecef;
-            border-radius: 6px;
-            height: 8px; /* પ્રોગ્રેસ બાર થોડો પતલો કર્યો જેથી જગ્યા બચે */
-            margin-top: 4px;
-            overflow: hidden;
-            border: 1px solid #ced4da;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background-color: #28a745;
-            width: 0%;
-            transition: width 0.5s ease-in-out;
-        }
-
-        .progress-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            font-weight: 800;
-            color: #555555;
-            margin-top: 2px;
-        }
-        
-        #error-msg {
-            color: #dc3545;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 800;
-            margin-bottom: 2px;
-            display: none;
-        }
+        .text-blue { color: #007bff !important; }
+        .full-width { grid-column: span 2; }
+        .small-text { font-size: 12px !important; font-weight: bold; color: #555 !important; margin-top: 5px !important;}
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>MEHUL GRID LIVE</h1>
-        <div class="status-pill" id="conn-status">
-            <span class="status-indicator"></span> Live Connection Active
-        </div>
-    </div>
-    
-    <div id="error-msg">Connection Error! Retrying...</div>
+    <h1>MEHUL GRID LIVE</h1>
+    <div id="systemBadge" class="status-badge bg-normal">🟢 CONNECTION ESTABLISHING...</div>
 
     <div class="grid-container">
-        <!-- Balance -->
         <div class="card">
-            <div class="title">Balance</div>
-            <div class="value text-green" id="val-balance">$0.00</div>
+            <h3>Balance</h3>
+            <p id="balance" class="text-green">$0.00</p>
         </div>
-
-        <!-- Today P/L -->
         <div class="card">
-            <div class="title">Today P/L</div>
-            <div class="value text-green" id="val-today-pl">$0.00</div>
+            <h3>Today P/L</h3>
+            <p id="todayPl" class="text-green">$0.00</p>
+        </div>
+        
+        <div class="card full-width">
+            <h3>Total Floating P/L</h3>
+            <p id="floatingPl">$0.00</p>
+            <p id="recoveryTargetText" class="small-text" style="display:none;">Target to Unlock: +$5.00</p>
         </div>
 
-        <!-- Floating P/L -->
         <div class="card">
-            <div class="title">Floating P/L</div>
-            <div class="value text-black" id="val-floating-pl">$0.00</div>
+            <h3>Bot A (Grid)</h3>
+            <p id="botAtrades" class="text-blue">0</p>
+            <p id="botAprofit" class="small-text">$0.00</p>
         </div>
-
-        <!-- Open Trades -->
         <div class="card">
-            <div class="title">Open Trades</div>
-            <div class="value text-black" id="val-open-trades" style="font-size: 18px;">0 (B:0 / S:0)</div>
+            <h3>Bot B (Recovery)</h3>
+            <p id="botBtrades" class="text-red">0</p>
+            <p id="botBprofit" class="small-text">$0.00</p>
         </div>
 
-        <!-- Max Drawdown -->
         <div class="card">
-            <div class="title">Max Drawdown</div>
-            <div class="value text-red" id="val-max-dd">$0.00</div>
+            <h3>ADX (14)</h3>
+            <p id="adxVal">0.00</p>
         </div>
-
-        <!-- Max Margin -->
         <div class="card">
-            <div class="title">Max Margin</div>
-            <div class="value text-black" id="val-max-margin">$0.00</div>
+            <h3>EMA (14) M5</h3>
+            <p id="emaVal">0.00</p>
         </div>
 
-        <!-- Current Margin -->
         <div class="card">
-            <div class="title">Current Margin</div>
-            <div class="value text-black" id="val-current-margin">$0.00</div>
+            <h3>Max Drawdown</h3>
+            <p id="maxDd" class="text-red">$0.00</p>
         </div>
-
-        <!-- Bot Uptime -->
         <div class="card">
-            <div class="title">Bot Uptime</div>
-            <div class="value text-blue" id="val-uptime">0h 0m</div>
-        </div>
-
-        <!-- Max Open Trades -->
-        <div class="card">
-            <div class="title">Max Open Trades</div>
-            <div class="value text-black" id="val-max-open-trades">0</div>
-        </div>
-
-        <!-- Scan Speed -->
-        <div class="card">
-            <div class="title">Scan Speed</div>
-            <div class="value text-black" id="val-scan-speed" style="font-size: 20px;">0.00 ms</div>
-        </div>
-
-        <!-- ADX -->
-        <div class="card">
-            <div class="title">ADX (14)</div>
-            <div class="value text-black" id="val-adx">0.00</div>
-        </div>
-
-        <!-- ATR -->
-        <div class="card">
-            <div class="title">ATR (14)</div>
-            <div class="value text-black" id="val-atr" style="font-size: 20px;">0.00000</div>
-        </div>
-
-        <!-- Small Target Progress -->
-        <div class="card card-full">
-            <div class="title" id="val-small-target-title">Small Target Progress ($2.00)</div>
-            <div class="progress-container">
-                <div class="progress-fill" id="val-small-progress-bar"></div>
-            </div>
-            <div class="progress-labels">
-                <span>$0.00</span>
-                <span id="val-small-target-max">$2.00</span>
-            </div>
-        </div>
-
-        <!-- Basket Target Progress -->
-        <div class="card card-full">
-            <div class="title" id="val-target-title">Basket Target Progress ($10.00)</div>
-            <div class="progress-container">
-                <div class="progress-fill" id="val-progress-bar"></div>
-            </div>
-            <div class="progress-labels">
-                <span>$0.00</span>
-                <span id="val-target-max">$10.00</span>
-            </div>
+            <h3>Bot Uptime</h3>
+            <p id="uptime" class="text-blue">0h 0m</p>
         </div>
     </div>
 
     <script>
-        const FIREBASE_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json";
+        const firebaseUrl = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json";
 
-        function formatMoney(amount) {
-            return "$" + parseFloat(amount).toFixed(2);
-        }
-
-        function updateColor(elementId, value) {
-            const el = document.getElementById(elementId);
-            el.classList.remove("text-green", "text-red", "text-black", "text-blue");
-            if (value > 0) el.classList.add("text-green");
-            else if (value < 0) el.classList.add("text-red");
-            else el.classList.add("text-black");
-        }
-
-        async function fetchDashboardData() {
+        async function updateDashboard() {
             try {
-                const response = await fetch(FIREBASE_URL + "?nocache=" + new Date().getTime());
-                if (!response.ok) throw new Error("Network response was not ok");
-                const data = await response.json();
-                
+                let response = await fetch(firebaseUrl + "?nocache=" + new Date().getTime());
+                let data = await response.json();
+
                 if (data) {
-                    document.getElementById('error-msg').style.display = 'none';
-                    document.querySelector('.status-indicator').style.backgroundColor = '#4caf50';
-
-                    document.getElementById('val-balance').innerText = formatMoney(data.balance);
-                    document.getElementById('val-today-pl').innerText = formatMoney(data.today_pl);
-                    updateColor('val-today-pl', data.today_pl);
-
-                    document.getElementById('val-floating-pl').innerText = formatMoney(data.floating_pl);
-                    updateColor('val-floating-pl', data.floating_pl);
-
-                    document.getElementById('val-open-trades').innerText = `${data.open_trades_total} (B:${data.buy_trades} / S:${data.sell_trades})`;
+                    document.getElementById("balance").innerText = "$" + data.balance.toFixed(2);
                     
-                    document.getElementById('val-max-dd').innerText = formatMoney(data.max_dd);
-                    document.getElementById('val-max-margin').innerText = formatMoney(data.max_margin);
-                    document.getElementById('val-current-margin').innerText = formatMoney(data.current_margin);
-                    document.getElementById('val-uptime').innerText = data.uptime;
-                    
-                    document.getElementById('val-max-open-trades').innerText = data.max_open_trades || 0;
-                    document.getElementById('val-scan-speed').innerText = (data.scan_speed ? parseFloat(data.scan_speed).toFixed(2) : "0.00") + " ms";
+                    let todayEl = document.getElementById("todayPl");
+                    todayEl.innerText = "$" + data.today_pl.toFixed(2);
+                    todayEl.className = data.today_pl >= 0 ? "text-green" : "text-red";
 
-                    document.getElementById('val-adx').innerText = parseFloat(data.adx).toFixed(2);
-                    document.getElementById('val-atr').innerText = parseFloat(data.atr).toFixed(5);
+                    let floatEl = document.getElementById("floatingPl");
+                    floatEl.innerText = "$" + data.floating_pl.toFixed(2);
+                    floatEl.className = data.floating_pl >= 0 ? "text-green" : "text-red";
 
-                    let smallTarget = 2.00;
-                    document.getElementById('val-small-target-title').innerText = `Small Target Progress ($${smallTarget.toFixed(2)})`;
-                    document.getElementById('val-small-target-max').innerText = formatMoney(smallTarget);
+                    document.getElementById("botAtrades").innerText = data.bot_a_trades;
+                    document.getElementById("botBtrades").innerText = data.bot_b_trades;
                     
-                    let smallProgressPercent = 0;
-                    if(data.floating_pl > 0) {
-                        smallProgressPercent = (data.floating_pl / smallTarget) * 100;
-                        if(smallProgressPercent > 100) smallProgressPercent = 100;
+                    document.getElementById("botAprofit").innerText = "P/L: $" + (data.bot_a_profit || 0).toFixed(2);
+                    document.getElementById("botBprofit").innerText = "P/L: $" + (data.bot_b_profit || 0).toFixed(2);
+
+                    document.getElementById("adxVal").innerText = data.adx.toFixed(2);
+                    document.getElementById("emaVal").innerText = data.ema_14.toFixed(2);
+                    document.getElementById("maxDd").innerText = "$" + data.max_dd.toFixed(2);
+                    document.getElementById("uptime").innerText = data.uptime;
+
+                    let badge = document.getElementById("systemBadge");
+                    let recText = document.getElementById("recoveryTargetText");
+                    if (data.system_mode === "RECOVERY") {
+                        badge.innerText = "🔴 RECOVERY MODE ACTIVE (HEDGED)";
+                        badge.className = "status-badge bg-recovery";
+                        recText.style.display = "block";
+                    } else {
+                        badge.innerText = "🟢 NORMAL GRID MODE";
+                        badge.className = "status-badge bg-normal";
+                        recText.style.display = "none";
                     }
-                    document.getElementById('val-small-progress-bar').style.width = smallProgressPercent + "%";
-
-                    let basketTarget = data.basket_target || 10.00;
-                    document.getElementById('val-target-title').innerText = `Basket Target Progress ($${basketTarget.toFixed(2)})`;
-                    document.getElementById('val-target-max').innerText = formatMoney(basketTarget);
-                    
-                    let basketProgressPercent = 0;
-                    if(data.floating_pl > 0) {
-                        basketProgressPercent = (data.floating_pl / basketTarget) * 100;
-                        if(basketProgressPercent > 100) basketProgressPercent = 100;
-                    }
-                    document.getElementById('val-progress-bar').style.width = basketProgressPercent + "%";
                 }
             } catch (error) {
-                console.error("Firebase Fetch Error:", error);
-                document.getElementById('error-msg').style.display = 'block';
-                document.querySelector('.status-indicator').style.backgroundColor = '#dc3545';
+                console.log("Error fetching data: ", error);
             }
         }
 
-        setInterval(fetchDashboardData, 2000);
-        fetchDashboardData();
+        setInterval(updateDashboard, 1000);
+        updateDashboard();
     </script>
 </body>
 </html>
