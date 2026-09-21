@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid Live - Pro Edition</title>
+    <title>Mehul Grid Live - Compact</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 10px; }
-        h1 { text-align: center; color: #111; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; font-size: 24px;}
+        body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 4px; }
+        h1 { text-align: center; color: #111; font-weight: 900; margin: 2px 0 4px 0; text-transform: uppercase; font-size: 16px;}
         
-        .status-badge { text-align: center; padding: 5px 15px; font-weight: bold; font-size: 12px; border-radius: 20px; margin: 0 auto 15px auto; width: fit-content; border: 1px solid #28a745; color: #28a745; background: #e9f7ef; }
+        .status-badge { text-align: center; padding: 3px 10px; font-weight: bold; font-size: 10px; border-radius: 15px; margin: 0 auto 6px auto; width: fit-content; border: 1px solid #28a745; color: #28a745; background: #e9f7ef; }
         .bg-recovery { border: 1px solid #dc3545; color: #dc3545; background: #fceceb; animation: blink 2s infinite; }
         @keyframes blink { 50% { opacity: 0.7; } }
 
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .card { background-color: #fff; padding: 15px 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
-        .card h3 { margin: 0 0 8px 0; font-size: 10px; color: #666; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
-        .card p { margin: 0; font-size: 22px; font-weight: 900; color: #111; }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px; }
+        .card { background-color: #fff; padding: 6px 4px; border-radius: 6px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
+        .card h3 { margin: 0 0 3px 0; font-size: 9px; color: #666; text-transform: uppercase; font-weight: 800; }
+        .card p { margin: 0; font-size: 15px; font-weight: 900; color: #111; }
         
         .text-green { color: #28a745 !important; }
         .text-red { color: #dc3545 !important; }
         .text-blue { color: #007bff !important; }
         
-        .sub-text { font-size: 12px; color: #111; font-weight: bold; }
+        .sub-text { font-size: 9px; color: #111; font-weight: bold; }
         
-        .progress-container { background-color: #fff; padding: 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
-        .progress-header { display: flex; justify-content: space-between; font-size: 11px; font-weight: 900; color: #555; text-transform: uppercase; margin-bottom: 8px; }
-        .progress-bar-bg { background-color: #e9ecef; border-radius: 10px; height: 8px; width: 100%; overflow: hidden; position: relative; }
+        .progress-container { background-color: #fff; padding: 8px; border-radius: 6px; margin-bottom: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 9px; font-weight: 900; color: #555; text-transform: uppercase; margin-bottom: 5px; }
+        .progress-bar-bg { background-color: #e9ecef; border-radius: 10px; height: 6px; width: 100%; overflow: hidden; position: relative; }
         .progress-bar-fill { background-color: #d3d3d3; height: 100%; width: 0%; transition: width 0.5s ease-in-out; }
-        .progress-labels { display: flex; justify-content: space-between; font-size: 11px; font-weight: 900; color: #555; margin-top: 8px; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 9px; font-weight: 900; color: #555; margin-top: 4px; }
     </style>
 </head>
 <body>
@@ -54,15 +54,14 @@
             <p id="openTrades">0 <br><span class="sub-text">(B:0 / S:0)</span></p>
         </div>
 
-        <!-- NEW: Bot A & B -->
         <div class="card">
             <h3>Bot A (Grid)</h3>
-            <p id="botAtrades" class="text-blue" style="font-size: 18px;">0</p>
+            <p id="botAtrades" class="text-blue">0</p>
             <p id="botAprofit" class="sub-text">P/L: $0.00</p>
         </div>
         <div class="card">
             <h3>Bot B (Recovery)</h3>
-            <p id="botBtrades" class="text-red" style="font-size: 18px;">0</p>
+            <p id="botBtrades" class="text-red">0</p>
             <p id="botBprofit" class="sub-text">P/L: $0.00</p>
         </div>
 
@@ -108,14 +107,14 @@
         </div>
         <div class="card">
             <h3>System Mode</h3>
-            <p id="modeText" style="font-size: 14px; margin-top: 5px;" class="text-green">NORMAL</p>
+            <p id="modeText" style="font-size: 11px; margin-top: 3px;" class="text-green">NORMAL</p>
         </div>
     </div>
 
     <!-- PROGRESS BARS -->
     <div class="progress-container">
         <div class="progress-header">
-            <span>Small Target Progress (<span id="smallTargetLbl">$0.00</span>)</span>
+            <span>Small Target (<span id="smallTargetLbl">$0.00</span>)</span>
         </div>
         <div class="progress-bar-bg"><div id="smallProgressFill" class="progress-bar-fill"></div></div>
         <div class="progress-labels">
@@ -126,7 +125,7 @@
 
     <div class="progress-container">
         <div class="progress-header">
-            <span>Basket Target Progress (<span id="basketTargetLbl">$0.00</span>)</span>
+            <span>Basket Target (<span id="basketTargetLbl">$0.00</span>)</span>
         </div>
         <div class="progress-bar-bg"><div id="basketProgressFill" class="progress-bar-fill"></div></div>
         <div class="progress-labels">
