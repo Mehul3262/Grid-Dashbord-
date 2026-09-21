@@ -3,215 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid Live - Compact</title>
+    <title>Mehul Grid Live</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 4px; }
-        h1 { text-align: center; color: #111; font-weight: 900; margin: 2px 0 4px 0; text-transform: uppercase; font-size: 16px;}
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         
-        .status-badge { text-align: center; padding: 3px 10px; font-weight: bold; font-size: 10px; border-radius: 15px; margin: 0 auto 6px auto; width: fit-content; border: 1px solid #28a745; color: #28a745; background: #e9f7ef; }
-        .bg-recovery { border: 1px solid #dc3545; color: #dc3545; background: #fceceb; animation: blink 2s infinite; }
-        @keyframes blink { 50% { opacity: 0.7; } }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f5f7;
+            margin: 0;
+            padding: 10px;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            margin: 5px 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #000;
+            text-transform: uppercase;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #a5d6a7;
+        }
+        .status-badge .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .card {
+            background: #fff;
+            padding: 15px 10px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .card-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #757575;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .card-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000;
+        }
+        .card-subtext {
+            font-size: 11px;
+            color: #555;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        
+        /* Colors */
+        .text-green { color: #2e7d32 !important; }
+        .text-red { color: #d32f2f !important; }
+        .text-blue { color: #1976d2 !important; }
 
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px; }
-        .card { background-color: #fff; padding: 6px 4px; border-radius: 6px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
-        .card h3 { margin: 0 0 3px 0; font-size: 9px; color: #666; text-transform: uppercase; font-weight: 800; }
-        .card p { margin: 0; font-size: 15px; font-weight: 900; color: #111; }
-        
-        .text-green { color: #28a745 !important; }
-        .text-red { color: #dc3545 !important; }
-        .text-blue { color: #007bff !important; }
-        
-        .sub-text { font-size: 9px; color: #111; font-weight: bold; }
-        
-        .progress-container { background-color: #fff; padding: 8px; border-radius: 6px; margin-bottom: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
-        .progress-header { display: flex; justify-content: space-between; font-size: 9px; font-weight: 900; color: #555; text-transform: uppercase; margin-bottom: 5px; }
-        .progress-bar-bg { background-color: #e9ecef; border-radius: 10px; height: 6px; width: 100%; overflow: hidden; position: relative; }
-        .progress-bar-fill { background-color: #d3d3d3; height: 100%; width: 0%; transition: width 0.5s ease-in-out; }
-        .progress-labels { display: flex; justify-content: space-between; font-size: 9px; font-weight: 900; color: #555; margin-top: 4px; }
+        /* Progress Bar Section */
+        .progress-section {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 10px;
+        }
+        .progress-header {
+            font-size: 11px;
+            font-weight: 600;
+            color: #757575;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+        }
+        .progress-bar-bg {
+            background-color: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        .progress-bar-fill {
+            background-color: #4caf50;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+        }
     </style>
 </head>
 <body>
 
-    <h1>MEHUL GRID LIVE</h1>
-    <div id="systemBadge" class="status-badge">🟢 Live Connection Active</div>
+    <div class="header">
+        <h1>Mehul Grid Live</h1>
+        <div class="status-badge" id="conn-status">
+            <span class="dot"></span> Live Connection Active
+        </div>
+    </div>
 
     <div class="grid-container">
         <div class="card">
-            <h3>Balance</h3>
-            <p id="balance" class="text-green">$0.00</p>
+            <div class="card-title">Balance</div>
+            <div class="card-value" id="val-balance">$-.--</div>
         </div>
         <div class="card">
-            <h3>Today P/L</h3>
-            <p id="todayPl" class="text-green">$0.00</p>
+            <div class="card-title">Today P/L</div>
+            <div class="card-value" id="val-today-pl">$-.--</div>
         </div>
         
         <div class="card">
-            <h3>Floating P/L</h3>
-            <p id="floatingPl">$0.00</p>
+            <div class="card-title">Floating P/L</div>
+            <div class="card-value" id="val-floating-pl">$-.--</div>
         </div>
         <div class="card">
-            <h3>Open Trades</h3>
-            <p id="openTrades">0 <br><span class="sub-text">(B:0 / S:0)</span></p>
+            <div class="card-title">Open Trades</div>
+            <div class="card-value" id="val-open-trades">-</div>
+            <div class="card-subtext" id="val-bs-count">(B:0 / S:0)</div>
         </div>
 
         <div class="card">
-            <h3>Bot A (Grid)</h3>
-            <p id="botAtrades" class="text-blue">0</p>
-            <p id="botAprofit" class="sub-text">P/L: $0.00</p>
+            <div class="card-title">Current Active Lot</div>
+            <div class="card-value text-blue" id="val-active-lot">0.00</div>
         </div>
         <div class="card">
-            <h3>Bot B (Recovery)</h3>
-            <p id="botBtrades" class="text-red">0</p>
-            <p id="botBprofit" class="sub-text">P/L: $0.00</p>
+            <div class="card-title">Next Loss Target</div>
+            <div class="card-value text-red" id="val-next-loss">$-.--</div>
         </div>
 
         <div class="card">
-            <h3>Max Drawdown</h3>
-            <p id="maxDd" class="text-red">$0.00</p>
+            <div class="card-title">Max Drawdown</div>
+            <div class="card-value text-red" id="val-max-dd">$-.--</div>
         </div>
         <div class="card">
-            <h3>Max Margin</h3>
-            <p id="maxMargin">$0.00</p>
-        </div>
-        
-        <div class="card">
-            <h3>Current Margin</h3>
-            <p id="currentMargin">$0.00</p>
-        </div>
-        <div class="card">
-            <h3>Bot Uptime</h3>
-            <p id="uptime" class="text-blue">0h 0m</p>
-        </div>
-        
-        <div class="card">
-            <h3>Max Open Trades</h3>
-            <p id="maxOpen">0</p>
-        </div>
-        <div class="card">
-            <h3>Scan Speed</h3>
-            <p id="scanSpeed">0.00 ms</p>
-        </div>
-        
-        <div class="card">
-            <h3>ADX (14)</h3>
-            <p id="adxVal">0.00</p>
-        </div>
-        <div class="card">
-            <h3>ATR (14)</h3>
-            <p id="atrVal">0.00</p>
+            <div class="card-title">Bot Uptime</div>
+            <div class="card-value text-blue" id="val-uptime">0h 0m</div>
         </div>
 
         <div class="card">
-            <h3>EMA (14) M5</h3>
-            <p id="emaVal">0.00</p>
+            <div class="card-title">Trailing Status</div>
+            <div class="card-value text-green" id="val-trailing" style="font-size: 13px;">ACTIVE</div>
         </div>
         <div class="card">
-            <h3>System Mode</h3>
-            <p id="modeText" style="font-size: 11px; margin-top: 3px;" class="text-green">NORMAL</p>
+            <div class="card-title">Scan Speed</div>
+            <div class="card-value" id="val-scan">0.00 ms</div>
         </div>
     </div>
 
-    <!-- PROGRESS BARS -->
-    <div class="progress-container">
+    <!-- Basket Target Progress -->
+    <div class="progress-section">
         <div class="progress-header">
-            <span>Small Target (<span id="smallTargetLbl">$0.00</span>)</span>
+            <span>BASKET TARGET ($50.00)</span>
         </div>
-        <div class="progress-bar-bg"><div id="smallProgressFill" class="progress-bar-fill"></div></div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="bar-basket"></div>
+        </div>
         <div class="progress-labels">
-            <span>$0.00</span>
-            <span id="smallTargetMax">$0.00</span>
-        </div>
-    </div>
-
-    <div class="progress-container">
-        <div class="progress-header">
-            <span>Basket Target (<span id="basketTargetLbl">$0.00</span>)</span>
-        </div>
-        <div class="progress-bar-bg"><div id="basketProgressFill" class="progress-bar-fill"></div></div>
-        <div class="progress-labels">
-            <span>$0.00</span>
-            <span id="basketTargetMax">$0.00</span>
+            <span id="txt-current-profit">$0.00</span>
+            <span>$50.00</span>
         </div>
     </div>
 
     <script>
-        const firebaseUrl = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json";
+        const FIREBASE_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json";
+        const BASKET_TARGET = 50.00;
 
-        async function updateDashboard() {
+        function formatCurrency(val) {
+            let num = parseFloat(val);
+            if(isNaN(num)) return "$0.00";
+            return (num >= 0 ? "$" : "-$") + Math.abs(num).toFixed(2);
+        }
+
+        function updateColor(element, value) {
+            let num = parseFloat(value);
+            element.classList.remove('text-green', 'text-red');
+            if (num > 0) element.classList.add('text-green');
+            else if (num < 0) element.classList.add('text-red');
+        }
+
+        async function fetchLiveData() {
             try {
-                let response = await fetch(firebaseUrl + "?nocache=" + new Date().getTime());
-                let data = await response.json();
+                const response = await fetch(FIREBASE_URL);
+                if(!response.ok) throw new Error("Network error");
+                const data = await response.json();
+                
+                if(data) {
+                    // Update Texts
+                    document.getElementById('val-balance').innerText = formatCurrency(data.balance);
+                    document.getElementById('val-balance').className = 'card-value text-green';
 
-                if (data) {
-                    document.getElementById("balance").innerText = "$" + (data.balance || 0).toFixed(2);
-                    
-                    let todayEl = document.getElementById("todayPl");
-                    todayEl.innerText = "$" + (data.today_pl || 0).toFixed(2);
-                    todayEl.className = (data.today_pl >= 0) ? "text-green" : "text-red";
+                    document.getElementById('val-today-pl').innerText = formatCurrency(data.today_pl);
+                    updateColor(document.getElementById('val-today-pl'), data.today_pl);
 
-                    let floatEl = document.getElementById("floatingPl");
-                    floatEl.innerText = "$" + (data.floating_pl || 0).toFixed(2);
-                    floatEl.className = (data.floating_pl >= 0) ? "text-green" : "text-red";
+                    document.getElementById('val-floating-pl').innerText = formatCurrency(data.floating_pl);
+                    updateColor(document.getElementById('val-floating-pl'), data.floating_pl);
 
-                    document.getElementById("openTrades").innerHTML = `${data.open_trades_total || 0} <br><span class="sub-text">(B:${data.buy_trades || 0} / S:${data.sell_trades || 0})</span>`;
-                    
-                    document.getElementById("botAtrades").innerText = (data.bot_a_trades || 0);
-                    document.getElementById("botBtrades").innerText = (data.bot_b_trades || 0);
-                    document.getElementById("botAprofit").innerText = "P/L: $" + (data.bot_a_profit || 0).toFixed(2);
-                    document.getElementById("botBprofit").innerText = "P/L: $" + (data.bot_b_profit || 0).toFixed(2);
+                    document.getElementById('val-open-trades').innerText = data.open_trades_total || 0;
+                    document.getElementById('val-bs-count').innerText = `(B:${data.bot_a_buy || 0} / S:${data.bot_a_sell || 0})`;
 
-                    document.getElementById("maxDd").innerText = "$" + (data.max_dd || 0).toFixed(2);
-                    
-                    document.getElementById("maxMargin").innerText = "$" + (data.max_margin || 0).toFixed(2);
-                    document.getElementById("currentMargin").innerText = "$" + (data.current_margin || 0).toFixed(2);
-                    
-                    document.getElementById("uptime").innerText = data.uptime || "0h 0m";
-                    document.getElementById("maxOpen").innerText = data.max_open_trades || 0;
-                    document.getElementById("scanSpeed").innerText = (data.scan_speed || 0).toFixed(2) + " ms";
-                    
-                    document.getElementById("adxVal").innerText = (data.adx || 0).toFixed(2);
-                    document.getElementById("atrVal").innerText = data.atr ? data.atr.toFixed(5) : "0.00000";
-                    document.getElementById("emaVal").innerText = (data.ema_14 || 0).toFixed(2);
+                    document.getElementById('val-active-lot').innerText = parseFloat(data.active_lot || 0).toFixed(2);
+                    document.getElementById('val-next-loss').innerText = formatCurrency(data.next_loss_target);
 
-                    let badge = document.getElementById("systemBadge");
-                    let modeTxt = document.getElementById("modeText");
-                    if (data.system_mode === "RECOVERY") {
-                        badge.innerText = "🔴 RECOVERY MODE ACTIVE";
-                        badge.className = "status-badge bg-recovery";
-                        modeTxt.innerText = "HEDGED / REC";
-                        modeTxt.className = "text-red";
-                    } else {
-                        badge.innerText = "🟢 Live Connection Active";
-                        badge.className = "status-badge";
-                        modeTxt.innerText = "NORMAL";
-                        modeTxt.className = "text-green";
+                    document.getElementById('val-max-dd').innerText = formatCurrency(data.max_dd);
+                    document.getElementById('val-uptime').innerText = data.uptime || "0h 0m";
+                    
+                    let trlStatus = document.getElementById('val-trailing');
+                    trlStatus.innerText = data.trailing_status || "ACTIVE";
+                    trlStatus.className = 'card-value ' + (data.trailing_status === "ACTIVE" ? "text-green" : "text-red");
+                    
+                    document.getElementById('val-scan').innerText = (data.scan_speed || 0).toFixed(2) + " ms";
+
+                    // Update Progress Bar
+                    let floating = parseFloat(data.floating_pl) || 0;
+                    document.getElementById('txt-current-profit').innerText = formatCurrency(floating);
+                    
+                    let progressPercent = 0;
+                    if(floating > 0) {
+                        progressPercent = (floating / BASKET_TARGET) * 100;
+                        if(progressPercent > 100) progressPercent = 100;
                     }
-
-                    let pTotal = data.floating_pl || 0;
-                    let sTarget = data.small_target || 2.0;
-                    let bTarget = data.basket_target || 15.0;
-
-                    document.getElementById("smallTargetLbl").innerText = "$" + sTarget.toFixed(2);
-                    document.getElementById("smallTargetMax").innerText = "$" + sTarget.toFixed(2);
-                    let sPct = (pTotal > 0) ? (pTotal / sTarget) * 100 : 0;
-                    if(sPct > 100) sPct = 100;
-                    document.getElementById("smallProgressFill").style.width = sPct + "%";
-                    document.getElementById("smallProgressFill").style.backgroundColor = (sPct >= 100) ? "#28a745" : "#d3d3d3";
-
-                    document.getElementById("basketTargetLbl").innerText = "$" + bTarget.toFixed(2);
-                    document.getElementById("basketTargetMax").innerText = "$" + bTarget.toFixed(2);
-                    let bPct = (pTotal > 0) ? (pTotal / bTarget) * 100 : 0;
-                    if(bPct > 100) bPct = 100;
-                    document.getElementById("basketProgressFill").style.width = bPct + "%";
-                    document.getElementById("basketProgressFill").style.backgroundColor = (bPct >= 100) ? "#28a745" : "#d3d3d3";
+                    document.getElementById('bar-basket').style.width = progressPercent + "%";
                 }
             } catch (error) {
                 console.log("Error fetching data: ", error);
             }
         }
 
-        setInterval(updateDashboard, 1000);
-        updateDashboard();
+        // Fetch data every 1 second
+        setInterval(fetchLiveData, 1000);
+        fetchLiveData(); // Initial fetch
     </script>
 </body>
 </html>
