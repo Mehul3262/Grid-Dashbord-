@@ -32,27 +32,31 @@
 <script>
     async function fetchBotData() {
         try {
-            // અહીં તમારી GitHub પર મૂકેલી bot_status.json ની લિંક મૂકવાની રહેશે
-            let response = await fetch('bot_status.json');
+            // અહીં તમારી Firebase ની લિંક ફિક્સ મૂકી દીધી છે
+            let response = await fetch('https://your-project-id-default-rtdb.firebaseio.com/bot_status.json');
             let data = await response.json();
 
-            document.getElementById('balance').innerText = "$" + data.balance.toFixed(2);
+            if (!data) return;
+
+            document.getElementById('balance').innerText = "$" + Number(data.balance || 0).toFixed(2);
             
             let fpl = document.getElementById('floating_pl');
-            fpl.innerText = "$" + data.floating_pl.toFixed(2);
-            fpl.className = "value " + (data.floating_pl >= 0 ? "profit" : "loss");
+            let fplVal = Number(data.floating_pl || 0);
+            fpl.innerText = "$" + fplVal.toFixed(2);
+            fpl.className = "value " + (fplVal >= 0 ? "profit" : "loss");
 
             let tprof = document.getElementById('todays_profit');
-            tprof.innerText = "$" + data.todays_profit.toFixed(2);
-            tprof.className = "value " + (data.todays_profit >= 0 ? "profit" : "loss");
+            let tprofVal = Number(data.todays_profit || 0);
+            tprof.innerText = "$" + tprofVal.toFixed(2);
+            tprof.className = "value " + (tprofVal >= 0 ? "profit" : "loss");
 
-            document.getElementById('trades').innerText = data.buy_trades + " / " + data.sell_trades;
-            document.getElementById('max_trades').innerText = data.max_trades_24h;
-            document.getElementById('max_dd').innerText = "$" + data.max_drawdown_24h.toFixed(2);
-            document.getElementById('scan_speed').innerText = data.scan_speed_ms + " ms";
-            document.getElementById('uptime').innerText = data.uptime;
+            document.getElementById('trades').innerText = (data.buy_trades || 0) + " / " + (data.sell_trades || 0);
+            document.getElementById('max_trades').innerText = data.max_trades_24h || 0;
+            document.getElementById('max_dd').innerText = "$" + Number(data.max_drawdown_24h || 0).toFixed(2);
+            document.getElementById('scan_speed').innerText = (data.scan_speed_ms || 0) + " ms";
+            document.getElementById('uptime').innerText = data.uptime || "00:00:00";
         } catch (error) {
-            console.error("Error loading bot data:", error);
+            console.error("Error loading Firebase data:", error);
         }
     }
 
