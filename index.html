@@ -3,270 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mehul Grid Live</title>
+    <title>Gold Pro Grid Bot - Live Dashboard</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f5f7;
-            margin: 0;
-            padding: 10px;
-            color: #333;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .header h1 {
-            margin: 5px 0;
-            font-size: 22px;
-            font-weight: 700;
-            color: #000;
-            text-transform: uppercase;
-        }
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            border: 1px solid #a5d6a7;
-        }
-        .status-badge .dot {
-            width: 8px;
-            height: 8px;
-            background-color: #4caf50;
-            border-radius: 50%;
-            margin-right: 6px;
-            animation: blink 1.5s infinite;
-        }
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-        
-        /* Grid Layout */
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .card {
-            background: #fff;
-            padding: 15px 10px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        }
-        .card-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: #757575;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-        .card-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #000;
-        }
-        .card-subtext {
-            font-size: 11px;
-            color: #555;
-            margin-top: 4px;
-            font-weight: 600;
-        }
-        
-        /* Colors */
-        .text-green { color: #2e7d32 !important; }
-        .text-red { color: #d32f2f !important; }
-        .text-blue { color: #1976d2 !important; }
-
-        /* Progress Bar Section */
-        .progress-section {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            margin-bottom: 10px;
-        }
-        .progress-header {
-            font-size: 11px;
-            font-weight: 600;
-            color: #757575;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            display: flex;
-            justify-content: space-between;
-        }
-        .progress-bar-bg {
-            background-color: #e0e0e0;
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 5px;
-        }
-        .progress-bar-fill {
-            background-color: #4caf50;
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s ease-in-out;
-        }
-        .progress-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            font-weight: 600;
-            color: #333;
-        }
+        body { font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; text-align: center; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,255,100,0.2); }
+        h2 { color: #00ff66; }
+        .card { background: #2a2a2a; margin: 10px 0; padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; font-size: 18px; }
+        .label { color: #b0b0b0; }
+        .value { font-weight: bold; }
+        .profit { color: #00ff66; }
+        .loss { color: #ff4444; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Mehul Grid Live</h1>
-        <div class="status-badge" id="conn-status">
-            <span class="dot"></span> Live Connection Active
-        </div>
-    </div>
+<div class="container">
+    <h2>Gold Pro Grid Bot Live</h2>
+    <div class="card"><span class="label">Current Balance:</span> <span class="value" id="balance">Loading...</span></div>
+    <div class="card"><span class="label">Floating P/L:</span> <span class="value" id="floating_pl">Loading...</span></div>
+    <div class="card"><span class="label">Today's Profit:</span> <span class="value" id="todays_profit">Loading...</span></div>
+    <div class="card"><span class="label">Open Trades (Buy/Sell):</span> <span class="value" id="trades">Loading...</span></div>
+    <div class="card"><span class="label">Max Trades (24h):</span> <span class="value" id="max_trades">Loading...</span></div>
+    <div class="card"><span class="label">Max Drawdown (24h):</span> <span class="value" id="max_dd">Loading...</span></div>
+    <div class="card"><span class="label">Scan Speed:</span> <span class="value" id="scan_speed">Loading...</span></div>
+    <div class="card"><span class="label">Bot Uptime:</span> <span class="value" id="uptime">Loading...</span></div>
+</div>
 
-    <div class="grid-container">
-        <div class="card">
-            <div class="card-title">Balance</div>
-            <div class="card-value" id="val-balance">$-.--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Today P/L</div>
-            <div class="card-value" id="val-today-pl">$-.--</div>
-        </div>
-        
-        <div class="card">
-            <div class="card-title">Floating P/L</div>
-            <div class="card-value" id="val-floating-pl">$-.--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Open Trades</div>
-            <div class="card-value" id="val-open-trades">-</div>
-            <div class="card-subtext" id="val-bs-count">(B:0 / S:0)</div>
-        </div>
+<script>
+    async function fetchBotData() {
+        try {
+            // અહીં તમારી GitHub પર મૂકેલી bot_status.json ની લિંક મૂકવાની રહેશે
+            let response = await fetch('bot_status.json');
+            let data = await response.json();
 
-        <div class="card">
-            <div class="card-title">Current Active Lot</div>
-            <div class="card-value text-blue" id="val-active-lot">0.00</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Next Loss Target</div>
-            <div class="card-value text-red" id="val-next-loss">$-.--</div>
-        </div>
+            document.getElementById('balance').innerText = "$" + data.balance.toFixed(2);
+            
+            let fpl = document.getElementById('floating_pl');
+            fpl.innerText = "$" + data.floating_pl.toFixed(2);
+            fpl.className = "value " + (data.floating_pl >= 0 ? "profit" : "loss");
 
-        <div class="card">
-            <div class="card-title">Max Drawdown</div>
-            <div class="card-value text-red" id="val-max-dd">$-.--</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Bot Uptime</div>
-            <div class="card-value text-blue" id="val-uptime">0h 0m</div>
-        </div>
+            let tprof = document.getElementById('todays_profit');
+            tprof.innerText = "$" + data.todays_profit.toFixed(2);
+            tprof.className = "value " + (data.todays_profit >= 0 ? "profit" : "loss");
 
-        <div class="card">
-            <div class="card-title">Trailing Status</div>
-            <div class="card-value text-green" id="val-trailing" style="font-size: 13px;">ACTIVE</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Scan Speed</div>
-            <div class="card-value" id="val-scan">0.00 ms</div>
-        </div>
-    </div>
-
-    <!-- Basket Target Progress -->
-    <div class="progress-section">
-        <div class="progress-header">
-            <span>BASKET TARGET ($50.00)</span>
-        </div>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="bar-basket"></div>
-        </div>
-        <div class="progress-labels">
-            <span id="txt-current-profit">$0.00</span>
-            <span>$50.00</span>
-        </div>
-    </div>
-
-    <script>
-        const FIREBASE_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json";
-        const BASKET_TARGET = 50.00;
-
-        function formatCurrency(val) {
-            let num = parseFloat(val);
-            if(isNaN(num)) return "$0.00";
-            return (num >= 0 ? "$" : "-$") + Math.abs(num).toFixed(2);
+            document.getElementById('trades').innerText = data.buy_trades + " / " + data.sell_trades;
+            document.getElementById('max_trades').innerText = data.max_trades_24h;
+            document.getElementById('max_dd').innerText = "$" + data.max_drawdown_24h.toFixed(2);
+            document.getElementById('scan_speed').innerText = data.scan_speed_ms + " ms";
+            document.getElementById('uptime').innerText = data.uptime;
+        } catch (error) {
+            console.error("Error loading bot data:", error);
         }
+    }
 
-        function updateColor(element, value) {
-            let num = parseFloat(value);
-            element.classList.remove('text-green', 'text-red');
-            if (num > 0) element.classList.add('text-green');
-            else if (num < 0) element.classList.add('text-red');
-        }
+    setInterval(fetchBotData, 2000); // દર 2 સેકન્ડે ડેટા રિફ્રેશ થશે
+    fetchBotData();
+</script>
 
-        async function fetchLiveData() {
-            try {
-                const response = await fetch(FIREBASE_URL);
-                if(!response.ok) throw new Error("Network error");
-                const data = await response.json();
-                
-                if(data) {
-                    // Update Texts
-                    document.getElementById('val-balance').innerText = formatCurrency(data.balance);
-                    document.getElementById('val-balance').className = 'card-value text-green';
-
-                    document.getElementById('val-today-pl').innerText = formatCurrency(data.today_pl);
-                    updateColor(document.getElementById('val-today-pl'), data.today_pl);
-
-                    document.getElementById('val-floating-pl').innerText = formatCurrency(data.floating_pl);
-                    updateColor(document.getElementById('val-floating-pl'), data.floating_pl);
-
-                    document.getElementById('val-open-trades').innerText = data.open_trades_total || 0;
-                    document.getElementById('val-bs-count').innerText = `(B:${data.bot_a_buy || 0} / S:${data.bot_a_sell || 0})`;
-
-                    document.getElementById('val-active-lot').innerText = parseFloat(data.active_lot || 0).toFixed(2);
-                    document.getElementById('val-next-loss').innerText = formatCurrency(data.next_loss_target);
-
-                    document.getElementById('val-max-dd').innerText = formatCurrency(data.max_dd);
-                    document.getElementById('val-uptime').innerText = data.uptime || "0h 0m";
-                    
-                    let trlStatus = document.getElementById('val-trailing');
-                    trlStatus.innerText = data.trailing_status || "ACTIVE";
-                    trlStatus.className = 'card-value ' + (data.trailing_status === "ACTIVE" ? "text-green" : "text-red");
-                    
-                    document.getElementById('val-scan').innerText = (data.scan_speed || 0).toFixed(2) + " ms";
-
-                    // Update Progress Bar
-                    let floating = parseFloat(data.floating_pl) || 0;
-                    document.getElementById('txt-current-profit').innerText = formatCurrency(floating);
-                    
-                    let progressPercent = 0;
-                    if(floating > 0) {
-                        progressPercent = (floating / BASKET_TARGET) * 100;
-                        if(progressPercent > 100) progressPercent = 100;
-                    }
-                    document.getElementById('bar-basket').style.width = progressPercent + "%";
-                }
-            } catch (error) {
-                console.log("Error fetching data: ", error);
-            }
-        }
-
-        // Fetch data every 1 second
-        setInterval(fetchLiveData, 1000);
-        fetchLiveData(); // Initial fetch
-    </script>
 </body>
 </html>
