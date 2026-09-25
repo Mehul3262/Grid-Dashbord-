@@ -34,8 +34,8 @@
 <script>
     async function fetchBotData() {
         try {
-            // અહીં તમારી Firebase ની લિંક ફિક્સ મૂકી દીધી છે
-            let response = await fetch('https://your-project-id-default-rtdb.firebaseio.com/bot_status.json');
+            // અહીં તમારી સાચી લિંક મૂકી છે
+            let response = await fetch('https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json');
             let data = await response.json();
 
             if (!data) return;
@@ -48,24 +48,25 @@
             fpl.className = "value " + (fplVal >= 0 ? "profit" : "loss");
 
             let tprof = document.getElementById('todays_profit');
-            let tprofVal = Number(data.todays_profit || 0);
+            // બોટમાંથી આવતા સાચા નામ (today_pl) નો ઉપયોગ
+            let tprofVal = Number(data.today_pl || 0);
             tprof.innerText = "$" + tprofVal.toFixed(2);
             tprof.className = "value " + (tprofVal >= 0 ? "profit" : "loss");
 
             document.getElementById('max_margin').innerText = "$" + Number(data.max_margin || 0).toFixed(2);
             document.getElementById('one_side_lock').innerText = data.one_side_lock || "OFF";
 
-            document.getElementById('trades').innerText = (data.buy_trades || 0) + " / " + (data.sell_trades || 0);
-            document.getElementById('max_trades').innerText = data.max_trades_24h || 0;
-            document.getElementById('max_dd').innerText = "$" + Number(data.max_drawdown_24h || 0).toFixed(2);
-            document.getElementById('scan_speed').innerText = (data.scan_speed_ms || 0) + " ms";
+            document.getElementById('trades').innerText = (data.bot_a_buy || 0) + " / " + (data.bot_a_sell || 0);
+            document.getElementById('max_trades').innerText = data.open_trades_total || 0;
+            document.getElementById('max_dd').innerText = "$" + Number(data.max_dd || 0).toFixed(2);
+            document.getElementById('scan_speed').innerText = (data.scan_speed || 0) + " ms";
             document.getElementById('uptime').innerText = data.uptime || "00:00:00";
         } catch (error) {
             console.error("Error loading Firebase data:", error);
         }
     }
 
-    setInterval(fetchBotData, 2000); // દર 2 સેકન્ડે ડેટા રિફ્રેશ થશે
+    setInterval(fetchBotData, 2000); 
     fetchBotData();
 </script>
 
