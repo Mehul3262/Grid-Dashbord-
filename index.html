@@ -3,64 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gold Pro Grid Bot - Live Dashboard</title>
+    <title>Mehul Grid Live - Dashboard</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; text-align: center; padding: 20px; }
-        .container { max-width: 500px; margin: auto; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,255,100,0.2); }
-        h2 { color: #00ff66; }
-        .card { background: #2a2a2a; margin: 10px 0; padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; font-size: 18px; }
-        .label { color: #b0b0b0; }
-        .value { font-weight: bold; }
-        .profit { color: #00ff66; }
-        .loss { color: #ff4444; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #121212; 
+            color: #ffffff; 
+            margin: 0; 
+            padding: 15px; 
+            display: flex; 
+            justify-content: center;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 450px; 
+        }
+        
+        /* Header Section */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+        }
+        .header h1 { 
+            color: #f39c12; 
+            font-size: 18px; 
+            margin: 0; 
+            letter-spacing: 1.5px; 
+            text-transform: uppercase;
+        }
+        .status-badge { 
+            background: rgba(46, 204, 113, 0.1); 
+            color: #2ecc71; 
+            padding: 4px 10px; 
+            border-radius: 4px; 
+            font-size: 11px; 
+            border: 1px solid #2ecc71; 
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Grid Layout */
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        }
+        .card { 
+            background-color: #1a1a24; 
+            border: 1px solid #2a2a36; 
+            border-radius: 6px; 
+            padding: 15px 10px; 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+        }
+        .card.full-width { 
+            grid-column: span 2; 
+        }
+        
+        /* Card Texts */
+        .label { 
+            color: #8a8a9d; 
+            font-size: 10px; 
+            text-transform: uppercase; 
+            margin-bottom: 8px; 
+            letter-spacing: 0.5px; 
+            font-weight: bold; 
+        }
+        .value { 
+            font-size: 17px; 
+            font-weight: bold; 
+        }
+
+        /* Colors */
+        .profit { color: #2ecc71; }
+        .loss { color: #e74c3c; }
+        .neutral { color: #ecf0f1; }
+        .warning { color: #f1c40f; }
+
+        /* Special Cards */
+        .target-card { border: 1px solid #f39c12; }
+        .status-card { border: 1px solid #2ecc71; background-color: rgba(46, 204, 113, 0.05); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Gold Pro Grid Bot Live</h2>
-    <div class="card"><span class="label">Current Balance:</span> <span class="value" id="balance">Loading...</span></div>
-    <div class="card"><span class="label">Floating P/L:</span> <span class="value" id="floating_pl">Loading...</span></div>
-    <div class="card"><span class="label">Today's Profit:</span> <span class="value" id="todays_profit">Loading...</span></div>
-    <div class="card"><span class="label">Max Margin:</span> <span class="value" id="max_margin">Loading...</span></div>
-    <div class="card"><span class="label">One-Side Lock:</span> <span class="value" id="one_side_lock">Loading...</span></div>
-    <div class="card"><span class="label">Open Trades (Buy/Sell):</span> <span class="value" id="trades">Loading...</span></div>
-    <div class="card"><span class="label">Max Trades (24h):</span> <span class="value" id="max_trades">Loading...</span></div>
-    <div class="card"><span class="label">Max Drawdown (24h):</span> <span class="value" id="max_dd">Loading...</span></div>
-    <div class="card"><span class="label">Scan Speed:</span> <span class="value" id="scan_speed">Loading...</span></div>
-    <div class="card"><span class="label">Bot Uptime:</span> <span class="value" id="uptime">Loading...</span></div>
+    <div class="header">
+        <h1>Mehul Grid Live</h1>
+        <div class="status-badge">● ONLINE</div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="label">Balance</div>
+            <div class="value profit" id="balance">$0.00</div>
+        </div>
+        <div class="card">
+            <div class="label">Today P/L</div>
+            <div class="value" id="today_pl">$0.00</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Floating P/L</div>
+            <div class="value" id="floating_pl">$0.00</div>
+        </div>
+        <div class="card">
+            <div class="label">Open Trades</div>
+            <div class="value neutral" id="open_trades">0 (B:0 / S:0)</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Max Drawdown</div>
+            <div class="value loss" id="max_dd">$0.00</div>
+        </div>
+        <div class="card">
+            <div class="label">Max Margin Use</div>
+            <div class="value neutral" id="max_margin">$0.00</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Cycle Profit</div>
+            <div class="value" id="cycle_profit">$0.00</div>
+        </div>
+        <div class="card">
+            <div class="label">Bot Uptime</div>
+            <div class="value warning" id="uptime">0h 0m</div>
+        </div>
+
+        <div class="card">
+            <div class="label">One-Side Lock</div>
+            <div class="value" id="one_side_lock">OFF</div>
+        </div>
+        <div class="card">
+            <div class="label">Cycle Dynamic Stop</div>
+            <div class="value loss" id="dynamic_stop">-$0.00</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Peak Basket Profit</div>
+            <div class="value profit" id="peak_basket">$0.00</div>
+        </div>
+        <div class="card">
+            <div class="label">Scan Speed</div>
+            <div class="value neutral" id="scan_speed">0.00 ms</div>
+        </div>
+
+        <div class="card full-width target-card">
+            <div class="label warning">Basket Target Rule</div>
+            <div class="value neutral" id="target_rule">Loading...</div>
+        </div>
+
+        <div class="card full-width status-card">
+            <div class="label profit" style="margin-bottom: 5px;">Bot Status</div>
+            <div class="value profit" id="bot_status">Waiting for Data...</div>
+        </div>
+    </div>
 </div>
 
 <script>
     async function fetchBotData() {
         try {
-            // અહીં તમારી સાચી લિંક મૂકી છે
             let response = await fetch('https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json');
             let data = await response.json();
 
             if (!data) return;
 
+            // Balance
             document.getElementById('balance').innerText = "$" + Number(data.balance || 0).toFixed(2);
             
+            // Today P/L
+            let tpl = document.getElementById('today_pl');
+            let tplVal = Number(data.today_pl || 0);
+            tpl.innerText = "$" + tplVal.toFixed(2);
+            tpl.className = "value " + (tplVal >= 0 ? "profit" : "loss");
+
+            // Floating P/L
             let fpl = document.getElementById('floating_pl');
             let fplVal = Number(data.floating_pl || 0);
             fpl.innerText = "$" + fplVal.toFixed(2);
             fpl.className = "value " + (fplVal >= 0 ? "profit" : "loss");
 
-            let tprof = document.getElementById('todays_profit');
-            // બોટમાંથી આવતા સાચા નામ (today_pl) નો ઉપયોગ
-            let tprofVal = Number(data.today_pl || 0);
-            tprof.innerText = "$" + tprofVal.toFixed(2);
-            tprof.className = "value " + (tprofVal >= 0 ? "profit" : "loss");
+            // Open Trades
+            let tTotal = data.open_trades_total || 0;
+            let tBuy = data.bot_a_buy || 0;
+            let tSell = data.bot_a_sell || 0;
+            document.getElementById('open_trades').innerText = `${tTotal} (B:${tBuy} / S:${tSell})`;
 
-            document.getElementById('max_margin').innerText = "$" + Number(data.max_margin || 0).toFixed(2);
-            document.getElementById('one_side_lock').innerText = data.one_side_lock || "OFF";
-
-            document.getElementById('trades').innerText = (data.bot_a_buy || 0) + " / " + (data.bot_a_sell || 0);
-            document.getElementById('max_trades').innerText = data.open_trades_total || 0;
+            // Max Drawdown & Margin
             document.getElementById('max_dd').innerText = "$" + Number(data.max_dd || 0).toFixed(2);
-            document.getElementById('scan_speed').innerText = (data.scan_speed || 0) + " ms";
-            document.getElementById('uptime').innerText = data.uptime || "00:00:00";
+            document.getElementById('max_margin').innerText = "$" + Number(data.max_margin || 0).toFixed(2);
+
+            // Cycle Profit
+            let cp = document.getElementById('cycle_profit');
+            let cpVal = Number(data.cycle_profit || 0);
+            cp.innerText = "$" + cpVal.toFixed(2);
+            cp.className = "value " + (cpVal > 0 ? "profit" : "neutral");
+
+            // Uptime
+            document.getElementById('uptime').innerText = data.uptime || "0h 0m";
+
+            // One-Side Lock
+            let osl = document.getElementById('one_side_lock');
+            let oslStatus = data.one_side_lock || "OFF";
+            osl.innerText = oslStatus;
+            osl.className = "value " + (oslStatus !== "OFF" ? "loss" : "neutral");
+
+            // Cycle Dynamic Stop
+            document.getElementById('dynamic_stop').innerText = "-$" + Number(data.cycle_dynamic_stop || 0).toFixed(2);
+
+            // Peak Basket Profit
+            document.getElementById('peak_basket').innerText = "$" + Number(data.peak_basket_profit || 0).toFixed(2);
+
+            // Scan Speed
+            document.getElementById('scan_speed').innerText = Number(data.scan_speed || 0).toFixed(2) + " ms";
+
+            // Basket Target Rule
+            let targetMode = data.basket_mode || "Fixed";
+            let targetVal = Number(data.basket_target || 0).toFixed(2);
+            document.getElementById('target_rule').innerText = `${targetMode} Target ($${targetVal})`;
+
+            // Bot Status
+            document.getElementById('bot_status').innerText = data.bot_status || "Running";
+
         } catch (error) {
             console.error("Error loading Firebase data:", error);
         }
