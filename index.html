@@ -22,79 +22,104 @@
     background:var(--bg);
     color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    height:100%;
+    overflow:hidden;
+  }
+  body{
+    height:100dvh;
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
+    display:flex;
+    flex-direction:column;
   }
   .wrap{
-    max-width:520px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    max-width:480px;
+    width:100%;
     margin:0 auto;
-    padding:16px 14px 40px;
+    padding:6px 10px 4px;
+    min-height:0;
+    gap:6px;
   }
+
   header{
     text-align:center;
-    padding:14px 0 10px;
+    flex:none;
   }
   header h1{
-    font-size:19px;
-    margin:0 0 4px;
-    letter-spacing:.3px;
+    font-size:clamp(13px,4vw,17px);
+    margin:0;
+    letter-spacing:.2px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
   }
   .status-row{
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:8px;
-    font-size:12px;
+    gap:6px;
+    font-size:10px;
     color:var(--muted);
+    margin-top:1px;
   }
   .dot{
-    width:8px;height:8px;border-radius:50%;
+    width:6px;height:6px;border-radius:50%;
     background:var(--muted);
     flex:none;
   }
-  .dot.live{background:var(--green);box-shadow:0 0 6px var(--green);}
+  .dot.live{background:var(--green);box-shadow:0 0 5px var(--green);}
   .dot.stale{background:var(--amber);}
   .dot.off{background:var(--red);}
 
   .big-balance{
     text-align:center;
-    margin:14px 0 18px;
+    flex:none;
   }
   .big-balance .label{
-    font-size:12px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;
+    font-size:10px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;
   }
   .big-balance .value{
-    font-size:36px;font-weight:700;margin-top:2px;
+    font-size:clamp(24px,8vw,34px);font-weight:700;line-height:1.1;
   }
 
   .grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:6px;
+    flex:none;
   }
+  .grid.cols3{grid-template-columns:1fr 1fr 1fr;}
   .card{
     background:var(--card);
     border:1px solid var(--card-border);
-    border-radius:14px;
-    padding:12px 14px;
+    border-radius:10px;
+    padding:6px 8px;
+    min-width:0;
   }
   .card.span2{grid-column:1 / -1;}
   .card .label{
-    font-size:11px;
+    font-size:9px;
     color:var(--muted);
     text-transform:uppercase;
-    letter-spacing:.4px;
-    margin-bottom:4px;
+    letter-spacing:.3px;
+    margin-bottom:2px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   .card .value{
-    font-size:18px;
-    font-weight:600;
+    font-size:clamp(13px,4vw,16px);
+    font-weight:700;
+    line-height:1.15;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
-  .card .sub{
-    font-size:11px;
-    color:var(--muted);
-    margin-top:2px;
-  }
+  .card .value.small{font-size:clamp(11px,3.4vw,13px);}
   .pos{color:var(--green);}
   .neg{color:var(--red);}
   .neutral{color:var(--accent);}
@@ -102,34 +127,41 @@
   .trade-split{
     display:flex;
     justify-content:space-between;
-    align-items:center;
+    align-items:baseline;
+    font-size:13px;
   }
   .trade-split .buy{color:var(--green);font-weight:700;}
   .trade-split .sell{color:var(--red);font-weight:700;}
+  .trade-split .mid{color:var(--muted);font-size:10px;}
 
   .section-title{
-    font-size:12px;
+    font-size:9px;
     color:var(--muted);
     text-transform:uppercase;
-    letter-spacing:.5px;
-    margin:18px 4px 8px;
+    letter-spacing:.4px;
+    margin:2px 2px 0;
+    flex:none;
   }
 
   footer{
     text-align:center;
     color:var(--muted);
-    font-size:11px;
-    margin-top:24px;
+    font-size:9px;
+    flex:none;
+    margin-top:auto;
+    padding-top:2px;
   }
-  footer a{color:var(--accent);text-decoration:none;}
 
-  .pulse{
-    animation:pulse 1s ease;
-  }
+  .pulse{animation:pulse .6s ease;}
   @keyframes pulse{
     0%{transform:scale(1);}
-    30%{transform:scale(1.03);}
+    30%{transform:scale(1.02);}
     100%{transform:scale(1);}
+  }
+
+  @media (max-height:700px){
+    .wrap{gap:4px;padding:4px 8px 2px;}
+    .card{padding:5px 7px;}
   }
 </style>
 </head>
@@ -158,16 +190,18 @@
       <div class="label">Today's P/L</div>
       <div class="value" id="todayPl">$0.00</div>
     </div>
+  </div>
 
-    <div class="card span2">
-      <div class="label">Open Trades</div>
-      <div class="trade-split">
-        <span>Buy: <span class="buy" id="buyCount">0</span></span>
-        <span id="totalTrades" class="sub">Total: 0</span>
-        <span>Sell: <span class="sell" id="sellCount">0</span></span>
-      </div>
+  <div class="card">
+    <div class="label">Open Trades</div>
+    <div class="trade-split">
+      <span>Buy: <span class="buy" id="buyCount">0</span></span>
+      <span class="mid" id="totalTrades">Total: 0</span>
+      <span>Sell: <span class="sell" id="sellCount">0</span></span>
     </div>
+  </div>
 
+  <div class="grid">
     <div class="card">
       <div class="label">Max Drawdown</div>
       <div class="value neg" id="maxDd">$0.00</div>
@@ -176,48 +210,42 @@
       <div class="label">Scan Speed</div>
       <div class="value neutral" id="scanSpeed">0 ms</div>
     </div>
+  </div>
 
-    <div class="card span2">
-      <div class="label">Bot Uptime</div>
-      <div class="value" id="uptime">—</div>
+  <div class="section-title">Cycle &amp; Basket</div>
+  <div class="grid cols3">
+    <div class="card">
+      <div class="label">Cycle P/L</div>
+      <div class="value small" id="cycleProfit">$0.00</div>
+    </div>
+    <div class="card">
+      <div class="label">Cycle Stop</div>
+      <div class="value small neg" id="cycleStop">-$0.00</div>
+    </div>
+    <div class="card">
+      <div class="label">Peak</div>
+      <div class="value small pos" id="peakBasket">$0.00</div>
     </div>
   </div>
 
-  <div class="section-title">Cycle & Basket</div>
-  <div class="grid">
+  <div class="section-title">Martingale (Bot A) &middot; Uptime: <span id="uptime">—</span></div>
+  <div class="grid cols3">
     <div class="card">
-      <div class="label">Cycle Profit</div>
-      <div class="value" id="cycleProfit">$0.00</div>
-    </div>
-    <div class="card">
-      <div class="label">Cycle Dynamic Stop</div>
-      <div class="value neg" id="cycleStop">-$0.00</div>
-    </div>
-    <div class="card span2">
-      <div class="label">Peak Basket Profit</div>
-      <div class="value pos" id="peakBasket">$0.00</div>
-    </div>
-  </div>
-
-  <div class="section-title">Martingale (Bot A only)</div>
-  <div class="grid">
-    <div class="card">
-      <div class="label">Active Lot</div>
-      <div class="value" id="activeLot">—</div>
+      <div class="label">Lot</div>
+      <div class="value small" id="activeLot">—</div>
     </div>
     <div class="card">
-      <div class="label">Next Lot Incr. At</div>
-      <div class="value" id="nextLossTarget">—</div>
+      <div class="label">Next Incr.</div>
+      <div class="value small" id="nextLossTarget">—</div>
     </div>
-    <div class="card span2">
-      <div class="label">Position Trailing Status</div>
-      <div class="value" id="trailingStatus">—</div>
+    <div class="card">
+      <div class="label">Trailing</div>
+      <div class="value small" id="trailingStatus">—</div>
     </div>
   </div>
 
   <footer>
-    Last update: <span id="lastUpdate">—</span><br>
-    Auto-refreshes every 2 seconds
+    Update: <span id="lastUpdate">—</span> · દર 2 સેકન્ડે refresh
   </footer>
 
 </div>
@@ -225,7 +253,6 @@
 <script>
   const FIREBASE_URL = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json";
   const REFRESH_MS = 2000;
-  let lastSeenTimestamp = 0;
 
   function fmtMoney(v){
     const n = Number(v ?? 0);
@@ -242,7 +269,7 @@
 
   function pulseEl(el){
     el.classList.remove("pulse");
-    void el.offsetWidth; // restart animation
+    void el.offsetWidth;
     el.classList.add("pulse");
   }
 
@@ -257,12 +284,10 @@
         return;
       }
 
-      // --- Balance & P/L ---
       document.getElementById("balance").textContent = fmtMoney(data.balance);
       setPL(document.getElementById("floatingPl"), data.floating_pl);
       setPL(document.getElementById("todayPl"), data.today_pl);
 
-      // --- Trades ---
       const buy = Number(data.bot_a_buy ?? 0);
       const sell = Number(data.bot_a_sell ?? 0);
       document.getElementById("buyCount").textContent = buy;
@@ -270,27 +295,22 @@
       document.getElementById("totalTrades").textContent =
         "Total: " + (data.open_trades_total ?? (buy + sell));
 
-      // --- Drawdown / speed / uptime ---
-      document.getElementById("maxDd").textContent = fmtMoney(Math.abs(Number(data.max_dd ?? 0)) * -1);
+      document.getElementById("maxDd").textContent = fmtMoney(-Math.abs(Number(data.max_dd ?? 0)));
       document.getElementById("scanSpeed").textContent = (data.scan_speed ?? 0) + " ms";
       document.getElementById("uptime").textContent = data.uptime ?? "—";
 
-      // --- Cycle & basket ---
       setPL(document.getElementById("cycleProfit"), data.cycle_profit);
       document.getElementById("cycleStop").textContent =
         "-" + fmtMoney(Math.abs(Number(data.cycle_dynamic_stop ?? 0)));
       setPL(document.getElementById("peakBasket"), data.peak_basket_profit);
 
-      // --- Martingale (Bot A) ---
       document.getElementById("activeLot").textContent =
         (data.active_lot !== undefined && data.active_lot !== null) ? Number(data.active_lot).toFixed(2) : "—";
       document.getElementById("nextLossTarget").textContent =
         (data.next_loss_target !== undefined && data.next_loss_target !== null) ? fmtMoney(data.next_loss_target) : "—";
       document.getElementById("trailingStatus").textContent = data.trailing_status ?? "—";
 
-      // --- Status dot: live if data changed since last poll ---
-      const now = Date.now();
-      document.getElementById("lastUpdate").textContent = new Date(now).toLocaleTimeString();
+      document.getElementById("lastUpdate").textContent = new Date().toLocaleTimeString();
       setStatus("live", "Live");
       pulseEl(document.getElementById("balance"));
 
