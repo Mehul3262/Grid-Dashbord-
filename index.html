@@ -13,7 +13,6 @@
         .value { font-weight: bold; }
         .profit { color: #00ff66; }
         .loss { color: #ff4444; }
-        .warning { color: #ffaa00; }
     </style>
 </head>
 <body>
@@ -23,11 +22,14 @@
     <div class="card"><span class="label">Current Balance:</span> <span class="value" id="balance">Loading...</span></div>
     <div class="card"><span class="label">Floating P/L:</span> <span class="value" id="floating_pl">Loading...</span></div>
     <div class="card"><span class="label">Today's Profit:</span> <span class="value" id="todays_profit">Loading...</span></div>
-    <div class="card"><span class="label">Max Used Margin:</span> <span class="value warning" id="max_margin">Loading...</span></div>
+    
+    <!-- નવા ઉમેરેલા 2 ફિલ્ડ્સ -->
+    <div class="card"><span class="label">Max Used Margin:</span> <span class="value" id="max_margin">Loading...</span></div>
     <div class="card"><span class="label">One-Side Lock:</span> <span class="value" id="one_side_lock">Loading...</span></div>
+    
     <div class="card"><span class="label">Open Trades (Buy/Sell):</span> <span class="value" id="trades">Loading...</span></div>
-    <div class="card"><span class="label">Total Open Trades:</span> <span class="value" id="total_trades">Loading...</span></div>
-    <div class="card"><span class="label">Max Drawdown:</span> <span class="value" id="max_dd">Loading...</span></div>
+    <div class="card"><span class="label">Max Trades (24h):</span> <span class="value" id="max_trades">Loading...</span></div>
+    <div class="card"><span class="label">Max Drawdown (24h):</span> <span class="value" id="max_dd">Loading...</span></div>
     <div class="card"><span class="label">Scan Speed:</span> <span class="value" id="scan_speed">Loading...</span></div>
     <div class="card"><span class="label">Bot Uptime:</span> <span class="value" id="uptime">Loading...</span></div>
 </div>
@@ -35,7 +37,7 @@
 <script>
     async function fetchBotData() {
         try {
-            // MQL5 બોટ મુજબ સાચી લિંક મૂકવામાં આવી છે
+            // ફાયરબેઝ લિંક બોટના ડેટા સાથે મેચ કરી છે
             let response = await fetch('https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json');
             let data = await response.json();
 
@@ -49,23 +51,16 @@
             fpl.className = "value " + (fplVal >= 0 ? "profit" : "loss");
 
             let tprof = document.getElementById('todays_profit');
-            let tprofVal = Number(data.today_pl || 0); // MQL5 માં today_pl નામ છે
+            let tprofVal = Number(data.today_pl || 0);
             tprof.innerText = "$" + tprofVal.toFixed(2);
             tprof.className = "value " + (tprofVal >= 0 ? "profit" : "loss");
 
-            // નવા ઉમેરેલા ડેટા
+            // નવા ફિલ્ડ્સ નો ડેટા 
             document.getElementById('max_margin').innerText = "$" + Number(data.max_margin || 0).toFixed(2);
-            
-            let lockStatus = document.getElementById('one_side_lock');
-            lockStatus.innerText = data.one_side_lock || "OFF";
-            if(data.one_side_lock && data.one_side_lock !== "OFF") {
-                lockStatus.style.color = "#ff4444"; // લોક લાગેલું હોય ત્યારે લાલ કલર
-            } else {
-                lockStatus.style.color = "#00ff66"; // લોક ન હોય ત્યારે લીલો કલર
-            }
+            document.getElementById('one_side_lock').innerText = data.one_side_lock || "OFF";
 
             document.getElementById('trades').innerText = (data.bot_a_buy || 0) + " / " + (data.bot_a_sell || 0);
-            document.getElementById('total_trades').innerText = data.open_trades_total || 0;
+            document.getElementById('max_trades').innerText = data.open_trades_total || 0;
             document.getElementById('max_dd').innerText = "$" + Number(data.max_dd || 0).toFixed(2);
             document.getElementById('scan_speed').innerText = (data.scan_speed || 0) + " ms";
             document.getElementById('uptime').innerText = data.uptime || "00:00:00";
@@ -74,7 +69,7 @@
         }
     }
 
-    setInterval(fetchBotData, 2000); // દર 2 સેકન્ડે ડેટા રિફ્રેશ થશે
+    setInterval(fetchBotData, 2000); 
     fetchBotData();
 </script>
 
