@@ -26,3 +26,335 @@
             max-width: 450px;
             height: 100vh;
             height: 100dvh;
+            padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        /* Header */
+        .header {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        .header h1 {
+            color: var(--gold);
+            font-size: clamp(13px, 2.2vh, 17px);
+            margin: 0;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+        .status-badge {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--g);
+            padding: 3px 9px;
+            border-radius: 4px;
+            font-size: clamp(9px, 1.4vh, 11px);
+            border: 1px solid var(--g);
+            font-weight: bold;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        .status-badge.bad { background: rgba(231, 76, 60, 0.1); color: var(--r); border-color: var(--r); }
+
+        /* Cards */
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: 6px;
+            padding: 3px 4px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 0;
+            overflow: hidden;
+        }
+        .label {
+            color: var(--lab);
+            font-size: clamp(7px, 1.2vh, 9.5px);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            letter-spacing: 0.4px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .value {
+            font-size: clamp(11px, 2vh, 15px);
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .value.sm { font-size: clamp(9px, 1.55vh, 12px); }
+        .sub {
+            color: var(--lab);
+            font-size: clamp(8px, 1.3vh, 10.5px);
+            margin-top: 1px;
+            white-space: nowrap;
+        }
+
+        /* Colors */
+        .profit { color: var(--g); }
+        .loss { color: var(--r); }
+        .neutral { color: var(--w); }
+        .warning { color: var(--y); }
+
+        /* Top blocks */
+        .gold-card { flex: 0 0 auto; border: 1px solid var(--gold); padding: 4px; }
+        .gold-card .value { font-size: clamp(18px, 3.4vh, 26px); }
+        .cycle-card { flex: 0 0 auto; }
+        .locked-card { flex: 0 0 auto; text-align: left; padding: 4px 8px; }
+        .locked-card .label { text-align: center; }
+        .lrow {
+            display: flex;
+            justify-content: space-between;
+            font-size: clamp(9px, 1.5vh, 11.5px);
+            font-weight: bold;
+            line-height: 1.5;
+            white-space: nowrap;
+        }
+        .lrow .dim { color: #55556a; }
+
+        /* Main grid: 3 columns x 8 rows (જગ્યા પ્રમાણે સરખી ઊંચાઈ) */
+        .grid3 {
+            flex: 1 1 0;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: minmax(0, 1fr);
+            gap: 5px;
+        }
+
+        /* Bottom blocks */
+        .target-card { flex: 0 0 auto; border: 1px solid var(--gold); }
+        .status-card { flex: 0 0 auto; border: 1px solid var(--g); background-color: rgba(46, 204, 113, 0.05); }
+        .status-card.bad { border-color: var(--r); background-color: rgba(231, 76, 60, 0.06); }
+    </style>
+</head>
+<body>
+
+<div class="app">
+
+    <div class="header">
+        <h1>Mehul Grid Live</h1>
+        <div class="status-badge" id="badge">● ONLINE</div>
+    </div>
+
+    <!-- Gold -->
+    <div class="card gold-card">
+        <div class="label" style="color:#f39c12;">Gold (XAU/USD) Live Price</div>
+        <div class="value profit" id="gold_bid">$0.00</div>
+        <div class="sub" id="gold_sub">Ask 0.00 &middot; Spread 0.00</div>
+    </div>
+
+    <!-- Cycle -->
+    <div class="card cycle-card">
+        <div class="label">Cycle</div>
+        <div class="value" id="cycle_line">1 / 3 RUNNING &middot; LOCKED 0</div>
+    </div>
+
+    <!-- Locked cycles -->
+    <div class="card locked-card">
+        <div class="label">Locked Cycles (lock loss &middot; live P/L &middot; trades)</div>
+        <div class="lrow" id="lock1"><span class="dim">#1 &mdash;</span></div>
+        <div class="lrow" id="lock2"><span class="dim">#2 &mdash;</span></div>
+        <div class="lrow" id="lock3"><span class="dim">#3 &mdash;</span></div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="grid3">
+        <!-- Account -->
+        <div class="card"><div class="label">Balance</div><div class="value profit" id="balance">$0.00</div></div>
+        <div class="card"><div class="label">Today P/L</div><div class="value" id="today_pl">$0.00</div></div>
+        <div class="card"><div class="label">Max DD (Account)</div><div class="value loss" id="account_max_dd">$0.00</div></div>
+
+        <div class="card"><div class="label">Max Margin Use</div><div class="value neutral" id="max_margin">$0.00</div></div>
+        <div class="card"><div class="label">Bot Uptime</div><div class="value warning" id="uptime">0h 0m</div></div>
+        <div class="card"><div class="label">Scan A / B / C (ms)</div><div class="value sm neutral" id="scan_speed">0 / 0 / 0</div></div>
+
+        <!-- This cycle -->
+        <div class="card"><div class="label">Floating P/L (A+H)</div><div class="value" id="floating_pl">$0.00</div></div>
+        <div class="card"><div class="label">Bot A P/L</div><div class="value" id="botA_pl">$0.00</div></div>
+        <div class="card"><div class="label">Hedge P/L</div><div class="value" id="hedge_pl">$0.00</div></div>
+
+        <div class="card"><div class="label">Cycle Profit</div><div class="value" id="cycle_profit">$0.00</div></div>
+        <div class="card"><div class="label">Cycle Peak</div><div class="value profit" id="cycle_peak">$0.00</div></div>
+        <div class="card"><div class="label">Cycle Floor</div><div class="value warning" id="cycle_floor">$0.00</div></div>
+
+        <div class="card"><div class="label">Cycle Dyn. Stop</div><div class="value loss" id="dynamic_stop">-$0.00</div></div>
+        <div class="card"><div class="label">Peak Basket</div><div class="value profit" id="peak_basket">$0.00</div></div>
+        <div class="card"><div class="label">Max DD (Cycle)</div><div class="value loss" id="max_dd">$0.00</div></div>
+
+        <div class="card"><div class="label">Open Trades (A)</div><div class="value sm neutral" id="open_trades">0 (B:0/S:0)</div></div>
+        <div class="card"><div class="label">Hedge Trades</div><div class="value sm neutral" id="hedge_trades">0 (B:0/S:0)</div></div>
+        <div class="card"><div class="label">Max Trades (Cycle)</div><div class="value neutral" id="max_trades">0</div></div>
+
+        <div class="card"><div class="label">Heavy Side (TP off)</div><div class="value" id="one_side_lock">NONE</div></div>
+        <div class="card"><div class="label">Loss Hedge Mode</div><div class="value" id="hedge_mode">OFF</div></div>
+        <div class="card"><div class="label">ADX (20)</div><div class="value neutral" id="adx">0.00</div></div>
+
+        <div class="card"><div class="label">ATR (14)</div><div class="value neutral" id="atr">0.00000</div></div>
+        <div class="card"><div class="label">Spread</div><div class="value neutral" id="spread">0.00</div></div>
+        <div class="card"><div class="label">Locked Live P/L</div><div class="value" id="locked_live">$0.00</div></div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="card target-card">
+        <div class="label warning">Basket Target Rule</div>
+        <div class="value sm neutral" id="target_rule">Loading...</div>
+    </div>
+
+    <div class="card status-card" id="status_card">
+        <div class="label profit" id="status_label">Bot Status</div>
+        <div class="value sm profit" id="bot_status">Waiting for Data...</div>
+    </div>
+
+</div>
+
+<script>
+    const FIREBASE_URL = 'https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json';
+    const STALE_SECONDS = 90; // આટલા સમયથી ડેટા ન આવે તો OFFLINE
+
+    const $ = id => document.getElementById(id);
+    const num = (v, d = 0) => { const n = Number(v); return isFinite(n) ? n : d; };
+    const money = v => (v < 0 ? '-' : '') + '$' + Math.abs(v).toFixed(2);
+    const plClass = v => v > 0 ? 'profit' : (v < 0 ? 'loss' : 'neutral');
+
+    function setv(id, text, color) {
+        const e = $(id);
+        if (!e) return;
+        e.textContent = text;
+        if (color) {
+            e.classList.remove('profit', 'loss', 'neutral', 'warning');
+            e.classList.add(color);
+        }
+    }
+
+    function renderLocked(list, max) {
+        if (!list) list = [];
+        if (!Array.isArray(list)) list = Object.values(list);
+        list = list.filter(x => x && typeof x === 'object');
+
+        for (let k = 1; k <= 3; k++) {
+            const row = $('lock' + k);
+            const item = list.find(x => Number(x.cycle) === k);
+            if (k > max) { row.innerHTML = ''; continue; }
+
+            if (!item) {
+                row.innerHTML = `<span class="dim">#${k} &mdash;</span>`;
+                continue;
+            }
+            const lockLoss = num(item.lock_loss);
+            const live = num(item.live_pl);
+            const liveTrades = num(item.live_trades);
+            const closed = liveTrades === 0 ? ' (closed)' : '';
+            row.innerHTML =
+                `<span class="warning">#${k}</span>` +
+                `<span class="${plClass(lockLoss)}">${money(lockLoss)}</span>` +
+                `<span class="${plClass(live)}">${money(live)}</span>` +
+                `<span class="neutral">${liveTrades}T${closed}</span>`;
+        }
+    }
+
+    async function fetchBotData() {
+        try {
+            const response = await fetch(FIREBASE_URL, { cache: 'no-store' });
+            const data = await response.json();
+            if (!data) return;
+
+            // --- Status badge ---
+            const nowSec = Date.now() / 1000;
+            const ts = num(data.ts, 0);
+            const stale = ts > 0 && (nowSec - ts) > STALE_SECONDS;
+            const allLocked = (data.system_state === 'ALL LOCKED');
+            const badge = $('badge');
+            if (stale) { badge.textContent = '● OFFLINE'; badge.classList.add('bad'); }
+            else if (allLocked) { badge.textContent = '● ALL LOCKED'; badge.classList.add('bad'); }
+            else { badge.textContent = '● ONLINE'; badge.classList.remove('bad'); }
+
+            // --- Gold ---
+            const bid = num(data.gold_bid), ask = num(data.gold_ask);
+            const spread = ask > 0 && bid > 0 ? (ask - bid) : 0;
+            setv('gold_bid', '$' + bid.toFixed(2), 'profit');
+            $('gold_sub').textContent = `Ask ${ask.toFixed(2)} \u00b7 Spread ${spread.toFixed(2)}`;
+            setv('spread', spread.toFixed(2), 'neutral');
+
+            // --- Cycle ---
+            const cNo = num(data.cycle_no, 1), cMax = num(data.cycle_max, 3), cLocked = num(data.cycles_locked, 0);
+            const cl = $('cycle_line');
+            if (allLocked) {
+                cl.textContent = `ALL ${cMax} CYCLES LOCKED - MANUAL CLOSE`;
+                cl.className = 'value sm loss';
+            } else {
+                cl.textContent = `${cNo} / ${cMax} RUNNING \u00b7 LOCKED ${cLocked}`;
+                cl.className = 'value ' + (cLocked > 0 ? 'warning' : 'profit');
+            }
+            renderLocked(data.locked_cycles, cMax);
+            const lockedLive = num(data.locked_floating_total);
+            setv('locked_live', money(lockedLive), plClass(lockedLive));
+
+            // --- Account ---
+            setv('balance', '$' + num(data.balance).toFixed(2), 'profit');
+            const tplVal = num(data.today_pl);
+            setv('today_pl', money(tplVal), plClass(tplVal));
+            setv('account_max_dd', '$' + num(data.account_max_dd).toFixed(2), 'loss');
+            setv('max_margin', '$' + num(data.max_margin).toFixed(2), 'neutral');
+            setv('uptime', data.uptime || '0h 0m', 'warning');
+            setv('scan_speed',
+                `${num(data.scan_speed).toFixed(2)} / ${num(data.scan_speed_b).toFixed(2)} / ${num(data.scan_speed_c).toFixed(2)}`,
+                'neutral');
+
+            // --- This cycle ---
+            const fplVal = num(data.floating_pl);
+            const hedgePl = num(data.hedge_pl);
+            const botAPl = fplVal - hedgePl;
+            setv('floating_pl', money(fplVal), plClass(fplVal));
+            setv('botA_pl', money(botAPl), plClass(botAPl));
+            setv('hedge_pl', money(hedgePl), plClass(hedgePl));
+
+            const cpVal = num(data.cycle_profit);
+            setv('cycle_profit', money(cpVal), cpVal > 0 ? 'profit' : 'neutral');
+            setv('cycle_peak', money(num(data.cycle_peak)), 'profit');
+            setv('cycle_floor', money(num(data.cycle_floor)), 'warning');
+
+            setv('dynamic_stop', '-$' + num(data.cycle_dynamic_stop).toFixed(2), 'loss');
+            setv('peak_basket', money(num(data.peak_basket_profit)), 'profit');
+            setv('max_dd', '$' + num(data.max_dd).toFixed(2), 'loss');
+
+            const tTotal = num(data.open_trades_total), tBuy = num(data.bot_a_buy), tSell = num(data.bot_a_sell);
+            setv('open_trades', `${tTotal} (B:${tBuy}/S:${tSell})`, 'neutral');
+            const hBuy = num(data.hedge_buy), hSell = num(data.hedge_sell);
+            setv('hedge_trades', `${hBuy + hSell} (B:${hBuy}/S:${hSell})`, 'neutral');
+            setv('max_trades', String(num(data.max_trades)), 'neutral');
+
+            const osl = data.one_side_lock || 'NONE';
+            setv('one_side_lock', osl, (osl === 'NONE' || osl === 'OFF') ? 'neutral' : 'loss');
+            const hm = data.hedge_mode || 'OFF';
+            setv('hedge_mode', hm, hm === 'ON' ? 'warning' : 'neutral');
+            setv('adx', num(data.adx).toFixed(2), 'neutral');
+            setv('atr', num(data.atr).toFixed(5), 'neutral');
+
+            // --- Bottom ---
+            setv('target_rule', data.target_rule || 'Loading...', 'neutral');
+
+            const st = data.bot_status || 'Running';
+            const stCard = $('status_card');
+            const bad = allLocked || stale || /EMERGENCY|LOCKED/i.test(st);
+            stCard.classList.toggle('bad', bad);
+            $('status_label').className = 'label ' + (bad ? 'loss' : 'profit');
+            setv('bot_status', stale ? 'OFFLINE (no data)' : st, bad ? 'loss' : 'profit');
+
+        } catch (error) {
+            console.error('Error loading Firebase data:', error);
+        }
+    }
+
+    setInterval(fetchBotData, 2000);
+    fetchBotData();
+</script>
+
+</body>
+</html>
