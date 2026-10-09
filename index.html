@@ -2,248 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mehul Grid Live - Dashboard</title>
     <style>
         * { box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #121212; 
-            color: #ffffff; 
-            margin: 0; 
-            padding: 15px; 
-            display: flex; 
-            justify-content: center;
+        :root {
+            --bg: #121212; --card: #1a1a24; --bd: #2a2a36; --lab: #8a8a9d;
+            --gold: #f39c12; --g: #2ecc71; --r: #e74c3c; --y: #f1c40f; --w: #ecf0f1;
         }
-        .container { 
-            width: 100%; 
-            max-width: 450px; 
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
         }
-        
-        /* Header Section */
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #333; 
-            padding-bottom: 15px; 
-            margin-bottom: 20px; 
-        }
-        .header h1 { 
-            color: #f39c12; 
-            font-size: 18px; 
-            margin: 0; 
-            letter-spacing: 1.5px; 
-            text-transform: uppercase;
-        }
-        .status-badge { 
-            background: rgba(46, 204, 113, 0.1); 
-            color: #2ecc71; 
-            padding: 4px 10px; 
-            border-radius: 4px; 
-            font-size: 11px; 
-            border: 1px solid #2ecc71; 
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
+        body { display: flex; justify-content: center; }
 
-        /* Grid Layout */
-        .grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 12px; 
-        }
-        .card { 
-            background-color: #1a1a24; 
-            border: 1px solid #2a2a36; 
-            border-radius: 6px; 
-            padding: 15px 10px; 
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-        }
-        .card.full-width { 
-            grid-column: span 2; 
-        }
-        
-        /* Card Texts */
-        .label { 
-            color: #8a8a9d; 
-            font-size: 10px; 
-            text-transform: uppercase; 
-            margin-bottom: 8px; 
-            letter-spacing: 0.5px; 
-            font-weight: bold; 
-        }
-        .value { 
-            font-size: 17px; 
-            font-weight: bold; 
-        }
-
-        /* Colors */
-        .profit { color: #2ecc71; }
-        .loss { color: #e74c3c; }
-        .neutral { color: #ecf0f1; }
-        .warning { color: #f1c40f; }
-
-        /* Special Cards */
-        .target-card { border: 1px solid #f39c12; }
-        .status-card { border: 1px solid #2ecc71; background-color: rgba(46, 204, 113, 0.05); }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="header">
-        <h1>Mehul Grid Live</h1>
-        <div class="status-badge">● ONLINE</div>
-    </div>
-
-    <div class="grid">
-        <div class="card">
-            <div class="label">Balance</div>
-            <div class="value profit" id="balance">$0.00</div>
-        </div>
-        <div class="card">
-            <div class="label">Today P/L</div>
-            <div class="value" id="today_pl">$0.00</div>
-        </div>
-
-        <div class="card">
-            <div class="label">Floating P/L</div>
-            <div class="value" id="floating_pl">$0.00</div>
-        </div>
-        <div class="card">
-            <div class="label">Open Trades</div>
-            <div class="value neutral" id="open_trades">0 (B:0 / S:0)</div>
-        </div>
-
-        <div class="card">
-            <div class="label">Max Drawdown</div>
-            <div class="value loss" id="max_dd">$0.00</div>
-        </div>
-        <div class="card">
-            <div class="label">Max Margin Use</div>
-            <div class="value neutral" id="max_margin">$0.00</div>
-        </div>
-
-        <div class="card">
-            <div class="label">Cycle Profit</div>
-            <div class="value" id="cycle_profit">$0.00</div>
-        </div>
-        <div class="card">
-            <div class="label">Bot Uptime</div>
-            <div class="value warning" id="uptime">0h 0m</div>
-        </div>
-
-        <div class="card">
-            <div class="label">One-Side Lock</div>
-            <div class="value" id="one_side_lock">OFF</div>
-        </div>
-        <div class="card">
-            <div class="label">Cycle Dynamic Stop</div>
-            <div class="value loss" id="dynamic_stop">-$0.00</div>
-        </div>
-
-        <div class="card">
-            <div class="label">Peak Basket Profit</div>
-            <div class="value profit" id="peak_basket">$0.00</div>
-        </div>
-        <div class="card">
-            <div class="label">Scan Speed</div>
-            <div class="value neutral" id="scan_speed">0.00 ms</div>
-        </div>
-
-        <!-- સુધારેલું ખાનું: Gold Live Price -->
-        <div class="card full-width target-card">
-            <div class="label warning">Gold (XAU/USD) Live Price</div>
-            <div class="value profit" id="gold_live_price">Loading...</div>
-        </div>
-
-        <div class="card full-width status-card">
-            <div class="label profit" style="margin-bottom: 5px;">Bot Status</div>
-            <div class="value profit" id="bot_status">Waiting for Data...</div>
-        </div>
-    </div>
-</div>
-
-<script>
-    async function fetchBotData() {
-        try {
-            let response = await fetch('https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json');
-            let data = await response.json();
-
-            if (!data) return;
-
-            document.getElementById('balance').innerText = "$" + Number(data.balance || 0).toFixed(2);
-            
-            let tpl = document.getElementById('today_pl');
-            let tplVal = Number(data.today_pl || 0);
-            tpl.innerText = "$" + tplVal.toFixed(2);
-            tpl.className = "value " + (tplVal >= 0 ? "profit" : "loss");
-
-            let fpl = document.getElementById('floating_pl');
-            let fplVal = Number(data.floating_pl || 0);
-            fpl.innerText = "$" + fplVal.toFixed(2);
-            fpl.className = "value " + (fplVal >= 0 ? "profit" : "loss");
-
-            let tTotal = data.open_trades_total || 0;
-            let tBuy = data.bot_a_buy || 0;
-            let tSell = data.bot_a_sell || 0;
-            document.getElementById('open_trades').innerText = `${tTotal} (B:${tBuy} / S:${tSell})`;
-
-            document.getElementById('max_dd').innerText = "$" + Number(data.max_dd || 0).toFixed(2);
-            document.getElementById('max_margin').innerText = "$" + Number(data.max_margin || 0).toFixed(2);
-
-            let cp = document.getElementById('cycle_profit');
-            let cpVal = Number(data.cycle_profit || 0);
-            cp.innerText = "$" + cpVal.toFixed(2);
-            cp.className = "value " + (cpVal > 0 ? "profit" : "neutral");
-
-            document.getElementById('uptime').innerText = data.uptime || "0h 0m";
-
-            let osl = document.getElementById('one_side_lock');
-            let oslStatus = data.one_side_lock || "OFF";
-            osl.innerText = oslStatus;
-            osl.className = "value " + (oslStatus !== "OFF" ? "loss" : "neutral");
-
-            document.getElementById('dynamic_stop').innerText = "-$" + Number(data.cycle_dynamic_stop || 0).toFixed(2);
-            document.getElementById('peak_basket').innerText = "$" + Number(data.peak_basket_profit || 0).toFixed(2);
-            document.getElementById('scan_speed').innerText = Number(data.scan_speed || 0).toFixed(2) + " ms";
-            document.getElementById('bot_status').innerText = data.bot_status || "Running";
-
-        } catch (error) {
-            console.error("Error loading Firebase data:", error);
-        }
-    }
-
-    // ગોલ્ડનો લાઈવ ભાવ લાવવા માટેનું નવું ફંક્શન
-    async function fetchGoldPrice() {
-        try {
-            // અહી PAXGUSDT (PAX Gold) ની ફ્રી Binance API વાપરી છે જે XAUUSD ના લાઈવ ભાવને સચોટ રીતે ટ્રેક કરે છે. 
-            // આમાં કોઈ API Key ની જરૂર નથી.
-            let response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT');
-            let data = await response.json();
-            
-            if (data && data.price) {
-                let goldPrice = Number(data.price).toFixed(2);
-                document.getElementById('gold_live_price').innerText = "$" + goldPrice;
-            }
-        } catch (error) {
-            console.error("Error fetching Gold price:", error);
-            document.getElementById('gold_live_price').innerText = "Error";
-        }
-    }
-
-    // બન્ને ફંક્શનને દર 2 સેકન્ડે ઓટોમેટિક રિફ્રેશ કરવા માટે
-    setInterval(fetchBotData, 2000); 
-    setInterval(fetchGoldPrice, 2000); 
-    
-    // પેજ લોડ થાય ત્યારે તરત જ ડેટા લાવવા
-    fetchBotData();
-    fetchGoldPrice();
-</script>
-
-</body>
-</html>
+        /* આખું પેજ એક જ screen માં: ઊંચાઈ મુજબ બધું સંકોચાય */
+        .app {
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            height: 100dvh;
