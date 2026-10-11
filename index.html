@@ -166,14 +166,14 @@
 
     <!-- Main grid -->
     <div class="grid3">
-        <!-- Account -->
+        <!-- Account (lifetime) -->
         <div class="card"><div class="label">Balance</div><div class="value profit" id="balance">$0.00</div></div>
         <div class="card"><div class="label">Today P/L</div><div class="value" id="today_pl">$0.00</div></div>
-        <div class="card"><div class="label">Max DD (Account)</div><div class="value loss" id="account_max_dd">$0.00</div></div>
+        <div class="card"><div class="label">Max Drawdown</div><div class="value loss" id="max_dd">$0.00</div></div>
 
         <div class="card"><div class="label">Max Margin Use</div><div class="value neutral" id="max_margin">$0.00</div></div>
-        <div class="card"><div class="label">Bot Uptime</div><div class="value warning" id="uptime">0h 0m</div></div>
-        <div class="card"><div class="label">Scan A / B / C (ms)</div><div class="value sm neutral" id="scan_speed">0 / 0 / 0</div></div>
+        <div class="card"><div class="label">Max Open Trades</div><div class="value neutral" id="max_trades">0</div></div>
+        <div class="card"><div class="label">Cycles Completed</div><div class="value sm profit" id="cycles_done">0 (today 0)</div></div>
 
         <!-- This cycle -->
         <div class="card"><div class="label">Floating P/L (A+H)</div><div class="value" id="floating_pl">$0.00</div></div>
@@ -185,20 +185,20 @@
         <div class="card"><div class="label">Cycle Floor</div><div class="value warning" id="cycle_floor">$0.00</div></div>
 
         <div class="card"><div class="label">Cycle Dyn. Stop</div><div class="value loss" id="dynamic_stop">-$0.00</div></div>
-        <div class="card"><div class="label">Peak Basket</div><div class="value profit" id="peak_basket">$0.00</div></div>
-        <div class="card"><div class="label">Max DD (Cycle)</div><div class="value loss" id="max_dd">$0.00</div></div>
-
         <div class="card"><div class="label">Open Trades (A)</div><div class="value sm neutral" id="open_trades">0 (B:0/S:0)</div></div>
         <div class="card"><div class="label">Hedge Trades</div><div class="value sm neutral" id="hedge_trades">0 (B:0/S:0)</div></div>
-        <div class="card"><div class="label">Max Trades (Cycle)</div><div class="value neutral" id="max_trades">0</div></div>
 
         <div class="card"><div class="label">Heavy Side (TP off)</div><div class="value" id="one_side_lock">NONE</div></div>
         <div class="card"><div class="label">Loss Hedge Mode</div><div class="value" id="hedge_mode">OFF</div></div>
-        <div class="card"><div class="label">ADX (20)</div><div class="value neutral" id="adx">0.00</div></div>
+        <div class="card"><div class="label">Locked Live P/L</div><div class="value" id="locked_live">$0.00</div></div>
 
+        <div class="card"><div class="label">ADX (20)</div><div class="value neutral" id="adx">0.00</div></div>
         <div class="card"><div class="label">ATR (14)</div><div class="value neutral" id="atr">0.00000</div></div>
         <div class="card"><div class="label">Spread</div><div class="value neutral" id="spread">0.00</div></div>
-        <div class="card"><div class="label">Locked Live P/L</div><div class="value" id="locked_live">$0.00</div></div>
+
+        <div class="card"><div class="label">Bot Uptime</div><div class="value warning" id="uptime">0h 0m</div></div>
+        <div class="card"><div class="label">Scan A / B / C (ms)</div><div class="value sm neutral" id="scan_speed">0 / 0 / 0</div></div>
+        <div class="card"><div class="label">Data Age</div><div class="value neutral" id="data_age">-</div></div>
     </div>
 
     <!-- Bottom -->
@@ -303,6 +303,8 @@
             setv('account_max_dd', '$' + num(data.account_max_dd).toFixed(2), 'loss');
             setv('max_margin', '$' + num(data.max_margin).toFixed(2), 'neutral');
             setv('uptime', data.uptime || '0h 0m', 'warning');
+            setv('cycles_done', `${num(data.cycles_done)} (today ${num(data.cycles_today)})`, 'profit');
+            setv('data_age', ts > 0 ? Math.max(0, Math.round(nowSec - ts)) + 's' : '-', stale ? 'loss' : 'neutral');
             setv('scan_speed',
                 `${num(data.scan_speed).toFixed(2)} / ${num(data.scan_speed_b).toFixed(2)} / ${num(data.scan_speed_c).toFixed(2)}`,
                 'neutral');
