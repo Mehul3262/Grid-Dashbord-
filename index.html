@@ -153,7 +153,7 @@
     <!-- Cycle -->
     <div class="card cycle-card">
         <div class="label">Cycle</div>
-        <div class="value" id="cycle_line">1 / 3 RUNNING &middot; LOCKED 0</div>
+        <div class="value" id="cycle_line">LOCKED 0 / 3 &middot; RUNNING SLOT 1</div>
     </div>
 
     <!-- Locked cycles -->
@@ -289,7 +289,7 @@
                 cl.textContent = `ALL ${cMax} CYCLES LOCKED - MANUAL CLOSE`;
                 cl.className = 'value sm loss';
             } else {
-                cl.textContent = `${cNo} / ${cMax} RUNNING \u00b7 LOCKED ${cLocked}`;
+                cl.textContent = `LOCKED ${cLocked} / ${cMax} \u00b7 RUNNING SLOT ${cNo}`;
                 cl.className = 'value ' + (cLocked > 0 ? 'warning' : 'profit');
             }
             renderLocked(data.locked_cycles, cMax);
