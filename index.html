@@ -1,362 +1,214 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="gu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mehul Grid Live - Dashboard</title>
-    <style>
-        * { box-sizing: border-box; }
-        :root {
-            --bg: #121212; --card: #1a1a24; --bd: #2a2a36; --lab: #8a8a9d;
-            --gold: #f39c12; --g: #2ecc71; --r: #e74c3c; --y: #f1c40f; --w: #ecf0f1;
-        }
-        html, body {
-            height: 100%;
-            margin: 0;
-            background: var(--bg);
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-        }
-        body { display: flex; justify-content: center; }
-
-        /* આખું પેજ એક જ screen માં: ઊંચાઈ મુજબ બધું સંકોચાય */
-        .app {
-            width: 100%;
-            max-width: 450px;
-            height: 100vh;
-            height: 100dvh;
-            padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        /* Header */
-        .header {
-            flex: 0 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
-        .header h1 {
-            color: var(--gold);
-            font-size: clamp(13px, 2.2vh, 17px);
-            margin: 0;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-        }
-        .status-badge {
-            background: rgba(46, 204, 113, 0.1);
-            color: var(--g);
-            padding: 3px 9px;
-            border-radius: 4px;
-            font-size: clamp(9px, 1.4vh, 11px);
-            border: 1px solid var(--g);
-            font-weight: bold;
-            letter-spacing: 1px;
-            white-space: nowrap;
-        }
-        .status-badge.bad { background: rgba(231, 76, 60, 0.1); color: var(--r); border-color: var(--r); }
-
-        /* Cards */
-        .card {
-            background-color: var(--card);
-            border: 1px solid var(--bd);
-            border-radius: 6px;
-            padding: 3px 4px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 0;
-            overflow: hidden;
-        }
-        .label {
-            color: var(--lab);
-            font-size: clamp(7px, 1.2vh, 9.5px);
-            text-transform: uppercase;
-            margin-bottom: 2px;
-            letter-spacing: 0.4px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .value {
-            font-size: clamp(11px, 2vh, 15px);
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .value.sm { font-size: clamp(9px, 1.55vh, 12px); }
-        .sub {
-            color: var(--lab);
-            font-size: clamp(8px, 1.3vh, 10.5px);
-            margin-top: 1px;
-            white-space: nowrap;
-        }
-
-        /* Colors */
-        .profit { color: var(--g); }
-        .loss { color: var(--r); }
-        .neutral { color: var(--w); }
-        .warning { color: var(--y); }
-
-        /* Top blocks */
-        .gold-card { flex: 0 0 auto; border: 1px solid var(--gold); padding: 4px; }
-        .gold-card .value { font-size: clamp(18px, 3.4vh, 26px); }
-        .cycle-card { flex: 0 0 auto; }
-        .locked-card { flex: 0 0 auto; text-align: left; padding: 4px 8px; }
-        .locked-card .label { text-align: center; }
-        .lrow {
-            display: flex;
-            justify-content: space-between;
-            font-size: clamp(9px, 1.5vh, 11.5px);
-            font-weight: bold;
-            line-height: 1.5;
-            white-space: nowrap;
-        }
-        .lrow .dim { color: #55556a; }
-
-        /* Main grid: 3 columns x 8 rows (જગ્યા પ્રમાણે સરખી ઊંચાઈ) */
-        .grid3 {
-            flex: 1 1 0;
-            min-height: 0;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-auto-rows: minmax(0, 1fr);
-            gap: 5px;
-        }
-
-        /* Bottom blocks */
-        .target-card { flex: 0 0 auto; border: 1px solid var(--gold); }
-        .status-card { flex: 0 0 auto; border: 1px solid var(--g); background-color: rgba(46, 204, 113, 0.05); }
-        .status-card.bad { border-color: var(--r); background-color: rgba(231, 76, 60, 0.06); }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MEHUL GAPGRID LIVE</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#171a22; --line:#2a2f3b; --text:#f2f4f8; --dim:#9aa3b2;
+    --orange:#f5a623; --green:#2ecc71; --red:#e74c3c; --yellow:#f1c40f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px;max-width:760px;margin-inline:auto}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:14px}
+  h1{margin:0;font-size:24px;letter-spacing:.5px;color:var(--orange)}
+  .badge{font-size:13px;font-weight:700;letter-spacing:1px;padding:6px 12px;border-radius:6px;border:2px solid var(--red);color:var(--red);white-space:nowrap}
+  .badge.on{border-color:var(--green);color:var(--green)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center;margin-bottom:10px}
+  .card.hero{border:2px solid var(--orange);padding:14px}
+  .label{font-size:12px;font-weight:700;letter-spacing:.8px;color:var(--dim);text-transform:uppercase}
+  .hero .label{color:var(--orange);font-size:14px}
+  .price{font-size:42px;font-weight:800;line-height:1.15;margin:4px 0}
+  .sub{font-size:13px;color:var(--dim)}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}
+  .grid3 .card,.grid2 .card{margin:0;padding:12px 6px}
+  .val{font-size:22px;font-weight:800;margin-top:6px;word-break:break-word}
+  .grid2 .val{font-size:26px}
+  .row{display:flex;justify-content:space-between;font-size:14px;padding:5px 4px;border-top:1px solid var(--line)}
+  .row:first-of-type{margin-top:8px}
+  .row span:first-child{color:var(--dim)}
+  .pos{color:var(--green)} .neg{color:var(--red)} .warn{color:var(--yellow)} .zero{color:var(--text)}
+  .rule{border:2px solid var(--yellow)} .rule .label{color:var(--yellow)}
+  .status.bad{border-color:var(--red);background:#1d1214} .status.bad .label{color:var(--red)}
+  .status .val{font-size:20px}
+  .note{font-size:13px;color:var(--dim);line-height:1.5;text-align:left}
+  code{background:#0b0d12;border:1px solid var(--line);padding:1px 5px;border-radius:4px}
+  @media (max-width:420px){.val{font-size:19px}.price{font-size:38px}}
+</style>
 </head>
 <body>
 
-<div class="app">
+<header>
+  <h1>MEHUL GAPGRID LIVE</h1>
+  <div id="badge" class="badge">● OFFLINE</div>
+</header>
 
-    <div class="header">
-        <h1>Mehul Grid Live</h1>
-        <div class="status-badge" id="badge">● ONLINE</div>
-    </div>
+<div id="setup" class="card" style="display:none">
+  <div class="label">Firebase URL જોઈએ</div>
+  <p class="note">આ page ના address ની પાછળ તમારું Firebase database URL ઉમેરો, એક જ વાર:<br>
+  <code>?db=https://તમારું-project-default-rtdb.firebaseio.com</code><br>
+  પછી તે આ ફોન/બ્રાઉઝરમાં યાદ રહી જશે. અથવા file માં <code>DEFAULT_DB</code> માં લખી દો.</p>
+</div>
 
-    <!-- Gold -->
-    <div class="card gold-card">
-        <div class="label" style="color:#f39c12;">Gold (XAU/USD) Live Price</div>
-        <div class="value profit" id="gold_bid">$0.00</div>
-        <div class="sub" id="gold_sub">Ask 0.00 &middot; Spread 0.00</div>
-    </div>
+<div class="card hero">
+  <div class="label" id="symLabel">GOLD (XAU/USD) LIVE PRICE</div>
+  <div class="price" id="bid">—</div>
+  <div class="sub" id="askSpread">Ask — · Spread —</div>
+</div>
 
-    <!-- Cycle -->
-    <div class="card cycle-card">
-        <div class="label">Cycle</div>
-        <div class="value" id="cycle_line">LOCKED 0 / 3 &middot; RUNNING SLOT 1</div>
-    </div>
+<div class="grid2">
+  <div class="card">
+    <div class="label">SELL SIDE</div>
+    <div class="val" id="sellN">0</div>
+    <div class="row"><span>Lots</span><span id="sellLots">0.00</span></div>
+    <div class="row"><span>Floating</span><span id="sellPL">0.00</span></div>
+    <div class="row"><span>Common TP</span><span id="sellTP">—</span></div>
+    <div class="row"><span>Last trade</span><span id="sellLast">—</span></div>
+  </div>
+  <div class="card">
+    <div class="label">BUY SIDE</div>
+    <div class="val" id="buyN">0</div>
+    <div class="row"><span>Lots</span><span id="buyLots">0.00</span></div>
+    <div class="row"><span>Floating</span><span id="buyPL">0.00</span></div>
+    <div class="row"><span>Common TP</span><span id="buyTP">—</span></div>
+    <div class="row"><span>Last trade</span><span id="buyLast">—</span></div>
+  </div>
+</div>
 
-    <!-- Locked cycles -->
-    <div class="card locked-card">
-        <div class="label">Locked Cycles (lock loss &middot; live P/L &middot; trades)</div>
-        <div class="lrow" id="lock1"><span class="dim">#1 &mdash;</span></div>
-        <div class="lrow" id="lock2"><span class="dim">#2 &mdash;</span></div>
-        <div class="lrow" id="lock3"><span class="dim">#3 &mdash;</span></div>
-    </div>
+<div class="grid3">
+  <div class="card"><div class="label">Balance</div><div class="val" id="balance">—</div></div>
+  <div class="card"><div class="label">Today P/L</div><div class="val" id="todayPL">—</div></div>
+  <div class="card"><div class="label">Max Drawdown</div><div class="val" id="maxDD">—</div></div>
 
-    <!-- Main grid -->
-    <div class="grid3">
-        <!-- Account (lifetime) -->
-        <div class="card"><div class="label">Balance</div><div class="value profit" id="balance">$0.00</div></div>
-        <div class="card"><div class="label">Today P/L</div><div class="value" id="today_pl">$0.00</div></div>
-        <div class="card"><div class="label">Max Drawdown</div><div class="value loss" id="max_dd">$0.00</div></div>
+  <div class="card"><div class="label">Equity</div><div class="val" id="equity">—</div></div>
+  <div class="card"><div class="label">Floating P/L</div><div class="val" id="floating">—</div></div>
+  <div class="card"><div class="label">Max Margin Use</div><div class="val" id="maxMargin">—</div></div>
 
-        <div class="card"><div class="label">Max Margin Use</div><div class="value neutral" id="max_margin">$0.00</div></div>
-        <div class="card"><div class="label">Max Open Trades</div><div class="value neutral" id="max_trades">0</div></div>
-        <div class="card"><div class="label">Cycles Completed</div><div class="value sm profit" id="cycles_done">0 (today 0)</div></div>
+  <div class="card"><div class="label">Open Trades</div><div class="val" id="open">0</div></div>
+  <div class="card"><div class="label">Max Open Trades</div><div class="val" id="maxOpen">0</div></div>
+  <div class="card"><div class="label">Baskets Completed</div><div class="val pos" id="baskets">0</div></div>
 
-        <!-- This cycle -->
-        <div class="card"><div class="label">Floating P/L (A+H)</div><div class="value" id="floating_pl">$0.00</div></div>
-        <div class="card"><div class="label">Bot A P/L</div><div class="value" id="botA_pl">$0.00</div></div>
-        <div class="card"><div class="label">Hedge P/L</div><div class="value" id="hedge_pl">$0.00</div></div>
+  <div class="card"><div class="label">TP Hits Today</div><div class="val" id="tpToday">0</div></div>
+  <div class="card"><div class="label">Bot Uptime</div><div class="val warn" id="uptime">—</div></div>
+  <div class="card"><div class="label">Data Age</div><div class="val" id="age">—</div></div>
+</div>
 
-        <div class="card"><div class="label">Cycle Profit</div><div class="value" id="cycle_profit">$0.00</div></div>
-        <div class="card"><div class="label">Cycle Peak</div><div class="value profit" id="cycle_peak">$0.00</div></div>
-        <div class="card"><div class="label">Cycle Floor</div><div class="value warning" id="cycle_floor">$0.00</div></div>
+<div class="card rule">
+  <div class="label">TP Rule</div>
+  <div class="val" style="font-size:16px" id="rule">Waiting for data…</div>
+</div>
 
-        <div class="card"><div class="label">Cycle Dyn. Stop</div><div class="value loss" id="dynamic_stop">-$0.00</div></div>
-        <div class="card"><div class="label">Open Trades (A)</div><div class="value sm neutral" id="open_trades">0 (B:0/S:0)</div></div>
-        <div class="card"><div class="label">Hedge Trades</div><div class="value sm neutral" id="hedge_trades">0 (B:0/S:0)</div></div>
-
-        <div class="card"><div class="label">Heavy Side (TP off)</div><div class="value" id="one_side_lock">NONE</div></div>
-        <div class="card"><div class="label">Loss Hedge Mode</div><div class="value" id="hedge_mode">OFF</div></div>
-        <div class="card"><div class="label">Locked Live P/L</div><div class="value" id="locked_live">$0.00</div></div>
-
-        <div class="card"><div class="label">ADX (20)</div><div class="value neutral" id="adx">0.00</div></div>
-        <div class="card"><div class="label">ATR (14)</div><div class="value neutral" id="atr">0.00000</div></div>
-        <div class="card"><div class="label">Spread</div><div class="value neutral" id="spread">0.00</div></div>
-
-        <div class="card"><div class="label">Bot Uptime</div><div class="value warning" id="uptime">0h 0m</div></div>
-        <div class="card"><div class="label">Scan A / B / C (ms)</div><div class="value sm neutral" id="scan_speed">0 / 0 / 0</div></div>
-        <div class="card"><div class="label">Data Age</div><div class="value neutral" id="data_age">-</div></div>
-    </div>
-
-    <!-- Bottom -->
-    <div class="card target-card">
-        <div class="label warning">Basket Target Rule</div>
-        <div class="value sm neutral" id="target_rule">Loading...</div>
-    </div>
-
-    <div class="card status-card" id="status_card">
-        <div class="label profit" id="status_label">Bot Status</div>
-        <div class="value sm profit" id="bot_status">Waiting for Data...</div>
-    </div>
-
+<div class="card status" id="statusCard">
+  <div class="label">Bot Status</div>
+  <div class="val" id="status">OFFLINE (no data)</div>
 </div>
 
 <script>
-    const FIREBASE_URL = 'https://mehul-grid-dashboard-default-rtdb.firebaseio.com/MehulGridData.json';
-    const STALE_SECONDS = 90; // આટલા સમયથી ડેટા ન આવે તો OFFLINE
+// Fill this in once if you do not want to use ?db=
+const DEFAULT_DB = "";
 
-    const $ = id => document.getElementById(id);
-    const num = (v, d = 0) => { const n = Number(v); return isFinite(n) ? n : d; };
-    const money = v => (v < 0 ? '-' : '') + '$' + Math.abs(v).toFixed(2);
-    const plClass = v => v > 0 ? 'profit' : (v < 0 ? 'loss' : 'neutral');
+const qs = new URLSearchParams(location.search);
+let DB = qs.get("db") || "";
+let NODE = qs.get("path") || "gapgrid";
+try {
+  if (DB) localStorage.setItem("gg_db", DB); else DB = localStorage.getItem("gg_db") || "";
+  if (qs.get("path")) localStorage.setItem("gg_path", NODE); else NODE = localStorage.getItem("gg_path") || NODE;
+} catch (e) {}
+if (!DB) DB = DEFAULT_DB;
+DB = DB.replace(/\/+$/, "");
 
-    function setv(id, text, color) {
-        const e = $(id);
-        if (!e) return;
-        e.textContent = text;
-        if (color) {
-            e.classList.remove('profit', 'loss', 'neutral', 'warning');
-            e.classList.add(color);
-        }
-    }
+const $ = id => document.getElementById(id);
+let cur = "$";
 
-    function renderLocked(list, max) {
-        if (!list) list = [];
-        if (!Array.isArray(list)) list = Object.values(list);
-        list = list.filter(x => x && typeof x === 'object');
+function money(v) {
+  if (v === undefined || v === null || isNaN(v)) return "—";
+  const s = Math.abs(v).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return (v < 0 ? "-" : "") + cur + s;
+}
+function setPL(id, v) {
+  const el = $(id);
+  el.textContent = money(v);
+  el.className = "val " + (v > 0 ? "pos" : v < 0 ? "neg" : "zero");
+}
+function setSidePL(id, v) {
+  const el = $(id);
+  el.textContent = money(v);
+  el.className = v > 0 ? "pos" : v < 0 ? "neg" : "zero";
+}
+function px(v) { return (v === undefined || v === null || v === 0) ? "—" : Number(v).toFixed(2); }
+function fmtUp(sec) {
+  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
+  return h + "h " + m + "m";
+}
+function setOnline(on, text) {
+  $("badge").textContent = on ? "● LIVE" : "● OFFLINE";
+  $("badge").className = "badge" + (on ? " on" : "");
+  $("status").textContent = text;
+  $("statusCard").className = "card status" + (on ? "" : " bad");
+}
 
-        for (let k = 1; k <= 3; k++) {
-            const row = $('lock' + k);
-            const item = list.find(x => Number(x.cycle) === k);
-            if (k > max) { row.innerHTML = ''; continue; }
+function render(d) {
+  cur = (d.currency && d.currency !== "USD") ? d.currency + " " : "$";
+  $("symLabel").textContent = (d.symbol || "GOLD") + " LIVE PRICE";
+  $("bid").textContent = "$" + Number(d.bid).toFixed(2);
+  $("bid").className = "price pos";
+  $("askSpread").textContent = "Ask " + Number(d.ask).toFixed(2) + " · Spread " + Number(d.spread).toFixed(2);
 
-            if (!item) {
-                row.innerHTML = `<span class="dim">#${k} &mdash;</span>`;
-                continue;
-            }
-            const lockLoss = num(item.lock_loss);
-            const live = num(item.live_pl);
-            const liveTrades = num(item.live_trades);
-            const closed = liveTrades === 0 ? ' (closed)' : '';
-            row.innerHTML =
-                `<span class="warning">#${k}</span>` +
-                `<span class="${plClass(lockLoss)}">${money(lockLoss)}</span>` +
-                `<span class="${plClass(live)}">${money(live)}</span>` +
-                `<span class="neutral">${liveTrades}T${closed}</span>`;
-        }
-    }
+  const b = d.buy || {}, s = d.sell || {};
+  $("sellN").textContent = s.n || 0;
+  $("sellLots").textContent = Number(s.lots || 0).toFixed(2);
+  setSidePL("sellPL", s.pl || 0);
+  $("sellTP").textContent = px(s.tp);
+  $("sellLast").textContent = px(s.last);
+  $("buyN").textContent = b.n || 0;
+  $("buyLots").textContent = Number(b.lots || 0).toFixed(2);
+  setSidePL("buyPL", b.pl || 0);
+  $("buyTP").textContent = px(b.tp);
+  $("buyLast").textContent = px(b.last);
 
-    async function fetchBotData() {
-        try {
-            const response = await fetch(FIREBASE_URL, { cache: 'no-store' });
-            const data = await response.json();
-            if (!data) return;
+  $("balance").textContent = money(d.balance);
+  $("balance").className = "val pos";
+  $("equity").textContent = money(d.equity);
+  setPL("todayPL", d.todayPL);
+  setPL("floating", d.floating);
+  $("maxDD").textContent = money(d.maxDD);
+  $("maxDD").className = "val neg";
+  $("maxMargin").textContent = money(d.maxMargin);
+  $("open").textContent = ((b.n || 0) + (s.n || 0)) + " (B:" + (b.n || 0) + "/S:" + (s.n || 0) + ")";
+  $("maxOpen").textContent = d.maxOpen || 0;
+  $("baskets").textContent = (d.basketsTotal || 0) + " (today " + (d.basketsToday || 0) + ")";
+  $("tpToday").textContent = d.tpHitsToday || 0;
+  $("uptime").textContent = fmtUp(d.uptimeSec || 0);
 
-            // --- Status badge ---
-            const nowSec = Date.now() / 1000;
-            const ts = num(data.ts, 0);
-            const stale = ts > 0 && (nowSec - ts) > STALE_SECONDS;
-            const allLocked = (data.system_state === 'ALL LOCKED');
-            const badge = $('badge');
-            if (stale) { badge.textContent = '● OFFLINE'; badge.classList.add('bad'); }
-            else if (allLocked) { badge.textContent = '● ALL LOCKED'; badge.classList.add('bad'); }
-            else { badge.textContent = '● ONLINE'; badge.classList.remove('bad'); }
+  const c = d.cfg || {};
+  $("rule").textContent = "Gap $" + c.gap + " · first TP $" + c.tpDist +
+    " · from trade " + c.from + " the common TP moves $" + c.trail + " per new trade";
 
-            // --- Gold ---
-            const bid = num(data.gold_bid), ask = num(data.gold_ask);
-            const spread = ask > 0 && bid > 0 ? (ask - bid) : 0;
-            setv('gold_bid', '$' + bid.toFixed(2), 'profit');
-            $('gold_sub').textContent = `Ask ${ask.toFixed(2)} \u00b7 Spread ${spread.toFixed(2)}`;
-            setv('spread', spread.toFixed(2), 'neutral');
+  const age = d.ts ? Math.max(0, (Date.now() - d.ts) / 1000) : 9999;
+  $("age").textContent = age < 120 ? Math.round(age) + "s" : Math.round(age / 60) + "m";
+  $("age").className = "val " + (age < 20 ? "pos" : "neg");
 
-            // --- Cycle ---
-            const cNo = num(data.cycle_no, 1), cMax = num(data.cycle_max, 3), cLocked = num(data.cycles_locked, 0);
-            const cl = $('cycle_line');
-            if (allLocked) {
-                cl.textContent = `ALL ${cMax} CYCLES LOCKED - MANUAL CLOSE`;
-                cl.className = 'value sm loss';
-            } else {
-                cl.textContent = `LOCKED ${cLocked} / ${cMax} \u00b7 RUNNING SLOT ${cNo}`;
-                cl.className = 'value ' + (cLocked > 0 ? 'warning' : 'profit');
-            }
-            renderLocked(data.locked_cycles, cMax);
-            const lockedLive = num(data.locked_floating_total);
-            setv('locked_live', money(lockedLive), plClass(lockedLive));
+  if (d.status === "HALTED") setOnline(false, "HALTED (max loss reached)");
+  else if (age > 20) setOnline(false, "OFFLINE (no new data)");
+  else setOnline(true, "RUNNING");
+}
 
-            // --- Account ---
-            setv('balance', '$' + num(data.balance).toFixed(2), 'profit');
-            const tplVal = num(data.today_pl);
-            setv('today_pl', money(tplVal), plClass(tplVal));
-            setv('account_max_dd', '$' + num(data.account_max_dd).toFixed(2), 'loss');
-            setv('max_margin', '$' + num(data.max_margin).toFixed(2), 'neutral');
-            setv('uptime', data.uptime || '0h 0m', 'warning');
-            setv('cycles_done', `${num(data.cycles_done)} (today ${num(data.cycles_today)})`, 'profit');
-            setv('data_age', ts > 0 ? Math.max(0, Math.round(nowSec - ts)) + 's' : '-', stale ? 'loss' : 'neutral');
-            setv('scan_speed',
-                `${num(data.scan_speed).toFixed(2)} / ${num(data.scan_speed_b).toFixed(2)} / ${num(data.scan_speed_c).toFixed(2)}`,
-                'neutral');
-
-            // --- This cycle ---
-            const fplVal = num(data.floating_pl);
-            const hedgePl = num(data.hedge_pl);
-            const botAPl = fplVal - hedgePl;
-            setv('floating_pl', money(fplVal), plClass(fplVal));
-            setv('botA_pl', money(botAPl), plClass(botAPl));
-            setv('hedge_pl', money(hedgePl), plClass(hedgePl));
-
-            const cpVal = num(data.cycle_profit);
-            setv('cycle_profit', money(cpVal), cpVal > 0 ? 'profit' : 'neutral');
-            setv('cycle_peak', money(num(data.cycle_peak)), 'profit');
-            setv('cycle_floor', money(num(data.cycle_floor)), 'warning');
-
-            setv('dynamic_stop', '-$' + num(data.cycle_dynamic_stop).toFixed(2), 'loss');
-            setv('peak_basket', money(num(data.peak_basket_profit)), 'profit');
-            setv('max_dd', '$' + num(data.max_dd).toFixed(2), 'loss');
-
-            const tTotal = num(data.open_trades_total), tBuy = num(data.bot_a_buy), tSell = num(data.bot_a_sell);
-            setv('open_trades', `${tTotal} (B:${tBuy}/S:${tSell})`, 'neutral');
-            const hBuy = num(data.hedge_buy), hSell = num(data.hedge_sell);
-            setv('hedge_trades', `${hBuy + hSell} (B:${hBuy}/S:${hSell})`, 'neutral');
-            setv('max_trades', String(num(data.max_trades)), 'neutral');
-
-            const osl = data.one_side_lock || 'NONE';
-            setv('one_side_lock', osl, (osl === 'NONE' || osl === 'OFF') ? 'neutral' : 'loss');
-            const hm = data.hedge_mode || 'OFF';
-            setv('hedge_mode', hm, hm === 'ON' ? 'warning' : 'neutral');
-            setv('adx', num(data.adx).toFixed(2), 'neutral');
-            setv('atr', num(data.atr).toFixed(5), 'neutral');
-
-            // --- Bottom ---
-            setv('target_rule', data.target_rule || 'Loading...', 'neutral');
-
-            const st = data.bot_status || 'Running';
-            const stCard = $('status_card');
-            const bad = allLocked || stale || /EMERGENCY|LOCKED/i.test(st);
-            stCard.classList.toggle('bad', bad);
-            $('status_label').className = 'label ' + (bad ? 'loss' : 'profit');
-            setv('bot_status', stale ? 'OFFLINE (no data)' : st, bad ? 'loss' : 'profit');
-
-        } catch (error) {
-            console.error('Error loading Firebase data:', error);
-        }
-    }
-
-    setInterval(fetchBotData, 2000);
-    fetchBotData();
+async function tick() {
+  if (!DB) { $("setup").style.display = ""; return; }
+  try {
+    const r = await fetch(DB + "/" + NODE + ".json", {cache: "no-store"});
+    if (!r.ok) throw new Error("http " + r.status);
+    const d = await r.json();
+    if (!d) { setOnline(false, "OFFLINE (no data)"); return; }
+    render(d);
+  } catch (e) {
+    setOnline(false, "OFFLINE (" + e.message + ")");
+  }
+}
+tick();
+setInterval(tick, 2000);
 </script>
-
 </body>
 </html>
