@@ -1,262 +1,307 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="gu">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>MEHUL GAPGRID LIVE</title>
 <style>
-  :root{
-    --bg:#0e1015; --card:#171a22; --line:#2a2f3b; --text:#f2f4f8; --dim:#9aa3b2;
-    --orange:#f5a623; --green:#2ecc71; --red:#e74c3c; --yellow:#f1c40f;
+  :root {
+    --bg: #0c0e13;
+    --card: #161a23;
+    --line: #2a3040;
+    --text: #f2f4f8;
+    --muted: #8b93a7;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --gold: #f5a623;
+    --yellow: #f1c40f;
   }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow:hidden}
-  .app{height:100vh;height:100dvh;max-width:560px;margin:0 auto;padding:8px 10px;
-    display:flex;flex-direction:column;gap:6px}
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  body {
+    height: 100vh;
+    height: 100dvh;
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
 
-  header{display:flex;align-items:center;justify-content:space-between;gap:8px;
-    border-bottom:1px solid var(--line);padding-bottom:6px}
-  h1{margin:0;font-size:clamp(16px,2.6vh,20px);letter-spacing:.5px;color:var(--orange);white-space:nowrap}
-  .badge{font-size:11px;font-weight:700;letter-spacing:1px;padding:4px 9px;border-radius:6px;
-    border:2px solid var(--red);color:var(--red);white-space:nowrap}
-  .badge.on{border-color:var(--green);color:var(--green)}
-  #setupHint{display:none;font-size:11px;color:var(--yellow);text-align:center}
+  .head { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex: 0 0 auto; }
+  .title { color: var(--gold); font-weight: bold; font-size: clamp(14px, 3.6vw, 18px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .badge { border: 2px solid var(--red); color: var(--red); border-radius: 8px; padding: 2px 8px; font-weight: bold; font-size: 11px; white-space: nowrap; }
+  .badge.on { border-color: var(--green); color: var(--green); }
 
-  .card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 8px;text-align:center;min-height:0}
-  .label{font-size:clamp(9px,1.35vh,11px);font-weight:700;letter-spacing:.6px;color:var(--dim);text-transform:uppercase}
+  .card {
+    background: var(--card);
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    padding: 5px 8px;
+    min-height: 0;
+  }
+  .card.gold { border-color: var(--gold); }
+  .card.red { border-color: var(--red); background: #1d1517; }
+  .label { text-align: center; color: var(--gold); font-weight: bold; font-size: 10px; letter-spacing: .4px; text-transform: uppercase; }
+  .label.muted { color: var(--muted); }
 
-  .hero{border:2px solid var(--orange);padding:6px 8px}
-  .hero .label{color:var(--orange)}
-  .price{font-size:clamp(28px,5.6vh,42px);font-weight:800;line-height:1.1}
-  .sub{font-size:clamp(10px,1.5vh,12px);color:var(--dim)}
+  .price { flex: 0 0 auto; text-align: center; }
+  .price .big { font-size: clamp(26px, 9vw, 40px); font-weight: bold; color: var(--green); line-height: 1.1; }
+  .price .sub { color: var(--muted); font-size: 11px; }
 
-  .sides{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .side{padding:6px 8px}
-  .side .top{display:flex;align-items:baseline;justify-content:space-between}
-  .side .n{font-size:clamp(20px,3.6vh,28px);font-weight:800}
-  .row{display:flex;justify-content:space-between;font-size:clamp(10px,1.55vh,12.5px);padding:2px 0;border-top:1px solid var(--line)}
-  .row span:first-child{color:var(--dim)}
+  .sides { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .side-head { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-weight: bold; font-size: 11px; }
+  .side-head b { font-size: 20px; color: var(--text); }
+  .row { display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0; border-bottom: 1px solid var(--line); }
+  .row:last-child { border-bottom: none; }
+  .row span:first-child { color: var(--muted); }
 
-  .tiles{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);
-    grid-template-rows:repeat(4,1fr);gap:6px}
-  .tile{display:flex;flex-direction:column;justify-content:center;padding:4px 4px;overflow:hidden}
-  .val{font-size:clamp(13px,2.4vh,18px);font-weight:800;margin-top:2px;white-space:nowrap}
+  .tiles { flex: 0 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .tile { background: var(--card); border: 1.5px solid var(--line); border-radius: 9px; padding: 4px 2px; text-align: center; min-width: 0; }
+  .tile .t { color: var(--muted); font-size: 9px; font-weight: bold; text-transform: uppercase; line-height: 1.1; min-height: 20px; display: flex; align-items: center; justify-content: center; }
+  .tile .v { font-size: clamp(11px, 3.4vw, 15px); font-weight: bold; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .info{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .info .txt{font-size:clamp(10px,1.5vh,12.5px);line-height:1.3;word-break:break-word}
-  .lock{border:2px solid var(--orange)}
-  .lock .label{color:var(--orange)}
-  .lock .big{font-size:clamp(18px,3.2vh,26px);font-weight:800;line-height:1.1}
-  .news{border:2px solid var(--line)}
-  .news.hot{border-color:var(--yellow)}
-  .news.hot .txt{color:var(--yellow);font-weight:800}
-  .bottom{display:grid;grid-template-columns:1.4fr 1fr;gap:6px}
-  .rule{border:2px solid var(--yellow)}
-  .rule .label{color:var(--yellow)}
-  .rule .txt{font-size:clamp(9px,1.4vh,11px);color:var(--text);line-height:1.25}
-  .status .txt{font-size:clamp(11px,1.8vh,14px);font-weight:800}
-  .status.bad{border-color:var(--red);background:#1d1214}
-  .status.bad .label{color:var(--red)}
+  .pos { color: var(--green) !important; }
+  .neg { color: var(--red) !important; }
+  .gold-t { color: var(--yellow) !important; }
 
-  .pos{color:var(--green)} .neg{color:var(--red)} .warn{color:var(--yellow)} .zero{color:var(--text)}
+  .two { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .small { color: var(--muted); font-size: 11px; text-align: center; }
+  .big-n { text-align: center; font-size: 20px; font-weight: bold; }
+  .cycles { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.3; max-height: 26px; overflow: hidden; word-break: break-word; }
+  .news-text { text-align: center; font-size: 12px; margin-top: 6px; line-height: 1.25; }
+
+  .sl { flex: 0 0 auto; }
+  .sl-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; text-align: center; }
+  .sl-row .t { color: var(--muted); font-size: 9px; }
+  .sl-row .v { font-size: 14px; font-weight: bold; }
+  .bar { height: 6px; background: #2a2f3d; border-radius: 4px; overflow: hidden; margin: 4px 0; }
+  .bar > div { height: 100%; width: 0%; background: var(--green); transition: width .4s; }
+  .sl-btn {
+    width: 100%; padding: 8px; font-size: 14px; font-weight: bold; color: #111;
+    background: var(--yellow); border: none; border-radius: 9px; cursor: pointer;
+  }
+  .sl-btn:disabled { opacity: .5; cursor: default; }
+  .note { min-height: 12px; color: var(--muted); font-size: 10px; text-align: center; line-height: 1.2; overflow: hidden; }
+
+  .foot { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .foot .txt { font-size: 10px; text-align: center; line-height: 1.25; }
+  .status-big { text-align: center; font-size: 13px; font-weight: bold; margin-top: 3px; line-height: 1.2; }
 </style>
 </head>
 <body>
-<div class="app">
 
-  <header>
-    <h1>MEHUL GAPGRID LIVE</h1>
-    <div id="badge" class="badge">● OFFLINE</div>
-  </header>
-  <div id="setupHint">Firebase URL નથી: <b>?db=https://...firebaseio.com</b> ઉમેરો</div>
+<div class="head">
+  <div class="title">MEHUL GAPGRID LIVE</div>
+  <div class="badge" id="conn">OFFLINE</div>
+</div>
 
-  <div class="card hero">
-    <div class="label" id="symLabel">GOLD (XAU/USD) LIVE PRICE</div>
-    <div class="price" id="bid">—</div>
-    <div class="sub" id="askSpread">Ask — · Spread —</div>
+<div class="card gold price">
+  <div class="label">XAUUSD LIVE PRICE</div>
+  <div class="big" id="bid">-</div>
+  <div class="sub" id="askspread">Ask - · Spread -</div>
+</div>
+
+<div class="sides">
+  <div class="card">
+    <div class="side-head"><span>SELL SIDE</span><b id="sellN">0</b></div>
+    <div class="row"><span>Lots</span><span id="sellLots">-</span></div>
+    <div class="row"><span>Floating</span><span id="sellPL">-</span></div>
+    <div class="row"><span>Common TP</span><span id="sellTP">-</span></div>
+    <div class="row"><span>Last</span><span id="sellLast">-</span></div>
   </div>
-
-  <div class="sides">
-    <div class="card side">
-      <div class="top"><span class="label">SELL SIDE</span><span class="n" id="sellN">0</span></div>
-      <div class="row"><span>Lots</span><span id="sellLots">0.00</span></div>
-      <div class="row"><span>Floating</span><span id="sellPL">0.00</span></div>
-      <div class="row"><span>Common TP</span><span id="sellTP">—</span></div>
-      <div class="row"><span>Last trade</span><span id="sellLast">—</span></div>
-    </div>
-    <div class="card side">
-      <div class="top"><span class="label">BUY SIDE</span><span class="n" id="buyN">0</span></div>
-      <div class="row"><span>Lots</span><span id="buyLots">0.00</span></div>
-      <div class="row"><span>Floating</span><span id="buyPL">0.00</span></div>
-      <div class="row"><span>Common TP</span><span id="buyTP">—</span></div>
-      <div class="row"><span>Last trade</span><span id="buyLast">—</span></div>
-    </div>
+  <div class="card">
+    <div class="side-head"><span>BUY SIDE</span><b id="buyN">0</b></div>
+    <div class="row"><span>Lots</span><span id="buyLots">-</span></div>
+    <div class="row"><span>Floating</span><span id="buyPL">-</span></div>
+    <div class="row"><span>Common TP</span><span id="buyTP">-</span></div>
+    <div class="row"><span>Last</span><span id="buyLast">-</span></div>
   </div>
+</div>
 
-  <div class="tiles">
-    <div class="card tile"><div class="label">Balance</div><div class="val" id="balance">—</div></div>
-    <div class="card tile"><div class="label">Today P/L</div><div class="val" id="todayPL">—</div></div>
-    <div class="card tile"><div class="label">Max Drawdown</div><div class="val" id="maxDD">—</div></div>
+<div class="tiles">
+  <div class="tile"><div class="t">Balance</div><div class="v pos" id="balance">-</div></div>
+  <div class="tile"><div class="t">Today P/L</div><div class="v" id="todayPL">-</div></div>
+  <div class="tile"><div class="t">Max DD</div><div class="v neg" id="maxDD">-</div></div>
+  <div class="tile"><div class="t">Equity</div><div class="v" id="equity">-</div></div>
 
-    <div class="card tile"><div class="label">Equity</div><div class="val" id="equity">—</div></div>
-    <div class="card tile"><div class="label">Floating P/L</div><div class="val" id="floating">—</div></div>
-    <div class="card tile"><div class="label">Max Margin</div><div class="val" id="maxMargin">—</div></div>
+  <div class="tile"><div class="t">Floating</div><div class="v" id="floating">-</div></div>
+  <div class="tile"><div class="t">Max Margin</div><div class="v" id="maxMargin">-</div></div>
+  <div class="tile"><div class="t">Open B/S</div><div class="v" id="openBS">-</div></div>
+  <div class="tile"><div class="t">Max Open</div><div class="v" id="maxOpen">-</div></div>
 
-    <div class="card tile"><div class="label">Open (B/S)</div><div class="val" id="open">0</div></div>
-    <div class="card tile"><div class="label">Max Open</div><div class="val" id="maxOpen">0</div></div>
-    <div class="card tile"><div class="label">Baskets</div><div class="val pos" id="baskets">0</div></div>
+  <div class="tile"><div class="t">Baskets (tot)</div><div class="v pos" id="baskets">-</div></div>
+  <div class="tile"><div class="t">TP Hits Today</div><div class="v" id="tpToday">-</div></div>
+  <div class="tile"><div class="t">Uptime</div><div class="v gold-t" id="uptime">-</div></div>
+  <div class="tile"><div class="t">Data Age</div><div class="v neg" id="dataAge">-</div></div>
+</div>
 
-    <div class="card tile"><div class="label">TP Hits Today</div><div class="val" id="tpToday">0</div></div>
-    <div class="card tile"><div class="label">Bot Uptime</div><div class="val warn" id="uptime">—</div></div>
-    <div class="card tile"><div class="label">Data Age</div><div class="val" id="age">—</div></div>
+<div class="two">
+  <div class="card gold">
+    <div class="label">HEDGE LOCKS</div>
+    <div class="big-n" id="lockN">0 / 0</div>
+    <div class="small" id="lockText">-</div>
+    <div class="cycles" id="cycles"></div>
   </div>
-
-  <div class="info">
-    <div class="card lock">
-      <div class="label">Hedge Locks (લોક સાયકલ)</div>
-      <div class="big" id="lockN">0 / 0</div>
-      <div class="txt" id="lockTxt">—</div>
-    </div>
-    <div class="card news" id="newsCard">
-      <div class="label">News Filter (ભારતીય સમય)</div>
-      <div class="txt" id="newsTxt">—</div>
-    </div>
+  <div class="card">
+    <div class="label muted">NEWS (IST)</div>
+    <div class="news-text" id="news">-</div>
   </div>
+</div>
 
-  <div class="bottom">
-    <div class="card rule">
-      <div class="label">TP Rule</div>
-      <div class="txt" id="rule">Waiting for data…</div>
-    </div>
-    <div class="card status bad" id="statusCard">
-      <div class="label">Bot Status</div>
-      <div class="txt" id="status">OFFLINE</div>
-    </div>
+<div class="card gold sl">
+  <div class="label">HEDGE SL (કોસ્ટ-ટુ-કોસ્ટ)</div>
+  <div class="sl-row" style="margin-top:4px;">
+    <div><div class="t">LOCKED</div><div class="v" id="slLocked">-</div></div>
+    <div><div class="t">SL DONE</div><div class="v" id="slDone">-</div></div>
+    <div><div class="t">LAST PRESS</div><div class="v" id="slApplied">-</div></div>
   </div>
+  <div class="bar"><div id="slBar"></div></div>
+  <button class="sl-btn" id="slBtn">SL લગાવો</button>
+  <div class="note" id="slNote"></div>
+</div>
 
+<div class="foot">
+  <div class="card gold">
+    <div class="label">TP RULE</div>
+    <div class="txt" id="tpRule">-</div>
+  </div>
+  <div class="card" id="botCard">
+    <div class="label muted">BOT STATUS</div>
+    <div class="status-big" id="botStatus">-</div>
+  </div>
 </div>
 
 <script>
-// Same Firebase database the EA writes to (EA input: InpFirebaseURL)
-const DEFAULT_DB = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com";
+(function () {
+  // ---- Settings (match the EA inputs) ----
+  const DB      = "https://mehul-grid-dashboard-default-rtdb.firebaseio.com";
+  const NODE    = "gapgrid";             // InpFirebasePath
+  const CMD     = "gapgrid_cmd/slId";    // InpSLCmdPath
+  const TOKEN   = "";                    // Database secret, only if rules need it
+  const POLL_MS = 3000;
+  const OFFLINE_AFTER_MS = 60000;
 
-const qs = new URLSearchParams(location.search);
-let DB = qs.get("db") || "";
-let NODE = qs.get("path") || "gapgrid";
-try {
-  if (DB) localStorage.setItem("gg_db", DB); else DB = localStorage.getItem("gg_db") || "";
-  if (qs.get("path")) localStorage.setItem("gg_path", NODE); else NODE = localStorage.getItem("gg_path") || NODE;
-} catch (e) {}
-if (!DB) DB = DEFAULT_DB;
-DB = DB.replace(/\/+$/, "");
-if (!DB) document.getElementById("setupHint").style.display = "block";
-
-const $ = id => document.getElementById(id);
-let cur = "$";
-
-function money(v) {
-  if (v === undefined || v === null || isNaN(v)) return "—";
-  const s = Math.abs(v).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  return (v < 0 ? "-" : "") + cur + s;
-}
-function setPL(id, v) {
-  const el = $(id);
-  el.textContent = money(v);
-  el.className = "val " + (v > 0 ? "pos" : v < 0 ? "neg" : "zero");
-}
-function setSidePL(id, v) {
-  const el = $(id);
-  el.textContent = money(v);
-  el.className = v > 0 ? "pos" : v < 0 ? "neg" : "zero";
-}
-function px(v) { return (v === undefined || v === null || v === 0) ? "—" : Number(v).toFixed(2); }
-function fmtUp(sec) {
-  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
-  return h + "h " + m + "m";
-}
-function setOnline(on, text) {
-  $("badge").textContent = on ? "● LIVE" : "● OFFLINE";
-  $("badge").className = "badge" + (on ? " on" : "");
-  $("status").textContent = text;
-  $("statusCard").className = "card status" + (on ? "" : " bad");
-}
-
-function render(d) {
-  cur = (d.currency && d.currency !== "USD") ? d.currency + " " : "$";
-  $("symLabel").textContent = (d.symbol || "GOLD") + " LIVE PRICE";
-  $("bid").textContent = "$" + Number(d.bid).toFixed(2);
-  $("bid").className = "price pos";
-  $("askSpread").textContent = "Ask " + Number(d.ask).toFixed(2) + " · Spread " + Number(d.spread).toFixed(2);
-
-  const b = d.buy || {}, s = d.sell || {};
-  $("sellN").textContent = s.n || 0;
-  $("sellLots").textContent = Number(s.lots || 0).toFixed(2);
-  setSidePL("sellPL", s.pl || 0);
-  $("sellTP").textContent = px(s.tp);
-  $("sellLast").textContent = px(s.last);
-  $("buyN").textContent = b.n || 0;
-  $("buyLots").textContent = Number(b.lots || 0).toFixed(2);
-  setSidePL("buyPL", b.pl || 0);
-  $("buyTP").textContent = px(b.tp);
-  $("buyLast").textContent = px(b.last);
-
-  $("balance").textContent = money(d.balance);
-  $("balance").className = "val pos";
-  $("equity").textContent = money(d.equity);
-  setPL("todayPL", d.todayPL);
-  setPL("floating", d.floating);
-  $("maxDD").textContent = money(d.maxDD);
-  $("maxDD").className = "val neg";
-  $("maxMargin").textContent = money(d.maxMargin);
-  $("open").textContent = ((b.n || 0) + (s.n || 0)) + " (" + (b.n || 0) + "/" + (s.n || 0) + ")";
-  $("maxOpen").textContent = d.maxOpen || 0;
-  $("baskets").textContent = (d.basketsTotal || 0) + " (" + (d.basketsToday || 0) + ")";
-  $("tpToday").textContent = d.tpHitsToday || 0;
-  $("uptime").textContent = fmtUp(d.uptimeSec || 0);
-
-  const c = d.cfg || {};
-  $("rule").textContent = "Gap $" + c.gap + " · TP $" + c.tpDist + " · trade " + c.from +
-    " થી common TP પહેલી $" + c.ftrail + ", પછી $" + c.trail + " ખસે · trade 5 થી average +$2.5";
-
-  const lk = d.lock || {};
-  const cyc = lk.cycles || [];
-  $("lockN").textContent = (lk.n || 0) + " / " + (lk.max || 0);
-  if (cyc.length) {
-    $("lockTxt").innerHTML = cyc.map((v, i) => "C" + (i + 1) + ": <span class='neg'>" + money(v) + "</span>").join(" · ") +
-      "<br><b>કુલ લોક લોસ: <span class='neg'>" + money(lk.total) + "</span></b>";
-  } else {
-    $("lockTxt").textContent = "કોઈ સાયકલ લોક નથી (લોક -" + (lk.loss || 0) + " પર)";
+  function u(path) {
+    return DB + "/" + path + ".json" + (TOKEN ? "?auth=" + encodeURIComponent(TOKEN) : "");
   }
-  const nw = d.news || "—";
-  $("newsTxt").textContent = nw;
-  $("newsCard").className = "card news" + (/NEWS|STANDING/.test(nw) ? " hot" : "");
 
-  const age = d.ts ? Math.max(0, (Date.now() - d.ts) / 1000) : 9999;
-  $("age").textContent = age < 120 ? Math.round(age) + "s" : Math.round(age / 60) + "m";
-  $("age").className = "val " + (age < 20 ? "pos" : "neg");
-
-  if (d.status === "HALTED") setOnline(false, d.haltMsg || "HALTED");
-  else if (age > 20) setOnline(false, "OFFLINE (no new data)");
-  else if (d.status === "NEWS_PAUSE") setOnline(true, "NEWS: ઊભું છે");
-  else setOnline(true, "RUNNING");
-}
-
-async function tick() {
-  if (!DB) return;
-  try {
-    const r = await fetch(DB + "/" + NODE + ".json", {cache: "no-store"});
-    if (r.status === 401 || r.status === 403) throw new Error("Firebase rules: read બંધ");
-    if (!r.ok) throw new Error("http " + r.status);
-    const d = await r.json();
-    if (!d) { setOnline(false, "OFFLINE (no data)"); return; }
-    render(d);
-  } catch (e) {
-    setOnline(false, "OFFLINE (" + e.message + ")");
+  const $ = (id) => document.getElementById(id);
+  function n(v) { return v === undefined || v === null || v === "" ? 0 : Number(v); }
+  function f(v, d) { return n(v).toFixed(d === undefined ? 2 : d); }
+  function money(v, cur) { const x = n(v); return (x > 0 ? "+" : "") + x.toFixed(2) + (cur ? " " + cur : ""); }
+  function cls(el, v) { el.classList.remove("pos", "neg"); if (n(v) > 0) el.classList.add("pos"); else if (n(v) < 0) el.classList.add("neg"); }
+  function set(id, text) { $(id).textContent = text; }
+  function uptimeText(sec) { sec = n(sec); return Math.floor(sec / 3600) + "h " + Math.floor((sec % 3600) / 60) + "m"; }
+  function ageText(ms) {
+    if (ms < 0) ms = 0;
+    const m = Math.floor(ms / 60000);
+    if (m < 60) return m + "m";
+    return Math.floor(m / 60) + "h";
   }
-}
-tick();
-setInterval(tick, 2000);
+
+  function render(d) {
+    const cur = d.currency || "";
+
+    set("bid", f(d.bid, 2));
+    set("askspread", "Ask " + f(d.ask, 2) + " · Spread " + f(d.spread, 2));
+
+    const b = d.buy || {}, s = d.sell || {};
+    set("buyN", n(b.n)); set("sellN", n(s.n));
+    set("buyLots", f(b.lots)); set("sellLots", f(s.lots));
+    set("buyPL", money(b.pl, cur)); set("sellPL", money(s.pl, cur));
+    cls($("buyPL"), b.pl); cls($("sellPL"), s.pl);
+    set("buyTP", b.tp ? f(b.tp, 2) : "—"); set("sellTP", s.tp ? f(s.tp, 2) : "—");
+    set("buyLast", b.last ? f(b.last, 2) : "—"); set("sellLast", s.last ? f(s.last, 2) : "—");
+
+    set("balance", f(d.balance, 0));
+    set("todayPL", money(d.todayPL)); cls($("todayPL"), d.todayPL);
+    set("maxDD", f(d.maxDD, 0));
+    set("equity", f(d.equity, 0));
+    set("floating", money(d.floating)); cls($("floating"), d.floating);
+    set("maxMargin", f(d.maxMargin, 0));
+    set("openBS", (n(b.n) + n(s.n)) + " (" + n(b.n) + "/" + n(s.n) + ")");
+    set("maxOpen", n(d.maxOpen));
+    set("baskets", n(d.basketsToday) + " (" + n(d.basketsTotal) + ")");
+    set("tpToday", n(d.tpHitsToday));
+    set("uptime", uptimeText(d.uptimeSec));
+
+    const lock = d.lock || {};
+    set("lockN", n(lock.n) + " / " + (n(lock.max) === 0 ? "∞" : n(lock.max)));
+    set("lockText", n(lock.n) === 0
+      ? "લોક નથી (-" + n(lock.loss) + " પર)"
+      : "Total " + money(lock.total, cur));
+    const parts = (lock.cycles || []).map(function (v, i) { return "C" + (i + 1) + " " + money(v); });
+    set("cycles", parts.join("  "));
+
+    set("news", d.news || "-");
+
+    const sl = d.sl || {};
+    const locked = n(sl.locked), done = n(sl.done);
+    set("slLocked", locked);
+    set("slDone", done + "/" + locked);
+    set("slApplied", sl.applied !== undefined ? n(sl.applied) : "-");
+    $("slBar").style.width = (locked ? Math.round(done / locked * 100) : 0) + "%";
+
+    const c = d.cfg || {};
+    set("tpRule",
+      "Gap $" + f(c.gap, 1) + " · TP $" + f(c.tpDist, 1) +
+      " · trade " + n(c.from) + " થી પહેલી $" + f(c.ftrail, 1) + ", પછી $" + f(c.trail, 1));
+
+    const ts = n(d.ts);
+    const age = ts ? Date.now() - ts : 0;
+    const fresh = ts && age < OFFLINE_AFTER_MS;
+    set("dataAge", ts ? ageText(age) : "-");
+    cls($("dataAge"), 0);
+    $("dataAge").classList.add(fresh ? "pos" : "neg");
+
+    const conn = $("conn");
+    conn.textContent = fresh ? "LIVE" : "OFFLINE";
+    conn.classList.toggle("on", fresh);
+    set("botStatus", fresh ? (d.status || "-") : "OFFLINE");
+    $("botCard").classList.toggle("red", !fresh);
+  }
+
+  $("slBtn").addEventListener("click", async function () {
+    const btn = this;
+    btn.disabled = true;
+    try {
+      const r = await fetch(u(CMD), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Date.now())
+      });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      set("slNote", "Command gaya " + new Date().toLocaleTimeString() + ", 5 સેકન્ડ પછી જુઓ");
+    } catch (e) {
+      set("slNote", "Command નથી ગયો: " + e.message);
+    }
+    setTimeout(function () { btn.disabled = false; }, 2000);
+  });
+
+  async function load() {
+    try {
+      const r = await fetch(u(NODE));
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json();
+      if (d) render(d);
+    } catch (e) {
+      $("conn").textContent = "OFFLINE";
+      $("conn").classList.remove("on");
+    }
+  }
+
+  load();
+  setInterval(load, POLL_MS);
+})();
 </script>
 </body>
 </html>
