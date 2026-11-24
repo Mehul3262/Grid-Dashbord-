@@ -20,24 +20,17 @@
   * { box-sizing: border-box; }
   html, body {
     margin: 0;
-    height: 100%;
-    overflow: hidden;
     background: var(--bg);
     color: var(--text);
     font-family: Arial, Helvetica, sans-serif;
   }
   body {
-    height: 100vh;
-    height: 100dvh;
-    padding: 6px 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    padding: 6px 8px 16px;
     max-width: 640px;
     margin: 0 auto;
   }
 
-  .head { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex: 0 0 auto; }
+  .head { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
   .title { color: var(--gold); font-weight: bold; font-size: clamp(14px, 3.6vw, 18px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .badge { border: 2px solid var(--red); color: var(--red); border-radius: 8px; padding: 2px 8px; font-weight: bold; font-size: 11px; white-space: nowrap; }
   .badge.on { border-color: var(--green); color: var(--green); }
@@ -47,25 +40,25 @@
     border: 2px solid var(--line);
     border-radius: 12px;
     padding: 5px 8px;
-    min-height: 0;
+    margin-top: 5px;
   }
   .card.gold { border-color: var(--gold); }
   .card.red { border-color: var(--red); background: #1d1517; }
   .label { text-align: center; color: var(--gold); font-weight: bold; font-size: 10px; letter-spacing: .4px; text-transform: uppercase; }
   .label.muted { color: var(--muted); }
 
-  .price { flex: 0 0 auto; text-align: center; }
+  .price { text-align: center; margin-top: 6px; }
   .price .big { font-size: clamp(26px, 9vw, 40px); font-weight: bold; color: var(--green); line-height: 1.1; }
   .price .sub { color: var(--muted); font-size: 11px; }
 
-  .sides { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .sides { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 5px; }
   .side-head { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-weight: bold; font-size: 11px; }
   .side-head b { font-size: 20px; color: var(--text); }
   .row { display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0; border-bottom: 1px solid var(--line); }
   .row:last-child { border-bottom: none; }
   .row span:first-child { color: var(--muted); }
 
-  .tiles { flex: 0 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 5px; }
   .tile { background: var(--card); border: 1.5px solid var(--line); border-radius: 9px; padding: 4px 2px; text-align: center; min-width: 0; }
   .tile .t { color: var(--muted); font-size: 9px; font-weight: bold; text-transform: uppercase; line-height: 1.1; min-height: 20px; display: flex; align-items: center; justify-content: center; }
   .tile .v { font-size: clamp(11px, 3.4vw, 15px); font-weight: bold; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -74,19 +67,12 @@
   .neg { color: var(--red) !important; }
   .gold-t { color: var(--yellow) !important; }
 
-  .two { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .small { color: var(--muted); font-size: 11px; text-align: center; }
   .news-text { text-align: center; font-size: 12px; margin-top: 6px; line-height: 1.25; }
 
-  /* open cycles: one chip per cycle, blue = BUY TP kept, red = SELL TP kept */
-  .chips { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 4px; max-height: 46px; overflow: hidden; }
-  .chip { font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 6px; border: 1.5px solid; white-space: nowrap; }
-  .chip.buy  { color: var(--blue); border-color: var(--blue); }
-  .chip.sell { color: var(--red);  border-color: var(--red); }
-  .chip.none { color: var(--muted); border-color: var(--line); }
-  .chip .ok  { color: var(--green); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 5px; }
+  .status-big { text-align: center; font-size: 13px; font-weight: bold; margin-top: 3px; line-height: 1.2; }
+  .txt { font-size: 10px; text-align: center; line-height: 1.25; margin-top: 3px; }
 
-  .sl { flex: 0 0 auto; }
   .sl-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; text-align: center; margin-top: 4px; }
   .sl-row .t { color: var(--muted); font-size: 9px; }
   .sl-row .v { font-size: 14px; font-weight: bold; }
@@ -97,15 +83,42 @@
     background: var(--yellow); border: none; border-radius: 9px; cursor: pointer;
   }
   .sl-btn:disabled { opacity: .5; cursor: default; }
-  .note { min-height: 12px; color: var(--muted); font-size: 10px; text-align: center; line-height: 1.2; overflow: hidden; }
+  .note { min-height: 12px; color: var(--muted); font-size: 10px; text-align: center; line-height: 1.2; }
 
-  .foot { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .foot .txt { font-size: 10px; text-align: center; line-height: 1.25; }
-  .status-big { text-align: center; font-size: 13px; font-weight: bold; margin-top: 3px; line-height: 1.2; }
+  .go {
+    display: block; margin-top: 8px; text-align: center; padding: 8px;
+    font-size: 12px; font-weight: bold; color: var(--gold); text-decoration: none;
+    border: 1.5px dashed var(--gold); border-radius: 9px;
+  }
+
+  /* ---------- PAGE 2: cycles (below) ---------- */
+  #cyclePage { margin-top: 14px; }
+  .cy-title { text-align: center; color: var(--gold); font-weight: bold; font-size: 14px; margin-bottom: 4px; }
+  .cy-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+  .cy-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+  .cy-head { text-align: center; font-weight: bold; font-size: 11px; padding: 4px; border-radius: 8px; border: 1.5px solid; }
+  .cy-head.buy  { color: var(--blue); border-color: var(--blue); }
+  .cy-head.sell { color: var(--red);  border-color: var(--red); }
+  .cy-item {
+    background: #11141b; border: 1.5px solid; border-radius: 10px; padding: 5px 6px; margin-top: 5px; text-align: center;
+  }
+  .cy-item.buy  { border-color: var(--blue); }
+  .cy-item.sell { border-color: var(--red); }
+  .cy-item .k { font-size: 10px; font-weight: bold; color: var(--muted); }
+  .cy-item .tp { font-size: 15px; font-weight: bold; margin: 2px 0; }
+  .cy-item.buy  .tp { color: var(--blue); }
+  .cy-item.sell .tp { color: var(--red); }
+  .cy-item .loss { font-size: 11px; font-weight: bold; }
+  .cy-item .sl { font-size: 10px; font-weight: bold; margin-top: 2px; }
+  .cy-item .sl.yes { color: var(--green); }
+  .cy-item .sl.no  { color: var(--muted); }
+  .cy-empty { text-align: center; color: var(--muted); font-size: 11px; padding: 8px 0; }
+  .cy-legend { font-size: 10px; color: var(--muted); text-align: center; margin-top: 6px; }
 </style>
 </head>
 <body>
 
+<!-- ======================= PAGE 1: MAIN ======================= -->
 <div class="head">
   <div class="title">MEHUL GAPGRID LIVE</div>
   <div class="badge" id="conn">OFFLINE</div>
@@ -151,18 +164,12 @@
   <div class="tile"><div class="t">Data Age</div><div class="v neg" id="dataAge">-</div></div>
 </div>
 
-<div class="two">
-  <div class="card gold">
-    <div class="label">OPEN CYCLES (TP)</div>
-    <div class="chips" id="chips"></div>
-  </div>
-  <div class="card">
-    <div class="label muted">NEWS (IST)</div>
-    <div class="news-text" id="news">-</div>
-  </div>
+<div class="card">
+  <div class="label muted">NEWS (IST)</div>
+  <div class="news-text" id="news">-</div>
 </div>
 
-<div class="card gold sl">
+<div class="card gold">
   <div class="label">HEDGE SL (કોસ્ટ-ટુ-કોસ્ટ)</div>
   <div class="sl-row">
     <div><div class="t">OPEN CYCLES</div><div class="v" id="slOpen">-</div></div>
@@ -175,7 +182,7 @@
   <div class="note" id="slNote"></div>
 </div>
 
-<div class="foot">
+<div class="two">
   <div class="card gold">
     <div class="label">TP RULE</div>
     <div class="txt" id="tpRule">-</div>
@@ -184,6 +191,32 @@
     <div class="label muted">BOT STATUS</div>
     <div class="status-big" id="botStatus">-</div>
   </div>
+</div>
+
+<a class="go" href="#cyclePage">નીચે સાયકલ TP / SL ⬇</a>
+
+<!-- ======================= PAGE 2: CYCLES (નીચે) ======================= -->
+<div id="cyclePage">
+  <div class="cy-title">સાયકલ TP / SL</div>
+
+  <div class="cy-stats">
+    <div class="tile"><div class="t">Open cycles</div><div class="v" id="cOpen">-</div></div>
+    <div class="tile"><div class="t">SL લાગ્યો</div><div class="v gold-t" id="cSlOn">-</div></div>
+    <div class="tile"><div class="t">Open trades</div><div class="v" id="cTrades">-</div></div>
+  </div>
+
+  <div class="cy-cols">
+    <div>
+      <div class="cy-head buy">BUY TP</div>
+      <div id="buyList"></div>
+    </div>
+    <div>
+      <div class="cy-head sell">SELL TP</div>
+      <div id="sellList"></div>
+    </div>
+  </div>
+
+  <div class="cy-legend">વાદળી = Buy TP · લાલ = Sell TP · SL લાગ્યો = હેજ પર કોસ્ટ-ટુ-કોસ્ટ SL લાગી ગયો</div>
 </div>
 
 <script>
@@ -214,31 +247,60 @@
     return Math.floor(m / 60) + "h";
   }
 
-  function renderChips(list) {
-    const box = $("chips");
-    box.innerHTML = "";
-    if (!list || list.length === 0) {
-      const e = document.createElement("span");
-      e.className = "small";
-      e.textContent = "કોઈ open cycle નથી";
-      box.appendChild(e);
-      return;
-    }
-    list.forEach(function (c) {
-      const chip = document.createElement("span");
-      const side = (c.side || "").toUpperCase();
-      chip.className = "chip " + (side === "BUY" ? "buy" : (side === "SELL" ? "sell" : "none"));
-      chip.textContent = "C" + c.k + " " + side + " " + (c.tp !== null && c.tp !== undefined ? Number(c.tp).toFixed(2) : "-");
-      if (c.sl) {
-        const ok = document.createElement("span");
-        ok.className = "ok";
-        ok.textContent = " ✓SL";
-        chip.appendChild(ok);
-      }
-      box.appendChild(chip);
-    });
+  // ---- Cycles (page 2) ----
+  function cycleItem(c, losses) {
+    const side = (c.side || "").toUpperCase();
+    const loss = losses[c.k - 1];
+    const div = document.createElement("div");
+    div.className = "cy-item " + (side === "BUY" ? "buy" : "sell");
+
+    const k = document.createElement("div");
+    k.className = "k";
+    k.textContent = "C" + c.k;
+
+    const tp = document.createElement("div");
+    tp.className = "tp";
+    tp.textContent = (c.tp !== null && c.tp !== undefined) ? Number(c.tp).toFixed(2) : "-";
+
+    const lo = document.createElement("div");
+    lo.className = "loss " + (n(loss) >= 0 ? "pos" : "neg");
+    lo.textContent = "P/L " + (n(loss) > 0 ? "+" : "") + n(loss).toFixed(2);
+
+    const sl = document.createElement("div");
+    sl.className = "sl " + (c.sl ? "yes" : "no");
+    sl.textContent = c.sl ? "✓ SL લાગ્યો" : "SL નથી";
+
+    div.appendChild(k);
+    div.appendChild(tp);
+    div.appendChild(lo);
+    div.appendChild(sl);
+    return div;
   }
 
+  function renderCycles(d) {
+    const sl = d.sl || {};
+    const open = n(sl.open), on = n(sl.on);
+    set("cOpen", open);
+    set("cSlOn", on + " / " + open);
+    set("cTrades", n(d.openTrades));
+
+    const losses = (d.lock && d.lock.cycles) || [];
+    const list = d.cyc || [];
+    const buyBox = $("buyList"), sellBox = $("sellList");
+    buyBox.innerHTML = "";
+    sellBox.innerHTML = "";
+
+    let nb = 0, ns = 0;
+    list.forEach(function (c) {
+      const side = (c.side || "").toUpperCase();
+      if (side === "BUY") { buyBox.appendChild(cycleItem(c, losses)); nb++; }
+      else if (side === "SELL") { sellBox.appendChild(cycleItem(c, losses)); ns++; }
+    });
+    if (nb === 0) buyBox.innerHTML = "<div class='cy-empty'>કોઈ BUY TP નથી</div>";
+    if (ns === 0) sellBox.innerHTML = "<div class='cy-empty'>કોઈ SELL TP નથી</div>";
+  }
+
+  // ---- Main page ----
   function render(d) {
     const cur = d.currency || "";
 
@@ -267,8 +329,6 @@
 
     set("news", d.news || "-");
 
-    // Open cycles and SL (only cycles that are not closed yet)
-    renderChips(d.cyc || []);
     const sl = d.sl || {};
     const open = n(sl.open), on = n(sl.on);
     set("slOpen", open);
@@ -294,6 +354,8 @@
     conn.classList.toggle("on", fresh);
     set("botStatus", fresh ? (d.status || "-") : "OFFLINE");
     $("botCard").classList.toggle("red", !fresh);
+
+    renderCycles(d);
   }
 
   $("slBtn").addEventListener("click", async function () {
